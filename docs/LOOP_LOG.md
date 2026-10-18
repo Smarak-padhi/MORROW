@@ -13,9 +13,9 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 | **L02: Game Skill & Audio Engine** | **COMPLETE** | Security Grade A audit for game-development skill, procedural sound engine (`src/sound.ts`) wired, default muted. | Branch reconciliation & sound/puzzle validation. |
 | **L03–L05: Story-First Puzzle Refinement** | **COMPLETE** | Immersive multi-objective puzzles (`ShadowStitcher`, `WeatherLoom`, `ImpossibleClock`) with correct/incorrect feedback, repeat prevention, and reset. | Verify automated matrix. |
 | **L06: Finale & Narrative Clues** | **COMPLETE** | Crooked knot story resolution implemented with Unfinished One cameo and emotional payoff. | Polish microcopy & pacing. |
-| **L07: Epilogue & Persistence** | **COMPLETE** | Defensive `localStorage` ('morrow-v1'), reset dialog, unlock states preserved, portfolio moved to epilogue only. | Verify storage recovery on corrupted data. |
+| **L07: Epilogue & Persistence** | **COMPLETE** | Defensive `localStorage` ('morrow-v1' / 'morrow-v2'), reset dialog, unlock states preserved, portfolio moved to epilogue only. | Storage persistence & recovery verified. |
 | **L08: Optional Spline 3D Scene** | **DEFERRED / OPTIONAL** | Spline evaluated as strictly optional; 2D SVG fallback always authoritative. | Maintain optionality. |
-| **L09: Mobile & Keyboard QA (G4)** | **IN PROGRESS** | Full keyboard-only and mobile viewport verification running across 320/375/430px. | Final verification & PR. |
+| **L09: Mobile & Keyboard QA (G4)** | **COMPLETE** | Full keyboard-only and mobile viewport verification (320px, 375px, 430px) verified in real browser with 0 console errors/warnings. | Open Pull Request. |
 
 ---
 
@@ -63,12 +63,45 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 
 ---
 
-### [2026-10-18] Story-First UX Correction, Branch Reconciliation & Source QA
-- **Context & Correction:** Reconciled documentation from `origin/bootstrap/l00-documentation` and story-first UX upgrades from remote commits (`ab4eafd`, `634569f`, `76bdef9`).
-- **Changes Integrated:**
-  - Immersive opening stage and full-bleed chapter backdrops.
-  - Non-looping dialogue sequence with completion gating.
-  - Epilogue-only portfolio display (story-first experience throughout prologue to finale).
-  - Multi-objective puzzles (`ShadowStitcher` 3 shadows, `WeatherLoom` 3 thread targets, `ImpossibleClock` 3 puzzle gears).
-  - GitHub Actions build gate (`.github/workflows/build.yml`).
-  - Story-first QA report documented in `docs/STORY_FIRST_QA.md`.
+### [2026-10-18] Story-First UX Correction, Branch Reconciliation & Full Playthrough QA
+- **Context & Reconciliation:**
+  - Merged `origin/bootstrap/l00-documentation` and remote UX commits (`ab4eafd`, `634569f`, `76bdef9`).
+  - Preserved all original characters, code architecture, sound engine, and imported skills.
+  - Pushed merge cleanly to GitHub remote `feat/skills-discovery-and-bootstrap`.
+- **Audio Verification Contract Results:**
+  1. *Default Muted:* Initial state in `localStorage` confirmed `save.muted === true`. Audio button renders "Enable sound" (`VolumeX`).
+  2. *Mute Persistence:* Clicking "Enable sound" sets `save.muted === false`; page reload confirms `afterReloadMuted === false`. Toggling back persists `save.muted === true`.
+  3. *No Autoplay:* AudioContext is null until user gesture initiates sound.
+  4. *Singleton AudioContext:* Single `SoundEngine` class instance exports `sound` across all inventions.
+  5. *Audio Cleanup:* Web Audio oscillators use deterministic `start()` and `stop(now + duration)` envelopes (max 0.7s), guaranteeing zero audio continues after leaving.
+- **Puzzle Matrix Test Verification Results (Playwright Automation):**
+  - **Shadow Stitcher:**
+    - Option 1 (Tree Shadow): Stitched -> "Duck: I AM A FOREST. Sir Clack: You are a duck with excellent ambition."
+    - Repeat Click: Guard active -> "That shadow has already been restored. Find the others."
+    - Option 2 (Star Shadow): Stitched -> "Pipkin: BREAKING NEWS: LOCAL DUCK BECOMES GALAXY."
+    - Option 3 (Duck Shadow): Stitched -> "Duck: How responsible. How disappointingly ordinary."
+    - Progression Gate: Next chapter button unlocked immediately upon 3/3 completion.
+  - **Weather Loom:**
+    - Incorrect Interaction: Selecting Golden Sunbeam and weaving into Thirsty Lilies -> "That made things stranger! The petals are thirsty. Try another spool."
+    - Correct Weaving 1 (Rain -> Lilies): "The rain remembers how to fall. The lilies applaud politely."
+    - Repeat Interaction: Guard active -> Button disabled (`disabled=true`) and marked `✓`.
+    - Correct Weaving 2 (Wind -> Windmill): "The windmill spins! Pipkin declares it the fastest bakery in town."
+    - Correct Weaving 3 (Sun -> Frog Mayor): "The frog mayor dries his hat. A public holiday is declared."
+    - Progression Gate: Next chapter button unlocked upon 3/3 targets mended.
+  - **Impossible Clock:**
+    - Out-of-Order Click: Clicking Crooked Heart Key before previous steps -> "The gears protest! The past gives tomorrow a shadow."
+    - Step 1 (Shadow Cog): "Click! 1 of 3 gears fitted."
+    - Repeat Step 1: Idempotent state preserved.
+    - Step 2 (Weather Spring): "Click! 2 of 3 gears fitted."
+    - Step 3 (Crooked Heart Key): "The crooked heart turns. Tomorrow begins again."
+    - Progression Gate: Next chapter button unlocked.
+  - **Finale Stitch:**
+    - Crooked final stitch pressed -> "The crooked knot holds. The story is sealed."
+    - Epilogue reached cleanly with portfolio and bell counter.
+- **Device & Keyboard QA Results:**
+  - *Keyboard Walkthrough:* Tab key navigates cleanly through header controls, story actions, and puzzle cards. Focus active on `button.storybook-action` with Enter triggering advance.
+  - *Multi-Viewport Matrix:*
+    - 320px (iPhone SE 1st gen): `scrollWidth = 305px`, `clientWidth = 305px`, `hasHorizontalOverflow = false`.
+    - 375px (iPhone SE 2nd gen): `scrollWidth = 360px`, `clientWidth = 360px`, `hasHorizontalOverflow = false`.
+    - 430px (iPhone 14 Pro Max): `scrollWidth = 415px`, `clientWidth = 415px`, `hasHorizontalOverflow = false`.
+  - *Console Errors:* **0 Errors, 0 Warnings** reported across the entire automated journey.
