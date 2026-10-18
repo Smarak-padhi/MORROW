@@ -8,6 +8,7 @@ import { ShadowStitcher } from './components/inventions/ShadowStitcher';
 import { WeatherLoom } from './components/inventions/WeatherLoom';
 import { ImpossibleClock } from './components/inventions/ImpossibleClock';
 import { FinaleStitch } from './components/inventions/FinaleStitch';
+import { Cinematic } from './components/Cinematic';
 
 type Saved = { completed: ChapterId[]; active: ChapterId; muted: boolean; easter: boolean; started: boolean };
 const initial: Saved = { completed: [], active: 'workshop', muted: true, easter: false, started: false };
@@ -31,8 +32,7 @@ function load(): Saved {
 
 export default function App() {
   const [save, setSave] = useState<Saved>(load);
-  const [introPlaying, setIntroPlaying] = useState(() => !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  const [introFailed, setIntroFailed] = useState(false);
+  const [cinematic, setCinematic] = useState<string | null>(null);
   const [dialog, setDialog] = useState(0);
   const [night, setNight] = useState(false);
   const [view, setView] = useState<'story' | 'map'>('story');
@@ -71,6 +71,7 @@ export default function App() {
     setDialog(0);
     setPuzzleDone(false);
     setView('story');
+    if (next && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) setCinematic(next.id);
   }
   const expression: MorrowExpression =
     chapter.id === 'workshop' ? 'surprised' :
@@ -90,25 +91,11 @@ export default function App() {
         </div>
       </header>
 
-      {!save.started && introPlaying && !introFailed ? (
-        <main className="cinematic-intro" aria-label="Morrow waking-up cinematic">
-          <video
-            className="cinematic-intro-video"
-            src="/videos/morrow-waking-up.mp4"
-            poster="/videos/morrow-waking-poster.jpg"
-            autoPlay
-            muted
-            playsInline
-            preload="metadata"
-            onEnded={() => setIntroPlaying(false)}
-            onError={() => { setIntroFailed(true); setIntroPlaying(false); }}
-            aria-label="Morrow sleeps in the workshop, wakes up and notices you"
-          />
-          <div className="cinematic-intro-controls">
-            <span>PROLOGUE · THE FIRST STITCH</span>
-            <button type="button" onClick={() => setIntroPlaying(false)}>Skip opening <ArrowRight size={18}/></button>
-          </div>
-        </main>
+      {cinematic ? (
+        <Cinematic key={cinematic} scene={cinematic} onFinish={() => {
+          setCinematic(null);
+          if (!save.started) setSave(current => ({ ...current, started: true }));
+        }}/>
       ) : !save.started ? (
         <main className="opening-scene">
           <div className="opening-glow" aria-hidden="true"/>
@@ -118,7 +105,7 @@ export default function App() {
             <p className="opening-whisper">Once upon a nearly-perfect morning,</p>
             <h1>a very small mistake <em>woke up.</em></h1>
             <p>His name was Morrow. He could stitch almost anything together. Unfortunately, almost anything was currently falling apart.</p>
-            <button className="storybook-action" type="button" onClick={() => { setSave(s => ({ ...s, started: true })); play('chime'); }}>Open the story <ArrowRight size={20}/></button>
+            <button className="storybook-action" type="button" onClick={() => { play('chime'); if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) setSave(s => ({ ...s, started: true })); else setCinematic('waking'); }}>Open the story <ArrowRight size={20}/></button>
             <span className="opening-hint">An interactive storybook • sound is off by default</span>
           </div>
         </main>
@@ -194,7 +181,7 @@ export default function App() {
           )}
           <footer className="storybook-footer">
             <span>We make wonderful mistakes. ✳</span>
-            <button type="button" onClick={() => { if (window.confirm('Start the adventure over?')) { setSave(initial); setDialog(0); setAwake(false); setPuzzleDone(false); setView('story'); setIntroPlaying(!window.matchMedia('(prefers-reduced-motion: reduce)').matches); } }}><RotateCcw size={16}/> Start over</button>
+            <button type="button" onClick={() => { if (window.confirm('Start the adventure over?')) { setSave(initial); setDialog(0); setAwake(false); setPuzzleDone(false); setView('story'); setCinematic(null); } }}><RotateCcw size={16}/> Start over</button>
             <span>{completedCount} chapters visited</span>
           </footer>
         </main>
