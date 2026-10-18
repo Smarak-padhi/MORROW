@@ -1102,3 +1102,67 @@ footer button {
 .opening-character .felt-morrow { margin:auto; }
 .storybook-character .felt-morrow { margin:auto; }
 @media(prefers-reduced-motion:reduce) { .felt-morrow { animation:none; } }
+
+
+/* MOBILE HARDENING — no horizontal scrolling, safe areas, stable tap targets */
+html,body,#root { width:100%; min-width:0; max-width:100%; }
+body { overflow-x:clip; }
+img,svg,video,canvas { max-width:100%; }
+.story-topbar { padding-top:max(12px,env(safe-area-inset-top)); padding-left:max(14px,env(safe-area-inset-left)); padding-right:max(14px,env(safe-area-inset-right)); }
+.story-top-actions { min-width:0; flex-wrap:nowrap; }
+.story-top-actions button { flex-shrink:0; min-width:44px; min-height:44px; }
+.opening-scene,.storybook-chapter,.storybook-map,.storybook-stage,.storybook-reading,.storybook-interaction,.storybook-ending { min-width:0; max-width:100%; }
+.storybook-chapter { overflow:clip; }
+.storybook-reading,.storybook-interaction,.storybook-ending { overflow-wrap:anywhere; }
+.storybook-reading p,.storybook-ending p { text-wrap:pretty; }
+.storybook-stage { isolation:isolate; }
+.storybook-character { pointer-events:none; }
+.storybook-character .felt-morrow { width:100%; max-height:min(55svh,390px); object-fit:contain; }
+.opening-character .felt-morrow { width:min(70vw,320px); max-height:min(39svh,370px); object-fit:contain; }
+.storybook-interaction .game-container { width:100%; max-width:min(760px,100%); margin-inline:auto; }
+.choices-grid { grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr)); }
+.choices-grid > button,.spool-options > button,.gear-controls > button { min-width:0; overflow-wrap:anywhere; }
+.storybook-action,.storybook-link,.story-top-actions button,.storybook-island,.final-stitch-btn { min-height:48px; }
+.storybook-action { max-width:100%; white-space:normal; text-align:center; }
+.cinematic-player { width:100%; height:100svh; min-height:0; max-width:none; padding:0!important; }
+.cinematic-player video { object-fit:contain; }
+.cinematic-player-bar { padding-bottom:max(20px,env(safe-area-inset-bottom)); }
+.cinematic-player-buttons button { min-height:48px; min-width:48px; }
+.cinematic-player-buttons button:focus-visible { outline:3px solid #e8c878; outline-offset:3px; }
+@media(max-width:480px) {
+ .story-brand { font-size:clamp(.85rem,4vw,1.1rem); white-space:nowrap; }
+ .story-topbar { gap:8px; }
+ .opening-scene { min-height:100svh; padding-top:max(76px,env(safe-area-inset-top))!important; padding-bottom:max(20px,env(safe-area-inset-bottom))!important; }
+ .opening-character { min-height:0; height:auto; max-height:36svh; }
+ .opening-character .felt-morrow { max-height:34svh; }
+ .opening-narration { width:100%; }
+ .opening-narration h1 { font-size:clamp(2rem,10vw,3rem); line-height:1.08; }
+ .opening-narration p { max-width:100%; }
+ .storybook-stage { height:clamp(350px,62svh,580px); min-height:0; }
+ .storybook-character { width:min(65vw,275px); bottom:12%; }
+ .storybook-scene-label { max-width:100%; gap:8px; font-size:.65rem; }
+ .storybook-reading { padding-inline:clamp(16px,5vw,25px); }
+ .storybook-reading h1 { font-size:clamp(2rem,10vw,3rem); }
+ .storybook-dialogue p { font-size:clamp(1.05rem,4.7vw,1.3rem); }
+ .storybook-interaction { padding-inline:clamp(12px,4vw,20px); }
+ .storybook-map { padding-inline:14px!important; }
+ .storybook-map-grid { gap:12px; }
+ .storybook-island { padding:10px 6px; border-radius:32% 32% 18px 18px; }
+ .storybook-island strong { font-size:clamp(.85rem,4vw,1.1rem); }
+ .storybook-island small { font-size:.65rem; }
+ .cinematic-player-bar { gap:12px; }
+ .cinematic-player-buttons { display:grid; grid-template-columns:auto 1fr; gap:8px; }
+ .cinematic-player-buttons button:last-child { grid-column:2; }
+ .cinematic-player-buttons button { font-size:.87rem; }
+ .cinematic-eyebrow { font-size:.65rem; }
+}
+@media(max-width:350px) {
+ .storybook-map-grid { grid-template-columns:1fr 1fr; }
+ .storybook-stage { height:350px; }
+ .storybook-character { width:62vw; }
+ .storybook-companion { width:65px; }
+ .storybook-scene-bottom { font-size:.6rem; }
+}
+@media(prefers-reduced-motion:reduce) {
+ *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }
+}
