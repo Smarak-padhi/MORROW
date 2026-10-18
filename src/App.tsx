@@ -43,7 +43,7 @@ export default function App() {
   const idx = chapters.findIndex(c => c.id === save.active);
   const chapter = chapters[Math.max(idx, 0)];
   const lines = dialogues[chapter.id];
-  const lastLine = chapter.id === 'workshop' ? dialog >= 6 : dialog === lines.length - 1;
+  const lastLine = chapter.id === 'workshop' ? dialog >= 7 : dialog === lines.length - 1;
   const puzzleNeeded = puzzleChapters.includes(chapter.id);
   const ready = lastLine && (!puzzleNeeded || puzzleDone || save.completed.includes(chapter.id));
   const completedCount = save.completed.length;
@@ -142,7 +142,7 @@ export default function App() {
         </main>
       ) : (
         <main className={`storybook-chapter chapter-${chapter.id}`}>
-          {chapter.id === 'workshop' ? <WorkshopComic beat={dialog} awake={awake || save.completed.includes('workshop')} onBell={() => { setAwake(true); setBell(n => n + 1); play('bell'); }} onNext={() => { setDialog(d => Math.min(d + 1, 6)); play('chime'); }}/> : <>
+          {chapter.id === 'workshop' ? <WorkshopComic beat={dialog} awake={awake || save.completed.includes('workshop')} onBell={() => { setAwake(true); setBell(n => n + 1); play('bell'); }} onNext={() => { setDialog(d => Math.min(d + 1, 7)); play('chime'); }}/> : <>
           <section key={chapter.id} className="storybook-stage" aria-label={`Illustrated scene: ${chapter.name}`}>
             <div className="storybook-sky" aria-hidden="true"><span className="story-sun"/> <span className="story-cloud cloud-a"/> <span className="story-cloud cloud-b"/></div>
             <div className="storybook-landscape" aria-hidden="true"><span/><span/><span/></div>
