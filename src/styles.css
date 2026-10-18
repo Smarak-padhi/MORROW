@@ -480,15 +480,44 @@ main {
 .spool-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
+  gap: 10px;
+  padding: 10px 16px;
   border-radius: 12px;
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--ink);
-  min-height: 44px;
-  font-weight: 600;
+  min-height: 48px;
+  text-align: left;
+}
+
+.spool-pip {
+  width: 14px;
+  height: 24px;
+  border-radius: 4px;
+  border: 2px solid #302631;
+  flex-shrink: 0;
+}
+
+.spool-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.spool-text strong {
   font-size: 13px;
+  line-height: 1.2;
+}
+
+.spool-text small {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.choice-badge {
+  display: inline-block;
+  font: 800 10px 'Space Mono', monospace;
+  color: var(--berry);
+  margin-bottom: 2px;
 }
 
 .spool-btn.active {
@@ -1099,8 +1128,24 @@ footer button {
 
 /* Approved handcrafted felt character art replaces rejected SVG mascot. */
 .felt-morrow { display:block; width:min(70vw,330px); max-height:390px; height:auto; object-fit:contain; filter:drop-shadow(0 14px 12px rgba(54,32,45,.22)); animation:bob 4.5s ease-in-out infinite; }
-.opening-character .felt-morrow { margin:auto; mix-blend-mode:multiply; }
-.storybook-character .felt-morrow { margin:auto; mix-blend-mode:multiply; }
+.opening-character.storybook-vignette-cameo {
+  position: relative;
+  display: block;
+  width: min(84vw, 340px);
+  max-width: 340px;
+  margin: 16px auto;
+  border-radius: 120px 120px 18px 18px;
+  overflow: hidden;
+  border: 3px solid var(--line);
+  box-shadow: 0 12px 28px rgba(48, 38, 49, 0.16), 0 0 0 3px var(--gold);
+}
+.opening-character .felt-morrow-vignette {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+}
 @media(prefers-reduced-motion:reduce) { .felt-morrow { animation:none; } }
 
 
@@ -1271,99 +1316,730 @@ img,svg,video,canvas { max-width:100%; }
 }
 
 
-/* Comic-first Workshop: persistent scroll panels and in-panel speech. */
-.chapter-workshop {background:#eae0d2}
-.comic-workshop{max-width:1050px;margin:auto;padding:100px 14px 30px}
-.comic-heading{text-align:center;margin:0 auto 24px}
-.comic-heading h1{font:800 clamp(2.5rem,8vw,5rem) Georgia,serif;margin:8px}
-.comic-heading>span,.comic-panel-caption{font:800 .72rem monospace;letter-spacing:.1em}
-.comic-strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.comic-panel{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;min-height:440px;border:5px solid #302631;background:#b9a18b;box-shadow:5px 6px 0 #302631}
-.comic-panel--establish,.comic-panel--reaction,.comic-panel--giant,.comic-panel--exit{grid-column:1/-1;min-height:560px}
-.comic-panel-caption{position:absolute;top:12px;left:12px;z-index:4;max-width:90%;background:#fff6e9;border:2px solid #302631;padding:8px}
-.comic-panel--establish{background:#694632}
-.comic-establish-image{position:absolute;inset:0;background:linear-gradient(0deg,#24151c88,transparent 60%),url('/cinematics/morrow-waking.jpg') center/cover}
-.comic-narrator{z-index:2;position:relative;max-width:70%;margin:0 0 20px 18px;padding:12px;background:#fff4df;border:3px solid #302631;font:700 1.2rem Georgia,serif}
-.comic-panel--bell{align-items:center;justify-content:center;background:radial-gradient(circle,#f1d8a3,#855439)}
-.comic-bell-drawing{color:#54331e;transform:rotate(-15deg)}
-.comic-sfx{font:900 clamp(3rem,10vw,7rem) Georgia,serif;color:#fff1a5;-webkit-text-stroke:2px #302631;transform:rotate(-8deg);text-shadow:6px 7px #a24d59}
-.comic-panel--reaction{background:repeating-conic-gradient(from 15deg at 50% 50%,#f4d8a8 0deg 10deg,#e7b77d 10deg 20deg)}
-.comic-panel--hello{background:radial-gradient(circle,#ffe9c8,#a56c79)}
-.comic-panel--clack{background:linear-gradient(130deg,#604332,#b18b67)}
-.comic-morrow{position:absolute;z-index:1;bottom:-6%;left:25%;width:55%;height:83%;object-fit:contain;object-position:bottom;filter:drop-shadow(9px 13px 6px #301c2b66)}
-.comic-panel--hello .comic-morrow{left:8%;width:65%;transform:rotate(-5deg)}
-.comic-panel--clack .comic-morrow{left:0;width:54%;height:65%}
-.comic-clack-placeholder{position:absolute;right:5%;bottom:10%;width:32%;aspect-ratio:1.2;background:linear-gradient(130deg,#a7784b,#633a24);border:8px ridge #593a23;border-radius:15px;display:grid;place-items:center;color:white;font:800 .7rem monospace;text-align:center}
-.comic-panel--giant{background:radial-gradient(circle at 50% 90%,#f5d7a5,#76606b 60%,#302938)}
-.comic-visitor{position:absolute;left:15%;bottom:-25%;width:70%;height:120%;background:#2a2431;border-radius:45% 45% 0 0;filter:blur(2px)}
-.comic-visitor:before{content:'';position:absolute;left:30%;top:-15%;width:40%;aspect-ratio:1;background:#2a2431;border-radius:50%}
-.comic-panel--pipkin{background:repeating-linear-gradient(-15deg,#dce5df 0 25px,#a6c5ca 25px 29px)}
-.comic-paper{align-self:center;display:grid;place-content:center;gap:10px;width:70%;aspect-ratio:1;transform:rotate(-10deg);padding:15px;background:#fff1dc;border:4px solid #302631;box-shadow:8px 10px #302631;text-align:center}
-.comic-paper strong{font:900 3rem Georgia,serif}
-.comic-paper span{font:800 .8rem monospace}
-.comic-panel--question{background:radial-gradient(circle,#eee2d4,#90818c)}
-.comic-silence{align-self:center;font:900 10rem Georgia,serif}
-.comic-panel--exit{background:radial-gradient(circle at 50% 80%,#f3e6b1,#3c5162)}
-.comic-door{position:absolute;left:30%;bottom:0;width:40%;height:78%;border:15px ridge #775334;border-bottom:0;border-radius:50% 50% 0 0;background:linear-gradient(145deg,#d7edc6,#41656a);display:grid;place-items:center}
-.comic-door span{font:900 8rem Georgia,serif;color:#fff3c4}
-.comic-balloon{position:relative;z-index:3;align-self:flex-start;width:max-content;max-width:65%;margin:0 0 10% 5%;padding:14px;border:3px solid #302631;border-radius:35px;background:#fffdf5;color:#302631;box-shadow:4px 5px #30263144}
-.comic-balloon--right{align-self:flex-end;margin:0 5% 10% 0}
-.comic-balloon:after{content:'';position:absolute;bottom:-20px;left:22%;width:25px;height:25px;background:#fffdf5;border-right:3px solid #302631;transform:skew(22deg) rotate(38deg)}
-.comic-balloon--right:after{left:auto;right:22%;transform:skew(-22deg) rotate(-38deg);border-right:0;border-left:3px solid #302631}
-.comic-speaker{font:900 .65rem monospace;color:#9b4164}
-.comic-balloon p{margin:5px 0;font:800 clamp(1.1rem,3vw,2rem)/1.2 Georgia,serif;overflow-wrap:break-word}
-.comic-bell-action{position:relative;z-index:4;min-height:48px;margin:10px;padding:12px;border:2px solid #302631;background:#fff4dc;border-radius:10px;font-weight:800}
-.comic-reading{text-align:center;padding:24px}
-.comic-reading h2{font:800 1.7rem Georgia,serif}
-.comic-reading .storybook-action{margin:15px auto}
-@media(max-width:650px){.comic-strip{grid-template-columns:1fr}.comic-panel{grid-column:1/-1;min-height:clamp(340px,115vw,550px)}.comic-panel--establish,.comic-panel--reaction,.comic-panel--giant,.comic-panel--exit{min-height:clamp(400px,125vw,630px)}.comic-balloon{max-width:78%}.comic-morrow{left:18%;width:70%;height:73%}.comic-panel--clack .comic-morrow{width:60%}}
-@media(prefers-reduced-motion:reduce){.comic-panel,.comic-panel *{animation:none!important;transition:none!important}}
+/* Comic-first Workshop: authentic handcrafted illustrated comic */
+.chapter-workshop { background: #eae0d2; }
+.comic-workshop { max-width: 1050px; margin: auto; padding: 90px 14px 40px; }
+.comic-heading { text-align: center; margin: 0 auto 28px; }
+.comic-heading h1 { font: 800 clamp(2.4rem, 7vw, 4.8rem) Georgia, serif; margin: 8px; color: #302631; }
+.comic-heading > span, .comic-panel-caption { font: 800 .75rem monospace; letter-spacing: .1em; color: #5a4a58; }
 
+.comic-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding-bottom: 24px; }
+.comic-panel {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  min-height: 480px;
+  border: 5px solid #302631;
+  border-radius: 6px;
+  background: #fbf7ee;
+  box-shadow: 6px 7px 0 #302631;
+  scroll-margin-bottom: 140px;
+}
 
-/* Compact, always-reachable next-panel control while reading the scroll comic. */
-.chapter-workshop .comic-reading{position:sticky;bottom:0;z-index:8;background:#fff7edee;backdrop-filter:blur(12px);border:2px solid #302631;border-radius:18px 18px 0 0;box-shadow:0 -8px 28px #30263125;padding:8px 14px max(10px,env(safe-area-inset-bottom))}
-.chapter-workshop .comic-reading h2,.chapter-workshop .comic-reading .story-overline{display:none}
-.chapter-workshop .comic-reading .storybook-action{margin:4px auto 6px;min-height:48px}
-.chapter-workshop .comic-reading .storybook-page-number{font-size:.7rem}
-.chapter-workshop .comic-strip{padding-bottom:12px}
+.comic-panel--establish,
+.comic-panel--reaction,
+.comic-panel--giant,
+.comic-panel--exit {
+  grid-column: 1 / -1;
+  min-height: 520px;
+}
 
+.comic-panel-caption {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  max-width: 85%;
+  background: #fffdf5;
+  border: 2px solid #302631;
+  border-radius: 3px;
+  padding: 6px 10px;
+  box-shadow: 3px 3px 0 #30263122;
+}
 
-/* Comic QA 03: keep dialogue clear of characters and the sticky reader bar.
-   Until an approved transparent cutout is available, display Morrow's existing
-   reference card as a deliberate framed illustration rather than a fake cutout. */
-.chapter-workshop .comic-panel--reaction,
-.chapter-workshop .comic-panel--clack,
-.chapter-workshop .comic-panel--hello{min-height:clamp(520px,135vw,670px)}
-.chapter-workshop .comic-character-frame{position:absolute;top:76px;left:16%;width:68%;height:calc(100% - 310px);min-height:175px;max-height:340px;overflow:hidden;border:3px solid #302631;background:#f6eede;box-shadow:7px 8px 0 #30263144;transform:rotate(-2deg)}
-.chapter-workshop .comic-character-frame .comic-morrow{position:static;display:block;width:100%;height:100%;max-width:none;object-fit:contain;object-position:center;filter:none;transform:none}
-.chapter-workshop .comic-panel--clack .comic-character-frame{left:5%;width:49%;transform:rotate(-3deg)}
-.chapter-workshop .comic-panel--hello .comic-character-frame{left:16%;width:68%;transform:rotate(2deg)}
-.chapter-workshop .comic-panel--clack .comic-clack-placeholder{top:110px;bottom:auto;right:5%;width:33%;max-height:170px}
-.chapter-workshop .comic-panel--reaction .comic-balloon,
-.chapter-workshop .comic-panel--clack .comic-balloon,
-.chapter-workshop .comic-panel--hello .comic-balloon{position:absolute;bottom:142px;left:5%;right:auto;align-self:auto;max-width:90%;width:fit-content;margin:0;padding:13px 16px}
-.chapter-workshop .comic-panel--clack .comic-balloon{left:auto;right:5%}
-.chapter-workshop .comic-panel--establish .comic-narrator,
-.chapter-workshop .comic-panel--giant .comic-narrator{margin-bottom:155px;max-width:82%}
-.chapter-workshop .comic-panel--pipkin .comic-balloon,
-.chapter-workshop .comic-panel--question .comic-balloon,
-.chapter-workshop .comic-panel--exit .comic-balloon{margin-bottom:148px;max-width:85%}
-.chapter-workshop .comic-panel--pipkin .comic-paper{margin-bottom:65px}
-.chapter-workshop .comic-panel--question .comic-silence{margin-bottom:70px}
-.chapter-workshop .comic-panel--exit .comic-door{bottom:110px;height:65%}
-.chapter-workshop .comic-reading{max-width:100%;overflow:visible}
-.chapter-workshop .comic-reading .storybook-action{font-size:clamp(.9rem,3.8vw,1.15rem);max-width:100%;padding:12px 18px}
-.chapter-workshop .comic-panel{scroll-margin-bottom:170px}
-@media(max-width:650px){
- .chapter-workshop .comic-panel--reaction,
- .chapter-workshop .comic-panel--clack,
- .chapter-workshop .comic-panel--hello{min-height:560px}
- .chapter-workshop .comic-character-frame{top:78px;left:12%;width:76%;height:255px;min-height:0}
- .chapter-workshop .comic-panel--clack .comic-character-frame{left:5%;width:51%;height:255px}
- .chapter-workshop .comic-panel--hello .comic-character-frame{left:12%;width:76%}
- .chapter-workshop .comic-panel--clack .comic-clack-placeholder{top:120px;width:34%;height:140px}
- .chapter-workshop .comic-panel--reaction .comic-balloon,
- .chapter-workshop .comic-panel--clack .comic-balloon,
- .chapter-workshop .comic-panel--hello .comic-balloon{bottom:135px;max-width:90%;padding:11px 14px}
- .chapter-workshop .comic-panel--establish .comic-narrator{font-size:1.05rem;max-width:85%}
+/* Illustrated Art & Video Stage inside each panel */
+.comic-art-stage,
+.comic-video-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #251b23;
+}
+
+.comic-scene-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.comic-panel-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.comic-video-controls {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.shadow-video-wrap .comic-video-controls {
+  top: 64px;
+  right: 14px;
+}
+
+.comic-video-btn {
+  background: #fff8f0ee;
+  border: 2px solid #302631;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font: 800 .7rem monospace;
+  color: #302631;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 2px 2px 0 #30263133;
+  transition: transform .1s ease;
+}
+
+.comic-video-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Chapter 01: Shadow Village Interactive Stage & Impossible Tree Shadow */
+.shadow-stage-interactive {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(380px, 60vw, 520px);
+  background: #252338;
+}
+
+.shadow-video-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shadow-duck-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The Impossible Tree Shadow anchored directly at Duck's feet */
+.impossible-tree-shadow {
+  position: absolute;
+  left: 38%;
+  bottom: 12%;
+  width: clamp(140px, 32vw, 240px);
+  pointer-events: none;
+  z-index: 3;
+  transform-origin: bottom center;
+  transform: rotate(-18deg) skewX(-15deg);
+  filter: drop-shadow(0 2px 8px rgba(10, 8, 14, 0.7));
+  mix-blend-mode: multiply;
+  opacity: 0.92;
+}
+
+.impossible-tree-shadow.static {
+  position: absolute;
+  left: 20%;
+  bottom: 0;
+}
+
+.tree-shadow-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.shadow-morrow-character {
+  z-index: 5;
+  left: 8%;
+  bottom: 12%;
+  transform: scale(0.85);
+}
+
+.shadow-fallback-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shadow-duck-fallback {
+  position: relative;
+  width: 220px;
+  height: 260px;
+}
+
+.duck-fallback-svg {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+/* Shadow Stitcher Tactile Icons */
+.resident-art-wrap,
+.shadow-choice-icon-wrap,
+.shadow-figure-item,
+.shadow-projection-item {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resident-svg-icon,
+.shadow-svg-icon {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.shadow-workbench {
+  margin: 16px 0;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.shadow-figure {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.shadow-thread {
+  font-size: 24px;
+  color: var(--berry);
+}
+
+.shadow-placeholder-mark {
+  font-size: 28px;
+  font-family: Georgia, serif;
+  color: #8E79A8;
+}
+
+/* Narrative Captions */
+.comic-narrator {
+  position: relative;
+  z-index: 4;
+  max-width: 84%;
+  margin: 0 16px 20px 16px;
+  padding: 12px 16px;
+  background: #fffdf5;
+  border: 3px solid #302631;
+  border-radius: 4px;
+  font: 700 1.15rem/1.3 Georgia, serif;
+  color: #302631;
+  box-shadow: 4px 4px 0 #30263133;
+}
+
+/* Bell SFX & overlay */
+.comic-bell-overlay {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 80px;
+}
+
+.comic-sfx {
+  font: 900 clamp(2.6rem, 8vw, 4.8rem) Georgia, serif;
+  color: #fff1a5;
+  -webkit-text-stroke: 2px #302631;
+  transform: rotate(-6deg);
+  text-shadow: 4px 5px #a24d59;
+}
+
+.comic-bell-action {
+  min-height: 48px;
+  padding: 12px 20px;
+  border: 3px solid #302631;
+  background: #fff4dc;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #302631;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 #302631;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.comic-bell-action:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 #302631;
+}
+
+/* Handcrafted Speech Balloons: anchored safely with directional tails */
+.comic-balloon {
+  position: relative;
+  z-index: 4;
+  align-self: flex-start;
+  width: fit-content;
+  max-width: 82%;
+  margin: 0 0 16px 16px;
+  padding: 10px 16px;
+  border: 3px solid #302631;
+  border-radius: 24px;
+  background: #fffdf5;
+  color: #302631;
+  box-shadow: 4px 4px 0 #30263133;
+}
+
+.comic-balloon--right {
+  align-self: flex-end;
+  margin: 0 16px 16px 0;
+}
+
+.comic-balloon:after {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: 28px;
+  width: 18px;
+  height: 18px;
+  background: #fffdf5;
+  border-top: 3px solid #302631;
+  border-left: 3px solid #302631;
+  transform: rotate(35deg) skew(-10deg);
+}
+
+.comic-balloon--right:after {
+  left: auto;
+  right: 32px;
+  transform: rotate(55deg) skew(10deg);
+}
+
+.comic-speaker {
+  display: block;
+  font: 900 .7rem monospace;
+  color: #9b4164;
+  letter-spacing: .08em;
+  margin-bottom: 2px;
+}
+
+.comic-balloon p {
+  margin: 0;
+  font: 800 clamp(1.05rem, 3.2vw, 1.45rem)/1.25 Georgia, serif;
+  overflow-wrap: break-word;
+}
+
+/* Compact sticky reader navigation bar */
+.chapter-workshop .comic-reading {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  background: #fff8f0f0;
+  backdrop-filter: blur(14px);
+  border: 2px solid #302631;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -8px 24px #30263122;
+  padding: 8px 16px max(10px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chapter-workshop .comic-reading .storybook-action {
+  margin: 4px auto;
+  min-height: 46px;
+  padding: 10px 24px;
+  font-size: clamp(.92rem, 3.8vw, 1.1rem);
+  font-weight: 800;
+  background: #a34063;
+  color: #fff8f1;
+  border: 2px solid #302631;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #302631;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chapter-workshop .comic-reading .storybook-page-number {
+  font: 800 .72rem monospace;
+  color: #6d5b6b;
+  margin-top: 2px;
+}
+
+@media(max-width: 650px) {
+  .comic-strip { grid-template-columns: 1fr; }
+  .comic-panel { grid-column: 1 / -1; min-height: 480px; }
+  .comic-panel--establish,
+  .comic-panel--reaction,
+  .comic-panel--giant,
+  .comic-panel--exit { min-height: 500px; }
+  .comic-narrator { max-width: 90%; font-size: 1.05rem; }
+  .comic-balloon { max-width: 88%; }
+}
+
+@media(prefers-reduced-motion: reduce) {
+  .comic-panel, .comic-panel * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   Bespoke Handcrafted Storybook Stages (Loops 06 & 07)
+   ========================================================================== */
+.stage-svg-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.stage-svg-art {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Rain rising animation for Chapter 2 (Upside-Down Forest) */
+@keyframes rain-rise {
+  0% {
+    transform: translateY(24px);
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateY(-45px);
+    opacity: 0;
+  }
+}
+
+.rain-rising .rain-bead {
+  animation: rain-rise 2.2s ease-in-out infinite;
+}
+
+.reduced-motion-static .rain-bead {
+  animation: none !important;
+}
+
+/* Finale Stitch Puzzle Card */
+.finale-stitch-card {
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  padding: clamp(16px, 4vw, 24px);
+  box-shadow: 0 4px 16px rgba(48, 38, 49, 0.06);
+}
+
+.finale-progress-bar {
+  margin: 14px 0 16px;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  color: var(--ink);
+}
+
+.progress-track {
+  width: 100%;
+  height: 10px;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--berry));
+  border-radius: 5px;
+  transition: width 0.35s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.finale-step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 52px;
+  padding: 12px 16px;
+  text-align: left;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.finale-step:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.finale-step.active {
+  border-color: var(--berry);
+  box-shadow: 0 4px 12px rgba(163, 64, 99, 0.15);
+  background: var(--surface);
+}
+
+.finale-step.finished {
+  border-color: var(--sage);
+  background: rgba(136, 169, 145, 0.08);
+}
+
+.step-indicator {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 1.5px solid var(--line);
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--berry);
+  flex-shrink: 0;
+}
+
+.finale-step.finished .step-indicator {
+  color: var(--sage);
+  border-color: var(--sage);
+  background: #ffffff;
+}
+
+.step-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.step-copy strong {
+  font-size: 0.95rem;
+}
+
+.step-copy small {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.finale-perfect-btn {
+  display: block;
+  margin: 14px auto 8px;
+  padding: 8px 16px;
+  border: none;
+  border-bottom: 1.5px dashed var(--muted);
+  background: transparent;
+  color: var(--ink);
+  font-size: 0.88rem;
+  font-family: inherit;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.finale-perfect-btn:hover {
+  color: var(--berry);
+  border-bottom-color: var(--berry);
+}
+
+.finale-success-banner {
+  margin: 12px 0;
+  text-align: center;
+}
+
+.finale-re-knot-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  background: var(--cream);
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.reaction-sparkle {
+  color: var(--berry);
+  animation: pulse-glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-glow {
+  from { transform: scale(1); filter: drop-shadow(0 0 2px var(--gold)); }
+  to { transform: scale(1.15); filter: drop-shadow(0 0 8px var(--berry)); }
+}
+
+/* Character Scrapbook Module (Epilogue) */
+.character-scrapbook-module {
+  margin: 24px 0 16px;
+  padding: clamp(16px, 4vw, 24px);
+  background: var(--cream);
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  text-align: left;
+}
+
+.scrapbook-header {
+  margin-bottom: 14px;
+}
+
+.scrapbook-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--rust);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.scrapbook-header h4 {
+  font-family: var(--font-display, serif);
+  font-size: clamp(1.1rem, 3.5vw, 1.35rem);
+  color: var(--ink);
+  margin: 2px 0 4px;
+}
+
+.scrapbook-subtitle {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.scrapbook-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px 2px 10px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scrapbook-tab {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 44px;
+  transition: all 0.2s ease;
+}
+
+.scrapbook-tab.is-active {
+  border-color: var(--berry);
+  background: var(--berry);
+  color: #fff8f1;
+  box-shadow: 0 2px 8px rgba(163, 64, 99, 0.2);
+}
+
+.scrapbook-card {
+  margin-top: 8px;
+  padding: 16px;
+  background: #ffffff;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 2px 3px 0 rgba(48, 38, 49, 0.04);
+}
+
+.scrapbook-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.scrapbook-role {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--berry);
+}
+
+.scrapbook-name {
+  font-family: var(--font-display, serif);
+  font-size: 1.25rem;
+  color: var(--ink);
+  margin: 2px 0;
+}
+
+.scrapbook-species {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.scrapbook-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1.5px dashed currentColor;
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  transform: rotate(-3deg);
+  flex-shrink: 0;
+}
+
+.scrapbook-quote {
+  font-family: var(--font-display, serif);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--berry);
+  border-left: 3px solid var(--gold);
+  padding-left: 12px;
+  margin: 10px 0;
+}
+
+.scrapbook-description {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 8px 0 0;
 }

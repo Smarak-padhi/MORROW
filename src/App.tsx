@@ -3,13 +3,18 @@ import { ArrowRight, BookOpen, Map as MapIcon, Moon, Sun, RotateCcw, Volume2, Vo
 import { chapters, dialogues, type ChapterId } from './story';
 import { sound, type AudioEffect } from './sound';
 
-import { Pipkin, TheUnfinishedOne } from './components/art/SupportingCast';
 import { ShadowStitcher } from './components/inventions/ShadowStitcher';
 import { WeatherLoom } from './components/inventions/WeatherLoom';
 import { ImpossibleClock } from './components/inventions/ImpossibleClock';
 import { FinaleStitch } from './components/inventions/FinaleStitch';
 import { Cinematic } from './components/Cinematic';
 import { WorkshopComic } from './components/WorkshopComic';
+import { ShadowStage } from './components/art/ShadowStage';
+import { WeatherStage } from './components/art/WeatherStage';
+import { ClockStage } from './components/art/ClockStage';
+import { FinaleStage } from './components/art/FinaleStage';
+import { EpilogueStage } from './components/art/EpilogueStage';
+import { CharacterScrapbook } from './components/CharacterScrapbook';
 
 type Saved = { completed: ChapterId[]; active: ChapterId; muted: boolean; easter: boolean; started: boolean };
 const initial: Saved = { completed: [], active: 'workshop', muted: true, easter: false, started: false };
@@ -114,7 +119,9 @@ export default function App() {
         <main className="opening-scene">
           <div className="opening-glow" aria-hidden="true"/>
           <span className="opening-kicker">SOMEWHERE BETWEEN A WISH AND A LOOSE THREAD…</span>
-          <div className="opening-character"><img className="felt-morrow" src="/characters/morrow.png" alt="Morrow, a handmade peach felt Stitchling with asymmetric ears and plum scarf" /></div>
+          <div className="opening-character storybook-vignette-cameo">
+            <img className="felt-morrow-vignette" src="/cinematics/morrow-waking-poster.jpg" alt="Morrow sleeping softly on his workbench before the adventure begins" />
+          </div>
           <div className="opening-narration">
             <p className="opening-whisper">Once upon a nearly-perfect morning,</p>
             <h1>a very small mistake <em>woke up.</em></h1>
@@ -142,31 +149,40 @@ export default function App() {
         </main>
       ) : (
         <main className={`storybook-chapter chapter-${chapter.id}`}>
-          {chapter.id === 'workshop' ? <WorkshopComic beat={dialog} awake={awake || save.completed.includes('workshop')} onBell={() => { setAwake(true); setBell(n => n + 1); play('bell'); }} onNext={() => { setDialog(d => Math.min(d + 1, 7)); play('chime'); }}/> : <>
-          <section key={chapter.id} className="storybook-stage" aria-label={`Illustrated scene: ${chapter.name}`}>
-            <div className="storybook-sky" aria-hidden="true"><span className="story-sun"/> <span className="story-cloud cloud-a"/> <span className="story-cloud cloud-b"/></div>
-            <div className="storybook-landscape" aria-hidden="true"><span/><span/><span/></div>
-            <div className="storybook-scene-label"><span>{chapter.tag}</span><span>{String(idx + 1).padStart(2,'0')} / {String(chapters.length).padStart(2,'0')}</span></div>
-            <div key={`${chapter.id}-${dialog}`} className="storybook-character story-character-react"><img className="felt-morrow" src="/characters/morrow.png" alt="Morrow, the handmade Stitchling" /></div>
-            {chapter.id === 'weather' && <Pipkin className="storybook-companion companion-right"/>}
-            {chapter.id === 'finale' && <TheUnfinishedOne className="storybook-companion companion-left"/>}
-            <div className="story-atmosphere" aria-hidden="true"><i/><i/><i/><i/><i/><i/></div>
-            <div className="storybook-scene-bottom"><span>{chapter.subtitle}</span><span>✦</span></div>
-          </section>
+          {chapter.id === 'workshop' ? (
+            <WorkshopComic
+              beat={dialog}
+              awake={awake || save.completed.includes('workshop')}
+              onBell={() => { setAwake(true); setBell(n => n + 1); play('bell'); }}
+              onNext={() => { setDialog(d => Math.min(d + 1, 7)); play('chime'); }}
+            />
+          ) : (
+            <>
+              {chapter.id === 'shadows' ? (
+                <ShadowStage dialog={dialog} />
+              ) : chapter.id === 'weather' ? (
+                <WeatherStage dialog={dialog} />
+              ) : chapter.id === 'clock' ? (
+                <ClockStage dialog={dialog} />
+              ) : chapter.id === 'finale' ? (
+                <FinaleStage dialog={dialog} />
+              ) : (
+                <EpilogueStage dialog={dialog} />
+              )}
 
-          <section className="storybook-reading reveal-on-scroll" aria-label="Story dialogue">
-            <p className="story-overline">{chapter.tag} · {chapter.subtitle}</p>
-            <h1>{chapter.name}</h1>
-            <div className="storybook-dialogue story-page-turn" aria-live="polite" key={`${chapter.id}-${dialog}`}>
-              <p>{lines[dialog]}</p>
-            </div>
-            {!lastLine ? (
-              <button className="storybook-action" type="button" onClick={() => { setDialog(d => Math.min(d + 1, lines.length - 1)); play('chime'); }}>Turn the page <ArrowRight size={18}/></button>
-            ) : null}
-            <span className="storybook-page-number">{dialog + 1} of {lines.length} · {lastLine ? 'The story continues below' : 'Tap to continue'}</span>
-          </section>
-
-          </>}
+              <section className="storybook-reading reveal-on-scroll" aria-label="Story dialogue">
+                <p className="story-overline">{chapter.tag} · {chapter.subtitle}</p>
+                <h1>{chapter.name}</h1>
+                <div className="storybook-dialogue story-page-turn" aria-live="polite" key={`${chapter.id}-${dialog}`}>
+                  <p>{lines[dialog]}</p>
+                </div>
+                {!lastLine ? (
+                  <button className="storybook-action" type="button" onClick={() => { setDialog(d => Math.min(d + 1, lines.length - 1)); play('chime'); }}>Turn the page <ArrowRight size={18}/></button>
+                ) : null}
+                <span className="storybook-page-number">{dialog + 1} of {lines.length} · {lastLine ? 'The story continues below' : 'Tap to continue'}</span>
+              </section>
+            </>
+          )}
           {lastLine && (
             <section className="storybook-interaction reveal-on-scroll" aria-label="Chapter interaction">
               {chapter.id === 'shadows' && <ShadowStitcher playChime={() => play('stitch')} onSuccess={() => setPuzzleDone(true)}/>}
@@ -184,7 +200,7 @@ export default function App() {
                       {['Shadow Stitcher', 'Weather Loom', 'Impossible Clock'].map((name, i) => <button type="button" key={name} onClick={() => select(chapters[i+1].id)}><span>0{i+1}</span><strong>{name}</strong><small>Replay the invention ↗</small></button>)}
                     </div>
                   </div>
-                  <details className="ending-character-sheet"><summary>Open Morrow's character portfolio</summary><p><strong>Name:</strong> Morrow · <strong>Species:</strong> Stitchling · <strong>Craft:</strong> Impossible-Things Repairer · <strong>Personality:</strong> curious, clumsy, gentle · <strong>Origin:</strong> born from a wish and loose thread.</p></details>
+                  <CharacterScrapbook />
                   <button className="storybook-link" type="button" onClick={() => { setBell(n => n+1); play('bell'); if (bell + 1 >= 5) setSave(s => ({ ...s, easter: true })); }}>Ring Sir Clack's bell ({bell})</button>
                   {save.easter && <p className="story-secret">The fourth invention is this website. You helped make it.</p>}
                 </div>
