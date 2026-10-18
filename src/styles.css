@@ -1318,3 +1318,11 @@ img,svg,video,canvas { max-width:100%; }
 .comic-reading .storybook-action{margin:15px auto}
 @media(max-width:650px){.comic-strip{grid-template-columns:1fr}.comic-panel{grid-column:1/-1;min-height:clamp(340px,115vw,550px)}.comic-panel--establish,.comic-panel--reaction,.comic-panel--giant,.comic-panel--exit{min-height:clamp(400px,125vw,630px)}.comic-balloon{max-width:78%}.comic-morrow{left:18%;width:70%;height:73%}.comic-panel--clack .comic-morrow{width:60%}}
 @media(prefers-reduced-motion:reduce){.comic-panel,.comic-panel *{animation:none!important;transition:none!important}}
+
+
+/* Compact, always-reachable next-panel control while reading the scroll comic. */
+.chapter-workshop .comic-reading{position:sticky;bottom:0;z-index:8;background:#fff7edee;backdrop-filter:blur(12px);border:2px solid #302631;border-radius:18px 18px 0 0;box-shadow:0 -8px 28px #30263125;padding:8px 14px max(10px,env(safe-area-inset-bottom))}
+.chapter-workshop .comic-reading h2,.chapter-workshop .comic-reading .story-overline{display:none}
+.chapter-workshop .comic-reading .storybook-action{margin:4px auto 6px;min-height:48px}
+.chapter-workshop .comic-reading .storybook-page-number{font-size:.7rem}
+.chapter-workshop .comic-strip{padding-bottom:12px}
