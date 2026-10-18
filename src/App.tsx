@@ -31,6 +31,8 @@ function load(): Saved {
 
 export default function App() {
   const [save, setSave] = useState<Saved>(load);
+  const [introPlaying, setIntroPlaying] = useState(true);
+  const [introFailed, setIntroFailed] = useState(false);
   const [dialog, setDialog] = useState(0);
   const [night, setNight] = useState(false);
   const [view, setView] = useState<'story' | 'map'>('story');
@@ -88,7 +90,26 @@ export default function App() {
         </div>
       </header>
 
-      {!save.started ? (
+      {!save.started && introPlaying && !introFailed ? (
+        <main className="cinematic-intro" aria-label="Morrow waking-up cinematic">
+          <video
+            className="cinematic-intro-video"
+            src="/videos/morrow-waking-up.mp4"
+            poster="/videos/morrow-waking-poster.jpg"
+            autoPlay
+            muted
+            playsInline
+            preload="metadata"
+            onEnded={() => setIntroPlaying(false)}
+            onError={() => { setIntroFailed(true); setIntroPlaying(false); }}
+            aria-label="Morrow sleeps in the workshop, wakes up and notices you"
+          />
+          <div className="cinematic-intro-controls">
+            <span>PROLOGUE · THE FIRST STITCH</span>
+            <button type="button" onClick={() => setIntroPlaying(false)}>Skip opening <ArrowRight size={18}/></button>
+          </div>
+        </main>
+      ) : !save.started ? (
         <main className="opening-scene">
           <div className="opening-glow" aria-hidden="true"/>
           <span className="opening-kicker">SOMEWHERE BETWEEN A WISH AND A LOOSE THREAD…</span>
@@ -173,7 +194,7 @@ export default function App() {
           )}
           <footer className="storybook-footer">
             <span>We make wonderful mistakes. ✳</span>
-            <button type="button" onClick={() => { if (window.confirm('Start the adventure over?')) { setSave(initial); setDialog(0); setAwake(false); setPuzzleDone(false); setView('story'); } }}><RotateCcw size={16}/> Start over</button>
+            <button type="button" onClick={() => { if (window.confirm('Start the adventure over?')) { setSave(initial); setDialog(0); setAwake(false); setPuzzleDone(false); setView('story'); setIntroPlaying(true); } }}><RotateCcw size={16}/> Start over</button>
             <span>{completedCount} chapters visited</span>
           </footer>
         </main>
