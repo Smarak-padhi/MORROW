@@ -98,3 +98,18 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
    - Command: `npm run build` (`tsc -b && vite build`)
    - Result: Passed with zero errors.
    - Bundle size: JS 261.78 kB (gzip: 80.92 kB), CSS 12.35 kB (gzip: 3.62 kB).
+
+
+---
+
+## [2026-10-18] Story-first UX correction and source QA (post L02)
+
+**User finding:** Previous site looked like a portfolio first rather than a story. This is a P0 product mismatch, regardless of previous smoke-test success.
+
+**Changes committed:** immersive opening and chapter stages; non-looping dialogue; chapter gates; epilogue-only portfolio; responsive chapter map; meaningful Shadow/Weather/Clock objectives; source-level QA report in `docs/STORY_FIRST_QA.md`; GitHub Actions build gate.
+
+**Evidence available:** Source files inspected and updated via GitHub connector. Commits visible on `feat/skills-discovery-and-bootstrap`. **No fresh local build, Playwright, accessibility, or device test was executed by this reviewer.** Previous Antigravity QA does not validate these new changes.
+
+**Status:** Implementation committed; QA gate **PENDING**. Antigravity must pull latest branch, run `npm ci && npm run build`, test full playthrough at 320/375/430px, keyboard, reduced motion, reload, and puzzle failure states, then attach screenshots/logs and update this entry.
+
+**Remaining design debt:** Environment-specific original scene art, cinematic transitions, deeper final reveal, visual polish and real-device testing. Optional Spline is not on the critical path.
