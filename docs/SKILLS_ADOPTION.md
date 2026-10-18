@@ -2,11 +2,11 @@
 
 ## Overview
 
-In accordance with Phase 1–3 of the Antigravity Skill Discovery & Integration mission, local skills across accessible project trees (Algoryxz, Multi-agent, o-travelz, and Antigravity builtins) were audited, filtered for relevance, license, and architectural compatibility, and imported into `.agents/skills/`.
+In accordance with Phase 1–3 of the Antigravity Skill Discovery & Integration mission, local and community skills were audited, security-inspected, filtered for relevance, and imported into `.agents/skills/`.
 
 ---
 
-## Discovered vs. Imported Skills Inventory
+## Discovered & Evaluated Skills Inventory
 
 | Skill Name | Source Project & Path | Purpose | Compatibility with MORROW (React 19 / TS / Vite / CSS / SVG) | Integration Status & Reason |
 |---|---|---|---|---|
@@ -16,31 +16,40 @@ In accordance with Phase 1–3 of the Antigravity Skill Discovery & Integration 
 | **ui-ux-pro-max** | `Desktop/o-travelz/.agents/skills/ui-ux-pro-max` | Comprehensive UI/UX design intelligence database (palettes, typography, WCAG checks, touch-target rules). | 100% compatible with React 19 web & mobile. | **Imported** (`.agents/skills/ui-ux-pro-max`). Used for tactile storybook palette and a11y cross-referencing. |
 | **design-system** | `Desktop/o-travelz/.agents/skills/design-system` | 3-layer token architecture (primitive → semantic → component), token validation scripts. | 100% compatible with CSS custom properties. | **Imported** (`.agents/skills/design-system`). Aligns with `docs/DESIGN_SYSTEM.md` token lock. |
 | **ui-styling** | `Desktop/o-travelz/.agents/skills/ui-styling` | Component specs, accessible primitives, styling patterns. | Compatible. Provides reference patterns for accessible dialogs and buttons. | **Imported** (`.agents/skills/ui-styling`). Used as reference for accessible controls. |
-| **playwright-cli** | System / Node | Browser automation, mobile viewport smoke testing. | Native integration. | **Used via Playwright MCP & CLI** for G4 / QA matrix. |
-| **gsd-\*** | Global `.agents/skills/gsd-*` | GSD (Get Stuff Done) multi-phase project workflows. | Global skills available via runtime. | **Retained in global runtime** to avoid polluting project repository. |
+| **game-development** (Orchestrator) | `ibragimov-oasis/oasis-languages-jp` (`antigravity-game-development`) | Comprehensive game loop architecture, input abstraction, state machines, and routing to sub-skills. | 100% compatible. Markdown-based principles and architecture guide. Security Grade A (100/100). | **Imported** (`.agents/skills/game-development`). Primary driver for Loops L02–L09. |
+| ↳ **2d-games** | `.../antigravity-game-development/2d-games` | 2D sprite layering, interactive SVG/canvas coordinate spaces, camera shake timing (50–200ms). | 100% compatible with MORROW's 2D storybook and SVG stages. | **Imported** as sub-skill module. |
+| ↳ **web-games** | `.../antigravity-game-development/web-games` | Browser constraint management: audio autoplay requirements, memory pooling, tab backgrounding. | 100% compatible with Vite/React 19 web execution. | **Imported** as sub-skill module. |
+| ↳ **game-design** | `.../antigravity-game-development/game-design` | 30-second core loop (Action → Feedback → Reward), puzzle difficulty balancing, narrative motivation. | 100% compatible with storybook chapter progression. | **Imported** as sub-skill module. |
+| ↳ **game-audio** | `.../antigravity-game-development/game-audio` | Audio priority hierarchy (Voice/Story → SFX → Music → Ambient), Web Audio synthesis, user-gesture gating. | 100% compatible with MORROW procedural audio and mute requirements. | **Imported** as sub-skill module. |
+| ↳ **mobile-games** | `.../antigravity-game-development/mobile-games` | Mobile touch controls, min 44x44pt targets, thermal/battery budget, interruption management. | 100% compatible with MORROW's mobile-first mandate. | **Imported** as sub-skill module. |
+| ↳ **game-art** | `.../antigravity-game-development/game-art` | Visual style consistency, character sheet preservation, color hierarchy and readability. | 100% compatible with MORROW paper-cut art direction. | **Imported** as sub-skill module. |
+| ↳ **3d-games** | `.../antigravity-game-development/3d-games` | 3D rendering pipeline, frustum culling, shader optimization. | Scoped: **Only used for optional Spline scenes**, never for core gameplay. | **Imported** with strict Spline-only constraint. |
 
 ---
 
-## Evaluation Criteria & Compatibility Matrix
+## Security Audit Summary (`ibragimov-oasis-antigravity-game-development`)
 
-1. **Original Character & Story Bible Protection**:
-   - Skills must obey MORROW non-negotiables: Morrow is a unique **Stitchling** (pear-shaped, button-eye markings, asymmetric folded ears, oversized scarf, spool tail, mitten paws). No generic fox designs or external IP.
-2. **Design Tokens & Accessibility**:
-   - `docs/DESIGN_SYSTEM.md` is canonical. No arbitrary hex codes.
-   - All interactive controls >= 44x44px.
-   - Reduced-motion unconditionally respected.
-3. **Execution Integrity**:
-   - `gravitas` invariants: No claiming done without runtime evidence. No exact retries without diagnosis.
+1. **Source Provenance**:
+   - Origin: GitHub `ibragimov-oasis/oasis-languages-jp` under directory `.antigravity/skills/skills-antigravity/antigravity-game-development`.
+   - Registry: Verified on Skills Directory (`https://www.skillsdirectory.com/skills/ibragimov-oasis-antigravity-game-development`).
+2. **Security Grade & Static Analysis**:
+   - Security Grade: **A (100/100)**.
+   - File Analysis: Consists strictly of 11 clean Markdown instruction and reference files (`SKILL.md`).
+   - Zero executable binaries, zero obfuscated scripts, zero network requests, zero telemetry, zero prompt injection or credential harvesting vectors.
+3. **Dependency Footprint**:
+   - No external npm packages or system binaries required. Fully self-contained conceptual and engineering guide.
 
 ---
 
-## Skill Usage Matrix for Agents
+## Skill Usage Matrix for Execution Loops L02–L09
 
-| Agent Role | Primary Skills to Invoke | Key Responsibilities |
-|---|---|---|
-| **Lead / Architecture** | `gravitas` | Scoped reconnaissance, invariant enforcement, verification loops |
-| **Art Director** | `ui-ux-pro-max`, `design-system` | Color palette compliance, paper texture feel, silhouette consistency |
-| **Narrative Designer** | `impeccable` (`clarify`, `delight`) | Dialogue pacing (<=150 words/scene), mystery clue timing, jokes |
-| **Gameplay Engineer** | `gravitas`, `design-system` | Stitching engine, 3 inventions, local progression state |
-| **Motion Engineer** | `animate` | Easing curves, GPU transform-only animations, reduced-motion bypass |
-| **QA Agent** | `impeccable` (`audit`), Playwright | 320/375/430/768/1280px testing, keyboard navigation, zero console errors |
+| Execution Loop | Focus | Applicable Skills | Key Directives |
+|---|---|---|---|
+| **L02: Intro & Workshop (G1)** | Prologue, bell ringing, meeting Sir Clack & Pipkin | `game-design`, `game-audio`, `impeccable` | 30s loop: Bell ring → Clack dad-joke → disaster counter increment. Procedural audio chime. |
+| **L03: Shadow Stitcher (Invention 1)** | Village chapter, duck shadow experiments | `2d-games`, `game-development`, `animate` | SVG layer ordering, state machine (Idle → Selecting → Stitching → Reaction), thread animation. |
+| **L04: Weather Loom (Invention 2)** | Upside-Down Forest, rain & wind weaving | `2d-games`, `web-games`, `mobile-games` | Touch-first target selection (>=44px), dual-step spool weaving mechanic. |
+| **L05: Impossible Clock (Invention 3)** | Tomorrow Town, 3 irregular gear toggles | `game-design`, `game-audio`, `gravitas` | Multi-slot puzzle resolution, state gating, ticking audio sync. |
+| **L06: Clock Tower Finale (G2)** | Confrontation with Professor Perfect & Unfinished One | `game-design`, `impeccable`, `animate` | Golden crooked knot stitch, emotional pacing, mystery clue payoff. |
+| **L07: Epilogue & Extras (G3)** | Scrapbook, disaster counter Easter egg, local storage | `web-games`, `design-system` | Defensive localStorage parsing, persistent unlock state, 4th stitch meta-discovery. |
+| **L08: Optional Spline 3D Scene** | Optional interactive 3D workshop vignette | `3d-games` (Strictly scoped) | WebGL/Spline scene with lightweight fallback; non-blocking; mobile safe. |
+| **L09: Mobile QA & Final Polish (G4)** | Multi-viewport testing (320-1280px), reduced motion | `mobile-games`, `impeccable`, Playwright | Zero console errors, 44px touch targets, complete reduced-motion fallback. |

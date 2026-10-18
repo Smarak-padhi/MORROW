@@ -11,6 +11,7 @@ import {
   VolumeX,
 } from 'lucide-react';
 import { chapters, dialogues, type ChapterId } from './story';
+import { sound, type AudioEffect } from './sound';
 import { Morrow, type MorrowExpression } from './components/art/Morrow';
 import { SirClack, Pipkin, TheUnfinishedOne } from './components/art/SupportingCast';
 import { ShadowStitcher } from './components/inventions/ShadowStitcher';
@@ -67,24 +68,8 @@ function App() {
   const chapter = chapters[idx];
   const unlocked = (i: number) => i === 0 || save.completed.includes(chapters[i - 1].id);
 
-  function playChime() {
-    if (save.muted) return;
-    try {
-      const AudioContextCtor = window.AudioContext;
-      const ctx = new AudioContextCtor();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.value = 660;
-      gain.gain.setValueAtTime(0.06, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.17);
-      osc.connect(gain).connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.18);
-      osc.onended = () => void ctx.close();
-    } catch {
-      // Audio fallback
-    }
+  function playSound(effect: AudioEffect = 'chime') {
+    sound.play(effect, save.muted);
   }
 
   function select(id: ChapterId) {
@@ -280,7 +265,7 @@ function App() {
                     type="button"
                     onClick={() => {
                       setDialog((d) => (d + 1) % dialogues[save.active].length);
-                      playChime();
+                      playSound('chime');
                     }}
                   >
                     Next line <ArrowRight size={16} />
@@ -291,28 +276,28 @@ function App() {
               {/* Functional Inventions per Chapter */}
               {save.active === 'shadows' && (
                 <ShadowStitcher
-                  playChime={playChime}
+                  playChime={() => playSound('stitch')}
                   onSuccess={() => setPuzzleDone(true)}
                 />
               )}
 
               {save.active === 'weather' && (
                 <WeatherLoom
-                  playChime={playChime}
+                  playChime={() => playSound('chime')}
                   onSuccess={() => setPuzzleDone(true)}
                 />
               )}
 
               {save.active === 'clock' && (
                 <ImpossibleClock
-                  playChime={playChime}
+                  playChime={() => playSound('gear')}
                   onSuccess={() => setPuzzleDone(true)}
                 />
               )}
 
               {save.active === 'finale' && (
                 <FinaleStitch
-                  playChime={playChime}
+                  playChime={() => playSound('stitch')}
                   onSuccess={() => setPuzzleDone(true)}
                 />
               )}
@@ -334,7 +319,7 @@ function App() {
                 className="primary"
                 disabled={!canAdvance}
                 onClick={() => {
-                  playChime();
+                  playSound('chime');
                   complete();
                 }}
               >
@@ -358,7 +343,7 @@ function App() {
               onClick={() => {
                 setBell((n) => n + 1);
                 if (bell + 1 >= 5) setSave((s) => ({ ...s, easter: true }));
-                playChime();
+                playSound('bell');
               }}
             >
               Ring the workshop bell <span>↗</span>
