@@ -1082,3 +1082,17 @@ footer button {
 .cinematic-intro-controls button:focus-visible { outline:3px solid #e8c878; outline-offset:3px; }
 @media(max-width:520px){ .cinematic-intro-controls { align-items:flex-end; } .cinematic-intro-controls > span { max-width:140px; line-height:1.5; } }
 @media(prefers-reduced-motion:reduce){ .cinematic-intro-video { display:none; } .cinematic-intro { background:#25324A url('/videos/morrow-waking-poster.jpg') center/cover no-repeat; } }
+
+
+/* Actual AI-generated cinematic playback: video assets are created separately in Gemini. */
+.cinematic-player { position:relative; min-height:100svh; display:grid; place-items:center; background:#110e1b; color:#fff8f1; overflow:hidden; }
+.cinematic-player video { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:#110e1b; }
+.cinematic-player-shade { position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg,rgba(8,8,16,.3),transparent 25%,transparent 66%,rgba(8,8,16,.85)); }
+.cinematic-player-bar { position:absolute; bottom:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:clamp(18px,4vw,42px); z-index:2; }
+.cinematic-eyebrow { font:700 12px 'Space Mono',monospace; letter-spacing:.16em; text-transform:uppercase; }
+.cinematic-player-buttons { display:flex; flex-wrap:wrap; gap:10px; }
+.cinematic-player-buttons button { display:inline-flex; align-items:center; justify-content:center; gap:9px; min-height:48px; padding:10px 16px; color:#fff8f1; background:rgba(42,28,50,.65); border:1px solid rgba(255,248,241,.6); border-radius:999px; backdrop-filter:blur(12px); }
+.cinematic-player-buttons button:hover { background:#a34063; }
+.cinematic-fallback { min-height:100svh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:25px; padding:32px!important; background:radial-gradient(circle at 50% 30%,#72536c,#25324a 75%); color:#fff8f1; }
+.cinematic-fallback h1 { font:700 clamp(2rem,6vw,5rem)/1.15 'Fraunces',Georgia,serif; max-width:750px; }
+@media(max-width:600px) { .cinematic-player-bar { align-items:stretch; flex-direction:column; } .cinematic-player-buttons { justify-content:space-between; } .cinematic-player-buttons button { padding:10px 12px; } }
