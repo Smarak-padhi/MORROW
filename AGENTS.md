@@ -1,7 +1,7 @@
 # AGENTS.md — operating instructions for coding/design agents
 
 ## Read order
-`docs/DESIGN_SYSTEM.md` → `docs/PRD.md` → `docs/TRD.md` → `docs/STORY_BIBLE.md` → `docs/PRODUCTION.md` → `docs/SKILLS_ADOPTION.md`.
+`docs/DESIGN_SYSTEM.md` → `docs/PRD.md` → `docs/TRD.md` → `docs/STORY_BIBLE.md` → `docs/EXECUTION_LOOPS.md` → `docs/PRODUCTION.md` → `docs/SKILLS_ADOPTION.md`.
 
 ## Non-negotiables
 1. **Design tokens before UI.** No ad hoc hex colors, typography or spacing. Update tokens first and explain changes.
@@ -9,11 +9,12 @@
 3. **Mobile-first, keyboard accessible, touch-first.** No hover-only or drag-only puzzles. Min 44px touch targets.
 4. **Core gameplay first.** Keep 3 inventions and the story ending functional before adding Tier 3, guestbook or AI videos.
 5. **Architectural separation.** Separate narrative data (`src/story.ts`), state (`src/App.tsx`), art assets (`src/components/art`), and interaction logic. Reuse the stitch engine across challenges.
-6. **Respect reduced motion.** Video and audio must be optional and skippable. Never autoplay audible sound.
+6. **Respect reduced motion.** Video and audio must be optional and skippable. Never autoplay audible sound. All audio user-initiated and muted by default.
 7. **Accurate representation.** Never fake global hit counters or live guestbooks. Label local-only demos accurately.
 8. **Narrative density.** Keep each scene <=150 words. Preserve mystery clue chronology and character voice.
 9. **Evidence-backed completion.** Run build/tests after changes. Report actual pass/fail and unimplemented features without exaggeration.
-10. **Safety and privacy.** Never modify remote repos, deployments, credentials, or submit hackathon entries without explicit repository/project selection and user authorization.
+10. **Spline 3D Scope**: Spline (https://spline.design/) is approved strictly as an optional 3D enhancement for the floating world map and workshop vignette. It must never replace React game state or mandatory accessible HTML/SVG interactions. Always retain a 2D fallback.
+11. **Safety and privacy.** Never modify remote repos, deployments, credentials, or submit hackathon entries without explicit repository/project selection and user authorization.
 
 ---
 

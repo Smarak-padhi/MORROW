@@ -4,97 +4,67 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 
 ---
 
-## [2026-10-18] L00 — Repository Bootstrap & Skill Discovery
+## Verified Execution Loops Summary
 
-### Scope & Invariant Grounding
-- **Requirement:** Discover and import existing skills from local projects, verify build environment, lock operational instructions, initialize Git repository and branch.
-- **Affected Files:**
-  - `.agents/skills/` (imported `gravitas`, `impeccable`, `animate`, `ui-ux-pro-max`, `design-system`, `ui-styling`)
-  - `docs/SKILLS_ADOPTION.md` (new)
-  - `docs/LOOP_LOG.md` (new)
-  - `AGENTS.md` (updated with imported skills instructions)
-  - `.gitignore` (new)
-  - `package.json`, `package-lock.json`
-
-### Verification Evidence
-1. **Local Skill Discovery:**
-   - Scanned `Desktop/Multi-agent`, `Desktop/o-travelz`, `Desktop/Algoryxz 001`, and global Antigravity config.
-   - Audited for licenses and compatibility (React 19 / TS / Vite / SVG / CSS).
-   - Imported 6 core skills into `.agents/skills/`.
-2. **Environment & Dependency Installation:**
-   - Command: `npm install`
-   - Result: 22 packages added, 0 vulnerabilities in 51s.
-3. **Production Build Verification:**
-   - Command: `npm run build` (`tsc -b && vite build`)
-   - Result: Passed with zero errors.
-4. **Git Branch & Hygiene:**
-   - Branch: `feat/skills-discovery-and-bootstrap`
-   - Remote origin: `https://github.com/Smarak-padhi/MORROW.git`
-   - Status: Committed `feat(bootstrap): complete L00 bootstrap and import verified local skills`.
+| Loop | State | Evidence | Next Action |
+|---|---|---|---|
+| **L00: Repo Bootstrap & Skills** | **COMPLETE** | 6 skills imported, dependencies installed, build passes, Git initialized. | Proceed to L01. |
+| **L01: Design Token Lock & Inventions** | **COMPLETE** | Original SVG character locked, 3 inventions + finale interactive, mobile 375px smoke test pass. | Proceed to L02. |
+| **L02: Game Skill & Audio Engine** | **COMPLETE** | Security Grade A audit for game-development skill, procedural sound engine (`src/sound.ts`) wired, default muted. | Branch reconciliation & sound/puzzle validation. |
+| **L03–L05: Puzzle Refinement** | **IN PROGRESS** | Puzzle interactions (correct, incorrect, repeat, reset) active and undergoing Playwright test matrix. | Deep-dive automated test coverage. |
+| **L06: Finale & Narrative Clues** | **COMPLETE** | Crooked knot story resolution implemented with Unfinished One cameo. | Polish microcopy & pacing. |
+| **L07: Epilogue & Persistence** | **COMPLETE** | Defensive `localStorage` ('morrow-v1'), reset dialog, unlock states preserved. | Verify storage recovery on corrupted data. |
+| **L08: Optional Spline 3D Scene** | **DEFERRED / OPTIONAL** | Spline evaluated as strictly optional; 2D SVG fallback always authoritative. | Evaluate after core polish. |
+| **L09: Mobile & Keyboard QA (G4)** | **IN PROGRESS** | Full keyboard-only and mobile viewport verification running. | Pull request creation. |
 
 ---
 
-## [2026-10-18] L01 — Design Token Lock, Original Art Pipeline & Inventions
+## Detailed Loop Evidence & Verification Records
 
-### Scope & Invariant Grounding
+### [2026-10-18] L00 — Repository Bootstrap & Skill Discovery
+- **Requirement:** Discover and import existing skills from local projects, verify build environment, lock operational instructions, initialize Git repository and branch.
+- **Affected Files:**
+  - `.agents/skills/` (imported `gravitas`, `impeccable`, `animate`, `ui-ux-pro-max`, `design-system`, `ui-styling`)
+  - `docs/SKILLS_ADOPTION.md`
+  - `docs/LOOP_LOG.md`
+  - `AGENTS.md`
+- **Verification Evidence:**
+  - Build command: `npm run build` (`tsc -b && vite build`) -> Pass (0 errors).
+  - Branch: `feat/skills-discovery-and-bootstrap` pushed to `origin`.
+
+---
+
+### [2026-10-18] L01 — Design Token Lock, Original Art Pipeline & Inventions
 - **Requirement:**
   - Lock colors, fonts, typography, original character designs, and reusable visual components.
   - Establish artwork pipeline (original 2D paper-cut SVG characters, zero external IP).
   - Provide 3 functional, playable inventions (`ShadowStitcher`, `WeatherLoom`, `ImpossibleClock`) + `FinaleStitch`.
   - Ensure mobile-first layout (min 44px touch targets), keyboard accessibility, and zero-motion fallback.
 - **Affected Files:**
-  - `src/components/art/Morrow.tsx` (original character SVG with 6 expression states)
-  - `src/components/art/SupportingCast.tsx` (Sir Clack, Pipkin, The Unfinished One)
-  - `src/components/inventions/ShadowStitcher.tsx` (playable invention 01)
-  - `src/components/inventions/WeatherLoom.tsx` (playable invention 02)
-  - `src/components/inventions/ImpossibleClock.tsx` (playable invention 03)
-  - `src/components/inventions/FinaleStitch.tsx` (finale interactive resolution)
-  - `src/App.tsx` (wired dynamic expressions, progression gating, supporting cast cameos)
-  - `src/styles.css` (design tokens, 44px min touch targets, mobile breakpoints, reduced-motion overrides)
-  - `public/favicon.svg` & `index.html` (brand star mark)
-  - `docs/ASSET_REGISTER.md` (complete asset inventory)
-
-### Verification Evidence
-1. **Production Build:**
-   - Command: `npm run build` (`tsc -b && vite build`)
-   - Result: Pass, 0 type errors, 0 warnings.
-   - Bundle size: JS 260.18 kB (gzip: 80.61 kB), CSS 12.35 kB (gzip: 3.62 kB).
-2. **Interactive Browser Smoke Test (Playwright):**
-   - Viewport: Mobile 375x667px (iPhone SE standard).
-   - End-to-end journey traversed:
-     - Prologue: Workshop wakes up, Sir Clack cameo displayed, text advances.
-     - Chapter 1: Duck shadow experiment played (`Tree shadow`), dynamic reaction rendered, progress unlocked.
-     - Chapter 2: Weather Loom played (`Gentle Downpour` -> `Thirsty Lilies`), Pipkin cameo displayed, progress unlocked.
-     - Chapter 3: Impossible Clock played (`Shadow Cog`, `Weather Spring`, `Crooked Heart Key` all fitted), clock ticked, progress unlocked.
-     - Finale: The Unfinished One cameo displayed, `FinaleStitch` executed joining hands with crooked knot, story resolved.
-     - Epilogue: Reached cleanly.
-   - Browser Console Messages: **0 Errors, 0 Warnings** across entire playthrough.
+  - `src/components/art/Morrow.tsx`, `SupportingCast.tsx`
+  - `src/components/inventions/` (`ShadowStitcher.tsx`, `WeatherLoom.tsx`, `ImpossibleClock.tsx`, `FinaleStitch.tsx`)
+  - `src/App.tsx`, `src/styles.css`, `public/favicon.svg`, `index.html`, `docs/ASSET_REGISTER.md`
+- **Verification Evidence:**
+  - `npm run build` -> Pass (0 type errors, 0 warnings).
+  - Playwright mobile smoke test (375x667px): Traversed all chapters with 0 console errors.
 
 ---
 
-## [2026-10-18] L02 — Game Development Skill Audit & Procedural Audio Engine Integration
-
-### Scope & Invariant Grounding
+### [2026-10-18] L02 — Game Development Skill Audit & Procedural Audio Engine Integration
 - **Requirement:**
-  - Security audit and adoption of `ibragimov-oasis-antigravity-game-development` from Skills Directory.
-  - Verification of Security Grade A (100/100) and zero binary/malicious payload confirmation.
-  - Import orchestrator and sub-skills into `.agents/skills/game-development/`.
-  - Establish `src/sound.ts` procedural Web Audio synthesizer supporting distinct sound effects (`chime`, `stitch`, `bell`, `gear`, `tock`).
+  - Security audit and adoption of `ibragimov-oasis-antigravity-game-development`.
+  - Security Grade A (100/100) confirmation; 11 Markdown guides imported to `.agents/skills/game-development/`.
+  - Create `src/sound.ts` procedural Web Audio synthesizer supporting distinct sound effects (`chime`, `stitch`, `bell`, `gear`, `tock`).
   - Gated audio behind user gestures and sound toggle (default muted).
-  - Update `docs/SKILLS_ADOPTION.md`, `AGENTS.md`, and roadmap for L02–L09.
-- **Affected Files:**
-  - `.agents/skills/game-development/` (all 11 SKILL.md modules)
-  - `src/sound.ts` (new procedural audio engine)
-  - `src/App.tsx` (wired distinct sound effects across actions)
-  - `docs/SKILLS_ADOPTION.md` (updated)
-  - `AGENTS.md` (updated)
+- **Verification Evidence:**
+  - `npm run build` -> Pass (0 errors).
+  - Audio architecture: Zero external mp3/wav downloads; browser native Web Audio API oscillators.
 
-### Verification Evidence
-1. **Security Audit**:
-   - Source: `https://github.com/ibragimov-oasis/oasis-languages-jp` / `https://www.skillsdirectory.com/skills/ibragimov-oasis-antigravity-game-development`.
-   - Security Grade: **A (100/100)**.
-   - Inspection: 100% Markdown guides, zero binary code or network access.
-2. **Build Verification**:
-   - Command: `npm run build` (`tsc -b && vite build`)
-   - Result: Passed with zero errors.
-   - Bundle size: JS 261.78 kB (gzip: 80.92 kB), CSS 12.35 kB (gzip: 3.62 kB).
+---
+
+### [2026-10-18] Branch Reconciliation with `origin/bootstrap/l00-documentation`
+- **Action:** Merged `origin/bootstrap/l00-documentation` into `feat/skills-discovery-and-bootstrap`.
+- **Preservation Contract:**
+  - Preserved all working application code (`src/App.tsx`, `src/sound.ts`, `src/components/*`).
+  - Preserved all imported skills in `.agents/skills/`.
+  - Incorporated canonical documentation updates (`AGENT_HANDOFF.md`, `SCENE_MATRIX.md`, `TRACEABILITY.md`, and bounded Spline rules).

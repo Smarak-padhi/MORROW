@@ -1,6 +1,8 @@
 # Asset Register — MORROW: The Almost-Right Adventure
 
-In compliance with Track 2 rules, all artistic, procedural, and visual assets are logged with their provenance, license, and technical implementation.
+In compliance with Track 2 rules and MORROW's production criteria, all artistic, procedural, and visual assets are logged with their provenance, license, dimensions, and technical implementation.
+
+No third-party character IP (fox, Disney, Nintendo, etc.) is used. MORROW is an original fantasy Stitchling creature created uniquely for this project.
 
 | Asset Identifier | Asset Description | Source & Author | Rights / License | Status & Implementation |
 |---|---|---|---|---|
@@ -14,4 +16,4 @@ In compliance with Track 2 rules, all artistic, procedural, and visual assets ar
 | `inv-finale-stitch` | Crooked golden knot joining two hands | Project-created SVG (`src/components/inventions/FinaleStitch.tsx`) | Original Work / MIT | **Playable v1.0** — Finale narrative resolution stitch. |
 | `favicon-brand-mark` | Golden stitched star inside paper medallion | Project-created SVG (`public/favicon.svg`) | Original Work / MIT | **Production** |
 | `web-fonts` | Fraunces, Nunito, Space Mono typography | Google Fonts | Open Font License (OFL) | **Imported** via `<link rel="stylesheet">` with offline system-ui fallbacks. |
-| `audio-chime` | Procedural 660Hz sine-wave synthesizer chime | Web Audio API oscillator (`playChime()` in `App.tsx`) | Project-created procedural code | **Active** — User-gesture enabled, default muted, 0 external audio files needed. |
+| `audio-procedural` | Procedural Web Audio API synthesizer (sine/square/triangle oscillators) | Project-created code (`src/sound.ts`) | Original Work / MIT | **Active** — User-gesture enabled, default muted, 5 distinct SFX, 0 external audio files needed. |

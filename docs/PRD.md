@@ -1,35 +1,51 @@
 # Product Requirements Document — Morrow v1.0
 
-## Problem
-Create an original baby character portfolio that makes the visitor *experience* its inventions through a short, funny, emotionally satisfying interactive adventure. Track 2, solo build, mobile-first, accessible, built during event sprint.
+## Problem & Goal
+Deliver a complete mobile-first original-character interactive portfolio for Morrow. Visitors must learn who Morrow is within 15 seconds, discover three playable inventions, enjoy touch-friendly and keyboard interactions, and complete the story in 8–14 minutes without signing in.
 
-## Audience and job to be done
-A judge or curious visitor should understand who Morrow is within 15 seconds, discover three original creations, enjoy touch-friendly interactions, and complete the story in 8–14 minutes without signing in.
+---
 
-## Character sheet
-Name: Morrow. Species: Stitchling (fantasy creature born from a wish and loose thread). Look: tiny pear-shaped patchwork creature, mismatched ears, oversized scarf, thread tail. Personality: gentle, impulsive, shy, comically overconfident. Profession: Apprentice Impossible-Things Repairer. Creations: Shadow Stitcher, Weather Loom, Impossible Clock. Origin: born inside Almost-Right Repair Shop. Tagline: *We make wonderful mistakes.*
+## Character Sheet
+- **Name**: Morrow
+- **Species**: Stitchling (original fantasy creature born from a wish and loose thread)
+- **Look**: Pear-shaped tiny body, mismatched folded ears, button-like eye markings, oversized patchwork scarf, spool tail, mitten paws
+- **Personality**: Gentle, impulsive, curious, clumsy, comically overconfident
+- **Profession**: Apprentice Impossible-Things Repairer
+- **Creations**: Shadow Stitcher, Weather Loom, Impossible Clock
+- **Origin**: Born inside the Almost-Right Repair Shop
+- **Tagline**: *We make wonderful mistakes.*
 
-## Required scope / acceptance
-- [ ] Character introduction with appearance, identity, personality, and original character sheet
-- [ ] Three distinct, **playable** invention showcases with labels and short explanations
-- [ ] Scroll/scene-driven origin story, each scene <=150 words
-- [ ] At least one responsive click/touch interaction and an Easter egg
-- [ ] Fully usable at 320, 375, 430, 768 and 1280px widths
-- [ ] Working mute toggle if audio exists; no forced audio
-- [ ] Functional public deployment and public source repository with sprint commits
-- [ ] Visible art attribution/credits and submission story
+---
 
-## Player journey
-Workshop wake-up → floating map → shadow village → upside-down weather forest → Tomorrow Town → clock tower finale → workshop epilogue → replay inventions. Chapter progress saved locally. Returning visitors may reset or resume.
+## Required Scope & Acceptance
+- [x] Character introduction with appearance, identity, personality, and original character sheet
+- [x] Three distinct, **playable** invention showcases with labels and interactive feedback
+- [x] Scroll/scene-driven origin story, each scene <= 150 words
+- [x] Responsive click/touch interaction, audio synthesizer with mute switch, and secret Easter egg
+- [x] Fully usable at 320, 375, 430, 768, and 1280px widths
+- [x] Working mute toggle with default mute; zero autoplay audio
+- [x] Functional public repository with verified feature commits and build outputs
+- [x] Visible art attribution, asset register, and submission credits
 
-## Narrative promises
-Laugh early; mystery clues in each chapter; the villain's actions cause all three world problems; the Unfinished One is Morrow's rejected first creation and has helped all along. Morrow independently makes the final stitch. Professor Perfect changes behavior but is not instantly redeemed.
+---
 
-## Tiering
-Tier 1 fully functional is mandatory. Tier 2: one polished shared stitch mechanic plus animated storybook. Side quests in priority: click sounds+mute, sparkle trail, hit counter (local/demo only; do not misrepresent as global), responsive chaos mode. Guestbook and 3D model deferred until main story passes QA.
+## Player Journey
+Workshop wake-up → floating map → Lost Shadows Village → Upside-Down Forest → Tomorrow Town → Clock Tower Finale → Workshop Epilogue. Chapter progress saved in `localStorage`. Returning visitors may resume or reset.
 
-## Success criteria
-No broken buttons or console errors, no blocked story progression, story and inventions clearly discoverable, keyboard access, prefers-reduced-motion support, small-screen usability, and visually consistent original art. Track rubric: functionality/polish 35%, early-web soul 30%, creativity 20%, clean craft 15% (per user-provided event screenshots; reverify before submission).
+---
 
-## Out of scope
-Login, payments, user-generated AI chat, heavy 3D free-roam, multiplayer, complex backend, mandatory video.
+## Narrative Promises & Pacing
+- **Humor**: Laugh early with dry puns from Sir Clack, literal misinterpretations by Morrow, and sensational headlines from Pipkin.
+- **Mystery Clues**:
+  1. The shadow quietly rescues a discarded thread in Chapter 1.
+  2. The shadow protects a flower in Chapter 2; Morrow recognizes the knot.
+  3. The shadow tries to fit the heart gear in Chapter 3 before the finale reveal.
+- **Emotional Arc**: The Unfinished One is revealed as Morrow's first rejected creation who has helped all along. Morrow independently executes the final crooked stitch. Professor Perfect acknowledges the beauty of imperfection.
+
+---
+
+## Release Priorities & Cut List
+- **P0 Mandatory**: 3 playable inventions, core narrative, mobile-first touch/keyboard controls, local storage progress, mute toggle.
+- **P1 Polish**: Procedural Web Audio synthesizer, layered 2.5D floating map, disaster counter Easter egg.
+- **P2 Optional**: Spline 3D vignette (bounded and non-blocking), AI video storyboard fallbacks. Defer P2 if schedule threatens core gameplay.
+- **Out of Scope**: Mandatory audio/video, login, backend servers, third-party user chat, free-roaming 3D worlds.

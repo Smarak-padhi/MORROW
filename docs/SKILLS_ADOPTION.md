@@ -4,6 +4,8 @@
 
 In accordance with Phase 1–3 of the Antigravity Skill Discovery & Integration mission, local and community skills were audited, security-inspected, filtered for relevance, and imported into `.agents/skills/`.
 
+No unverified or external skills were imported without inspection. All imported skills are licensed for reuse and have been adapted to MORROW's canonical specifications (React 19, TypeScript, Vite, procedural SVG, Web Audio API, and CSS custom properties).
+
 ---
 
 ## Discovered & Evaluated Skills Inventory

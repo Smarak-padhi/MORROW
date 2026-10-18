@@ -1,48 +1,50 @@
 # Story Bible — Canon v1.0
 
 ## Logline
-A baby Stitchling with a needle that joins impossible things travels through three malfunctioning worlds, fights an inspector obsessed with perfection, and learns that the little creature it once discarded as a mistake was its first friend.
+A baby Stitchling with a needle that joins impossible things travels through three malfunctioning worlds, confronts an inspector obsessed with perfection, and learns that the little creature it once discarded as a mistake was its first friend.
 
 ## Theme
-Difference is not damage. A mistake can be a beginning. Repair is not the same as control.
+Difference is not damage. A mistake can be a beginning. Repair is not the same as control. Tagline: *We make wonderful mistakes.*
+
+---
 
 ## Cast
-- **Morrow:** tiny Stitchling, apprentice repairer, magic needle, oversized scarf; literal-minded and pun-prone.
-- **Sir Clack:** grumpy sentient toolbox, records disasters as a secret memory scrapbook; mentor and dad-joke engine.
-- **Pipkin:** dramatic blue delivery bird, publishes *The Daily Panic*, fears being unneeded.
-- **Professor Primrose Perfect:** porcelain clockwork inspector, correction stamp and ruler, controls Great Correction Clock; once rejected as imperfect.
-- **The Unfinished One:** Morrow's unevenly stitched first creation, follows the party, secretly saves discarded fragments.
+- **Morrow:** Tiny Stitchling, apprentice impossible-things repairer, magical needle, oversized plum patchwork scarf; gentle, impulsive, clumsy, and comically overconfident.
+- **Sir Clack:** Grumpy, sarcastic sentient toolbox with brass hinges and keyhole mustache; mentor and dad-joke engine who secretly keeps a scrapbook of Morrow's achievements.
+- **Pipkin:** Dramatic courier bird who publishes *The Daily Panic*, speaks in sensational breaking headlines, and fears being unneeded.
+- **Professor Primrose Perfect:** Porcelain clockwork inspector with correction stamp and ruler; controls the Great Correction Clock; obsessed with erasing errors because he was once discarded as imperfect.
+- **The Unfinished One:** Morrow's unevenly stitched first creation; follows the party, secretly rescues discarded fragments, and holds the missing heart gear.
 
-## Plot causality
-Professor Perfect's Great Correction Clock began as a stabilizer but now classifies unusual shadows, weather and tomorrow itself as mistakes. His inspections cause each world's problem. The Unfinished One collects fragments needed to restore the clock.
+---
 
-## Story beats and lines
-### Prologue: Workshop wakes
-Tap bell → scarf twitches → Morrow wakes: 'AH! A GIANT!' Sir Clack: 'A visitor, you walnut.' Morrow: 'HELLO, POTENTIALLY POLITE GIANT!' Pipkin crashes in: 'EMERGENCY! THE WORLD IS BROKEN!' Sir Clack: 'Which part?' Pipkin: 'YES.' Tutorial: repair crooked sign.
+## Plot & World Causality
+Professor Perfect's Great Correction Clock began as a stabilizer but now classifies unusual shadows, weather, and tomorrow itself as mistakes. His inspections cause each world's malfunction:
+1. Confiscating shadows in Lost Shadows Village.
+2. Inverting gravity/precipitation in Upside-Down Forest.
+3. Freezing tomorrow in Tomorrow Town to prevent future mistakes.
+
+---
+
+## Story Chapters & Dialogue Canon
+### Prologue: The Workshop
+Tap bell → scarf twitches → Morrow wakes: "AH! A GIANT!" Sir Clack: "That is a visitor, you walnut." Morrow: "HELLO, POTENTIALLY POLITE GIANT!" Pipkin crashes in: "EMERGENCY! THE WORLD IS BROKEN!" Sir Clack: "Which part?" Pipkin: "YES."
 
 ### Chapter 1: The Shadow Scandal
-Shadows confiscated as irregular. Duck gets tree shadow: 'I AM A FOREST.' Sir Clack: 'That's not how ducks work.' Morrow: 'It's a very ambitious duck.' Introduce Stitcher. Mr. Perfect: 'Ducks must remain duck-shaped.' Shadow secretly rescues discarded thread. Morrow learns different isn't broken.
+Shadows confiscated as irregular. Duck gets tree shadow: "I AM A FOREST." Sir Clack: "That's not how ducks work." Morrow: "It's a very ambitious duck." Introduce Shadow Stitcher. Mystery Clue 1: The shadow quietly rescues a discarded thread.
 
 ### Chapter 2: A Forecast of Absolute Nonsense
-Rain rises due to strict forecast machinery. Frog mayor uses an umbrella as a bucket. Morrow stitches clouds to the ground. Sir Clack: 'Congratulations. You invented very wet furniture.' Weather Loom combinations: rain+flower, rain+bell, wind+windmill, cloud+frog. Shadow saves a flower. Morrow learns to listen before fixing.
+Rain rises due to strict forecast machinery. Frog Mayor uses an umbrella as a bucket. Morrow weaves weather threads to ground targets. Sir Clack: "Congratulations. You invented very wet furniture." Pipkin: "BREAKING NEWS: LOCAL CLOUD REFUSES GRAVITY." Mystery Clue 2: The shadow protects a flower in the forest; Morrow recognizes the knot.
 
 ### Chapter 3: Tomorrow Has Been Cancelled
-Professor Perfect freezes time to prevent future mistakes. Baker sold bread before baking it. Sir Clack: 'We've got too much time on our hands.' Morrow: 'YOU HAVE HANDS?' Restore shadow and weather gears. Heart gear missing. Shadow holds it.
+Professor Perfect freezes time to prevent future mistakes. Baker sold tomorrow's bread yesterday before baking it. Sir Clack: "We've got too much time on our hands." Morrow: "YOU HAVE HANDS?" Fit three irregular gears. Mystery Clue 3: The shadow holds the missing heart gear.
 
 ### Finale: The First Unfinished Thing
-Perfectly symmetrical clock arrangements fail. Shadow reveals familiar crooked knot. Morrow: 'I made you wrong.' Shadow: 'You made me.' Perfect reveals he was once rejected. Morrow chooses an unexpected connection; makes final stitch independently. Perfect: 'That violates seventeen regulations.' Morrow: 'Is that bad?' Perfect: 'It's... rather lovely.'
+Symmetrical clock arrangements fail. The shadow steps forward, revealing the familiar crooked knot. Morrow: "I made you wrong." The Unfinished One: "You made me." Perfect reveals his own fear of rejection. Morrow independently makes the final stitch joining both hands. Perfect: "That violates seventeen regulations... yet it is rather lovely."
 
 ### Epilogue: Wonderfully Wrong
-Sir Clack's failure log reveals scrapbook of Morrow's firsts. Pipkin headline: 'LOCAL BABY SAVES WORLD. TOOLBOX REFUSES TO ADMIT PRIDE.' Perfect stamps: 'IMPERFECT. ACCEPTABLE. SOMEHOW LOVELY.' Workshop motto becomes 'We make wonderful mistakes.' Disaster counter increments after flowers explode harmlessly.
+Sir Clack's disaster log is revealed as a proud scrapbook of Morrow's firsts. Pipkin headline: "LOCAL BABY SAVES WORLD. TOOLBOX REFUSES TO ADMIT PRIDE." Perfect stamps: "IMPERFECT. ACCEPTABLE. SOMEHOW LOVELY." The repair shop's motto is sealed: *We make wonderful mistakes.*
 
-## Mystery clues
-1. Shadow quietly rescues a discarded thread in village.
-2. Shadow protects a flower in forest; Morrow recognizes the knot.
-3. Shadow tries to fit heart gear before the reveal.
-Do not portray the Unfinished One as evil. Do not over-explain twist before finale.
+---
 
-## Joke rules
-Character-specific humor, not generic random meme text. Sir Clack dry puns; Morrow literal misinterpretation; Pipkin sensational headlines; Perfect bureaucratic absurdity. Emotional scenes should have breathing room. Never undercut the shadow's reveal with an immediate gag.
-
-## Inventions / portfolio
-Shadow Stitcher — joins shadows to living things. Weather Loom — connects weather to objects. Impossible Clock — measures time and meaningful moments. The website itself is Morrow's fourth, unfinished creation, revealed as a soft meta Easter egg.
+## Joke Rules & Narrative Density
+Keep each scene <= 150 words. Sir Clack provides dry puns; Morrow provides literal misinterpretations; Pipkin provides sensational headlines; Perfect provides bureaucratic absurdity. Never undercut emotional moments or the shadow's reveal with an immediate gag.
