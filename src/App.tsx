@@ -49,6 +49,23 @@ export default function App() {
 
   useEffect(() => { localStorage.setItem('morrow-v2', JSON.stringify(save)); }, [save]);
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [save.active, view, save.started]);
+  // Re-observe story panels after each page turn. CSS only hides panels once
+  // the observer is active; no-JS and reduced-motion content stays visible.
+  useEffect(() => {
+    if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed');
+          observer.unobserve(entry.target);
+        }
+      }
+    }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+    const nodes = document.querySelectorAll('.reveal-on-scroll');
+    nodes.forEach(node => observer.observe(node));
+    document.documentElement.classList.add('motion-ready');
+    return () => { observer.disconnect(); document.documentElement.classList.remove('motion-ready'); };
+  }, [save.active, save.started, view, dialog]);
 
   function play(effect: AudioEffect = 'chime') { sound.play(effect, save.muted); }
   function select(id: ChapterId) {
@@ -124,21 +141,22 @@ export default function App() {
         </main>
       ) : (
         <main className={`storybook-chapter chapter-${chapter.id}`}>
-          <section className="storybook-stage" aria-label={`Illustrated scene: ${chapter.name}`}>
+          <section key={chapter.id} className="storybook-stage" aria-label={`Illustrated scene: ${chapter.name}`}>
             <div className="storybook-sky" aria-hidden="true"><span className="story-sun"/> <span className="story-cloud cloud-a"/> <span className="story-cloud cloud-b"/></div>
             <div className="storybook-landscape" aria-hidden="true"><span/><span/><span/></div>
             <div className="storybook-scene-label"><span>{chapter.tag}</span><span>{String(idx + 1).padStart(2,'0')} / {String(chapters.length).padStart(2,'0')}</span></div>
-            <div className="storybook-character"><img className="felt-morrow" src="/characters/morrow.png" alt="Morrow, the handmade Stitchling" /></div>
+            <div key={`${chapter.id}-${dialog}`} className="storybook-character story-character-react"><img className="felt-morrow" src="/characters/morrow.png" alt="Morrow, the handmade Stitchling" /></div>
             {chapter.id === 'workshop' && <SirClack className="storybook-companion companion-left"/>}
             {chapter.id === 'weather' && <Pipkin className="storybook-companion companion-right"/>}
             {chapter.id === 'finale' && <TheUnfinishedOne className="storybook-companion companion-left"/>}
+            <div className="story-atmosphere" aria-hidden="true"><i/><i/><i/><i/><i/><i/></div>
             <div className="storybook-scene-bottom"><span>{chapter.subtitle}</span><span>✦</span></div>
           </section>
 
-          <section className="storybook-reading" aria-label="Story dialogue">
+          <section className="storybook-reading reveal-on-scroll" aria-label="Story dialogue">
             <p className="story-overline">{chapter.tag} · {chapter.subtitle}</p>
             <h1>{chapter.name}</h1>
-            <div className="storybook-dialogue" aria-live="polite" key={`${chapter.id}-${dialog}`}>
+            <div className="storybook-dialogue story-page-turn" aria-live="polite" key={`${chapter.id}-${dialog}`}>
               <p>{lines[dialog]}</p>
             </div>
             {chapter.id === 'workshop' && !awake && !save.completed.includes('workshop') ? (
@@ -150,7 +168,7 @@ export default function App() {
           </section>
 
           {lastLine && (
-            <section className="storybook-interaction" aria-label="Chapter interaction">
+            <section className="storybook-interaction reveal-on-scroll" aria-label="Chapter interaction">
               {chapter.id === 'shadows' && <ShadowStitcher playChime={() => play('stitch')} onSuccess={() => setPuzzleDone(true)}/>}
               {chapter.id === 'weather' && <WeatherLoom playChime={() => play('stitch')} onSuccess={() => setPuzzleDone(true)}/>}
               {chapter.id === 'clock' && <ImpossibleClock playChime={() => play('gear')} onSuccess={() => setPuzzleDone(true)}/>}
