@@ -50,8 +50,9 @@ try {
   await advanceDialogue();
   await page.getByRole('button', { name: /step into the next chapter/i }).click();
   await advanceDialogue();
-  for (const name of ['Duck shadow','Tree shadow','Star shadow']) {
-    await page.getByRole('button', { name: new RegExp(name,'i') }).click();
+  for (const [resident, shadow] of [['Village Duck','Tree shadow'],['Little Lantern','Star shadow'],['Wandering Snail','Duck shadow']]) {
+    await page.getByRole('button', { name: new RegExp(resident,'i') }).click();
+    await page.getByRole('button', { name: new RegExp(shadow,'i') }).click();
   }
   check(await page.getByRole('button', { name: /step into the next chapter/i }).isVisible(), 'Shadow Stitcher cannot complete');
   await page.screenshot({ path: `${out}/shadows-complete.png`, fullPage: true });
