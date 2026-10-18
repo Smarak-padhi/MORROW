@@ -20,9 +20,9 @@ export function Cinematic({ scene, onFinish }: Props) {
     </main>
   );
   return (
-    <main className="cinematic-player" aria-label={`Animated story scene: ${scene}`}>
+    <main className="cinematic-player" style={{ backgroundImage: `linear-gradient(0deg, rgba(17,14,27,.82),rgba(17,14,27,.55)),url("/cinematics/morrow-${scene}.jpg")`, backgroundSize: "cover", backgroundPosition: "center" }} aria-label={`Animated story scene: ${scene}`}>
       <video ref={video} key={scene} src={`/cinematics/morrow-${scene}.mp4`} poster={`/cinematics/morrow-${scene}.jpg`}
-        autoPlay muted={muted} playsInline preload="auto" onEnded={() => setEnded(true)} onError={() => setFailed(true)}
+        autoPlay muted={muted} playsInline preload="metadata" onEnded={() => setEnded(true)} onError={onFinish}
         aria-label={`Morrow animated cinematic: ${scene}`}/>
       <div className="cinematic-player-shade" aria-hidden="true"/>
       <div className="cinematic-player-bar">
