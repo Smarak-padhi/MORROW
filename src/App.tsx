@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { ArrowRight, BookOpen, Map as MapIcon, Moon, Sun, RotateCcw, Volume2, VolumeX, Sparkles } from 'lucide-react';
+import { ArrowRight, BookOpen, Map as MapIcon, Moon, Sun, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 import { chapters, dialogues, type ChapterId } from './story';
 import { sound, type AudioEffect } from './sound';
 
-import { SirClack, Pipkin, TheUnfinishedOne } from './components/art/SupportingCast';
+import { Pipkin, TheUnfinishedOne } from './components/art/SupportingCast';
 import { ShadowStitcher } from './components/inventions/ShadowStitcher';
 import { WeatherLoom } from './components/inventions/WeatherLoom';
 import { ImpossibleClock } from './components/inventions/ImpossibleClock';
@@ -148,7 +148,6 @@ export default function App() {
             <div className="storybook-landscape" aria-hidden="true"><span/><span/><span/></div>
             <div className="storybook-scene-label"><span>{chapter.tag}</span><span>{String(idx + 1).padStart(2,'0')} / {String(chapters.length).padStart(2,'0')}</span></div>
             <div key={`${chapter.id}-${dialog}`} className="storybook-character story-character-react"><img className="felt-morrow" src="/characters/morrow.png" alt="Morrow, the handmade Stitchling" /></div>
-            {chapter.id === 'workshop' && <SirClack className="storybook-companion companion-left"/>}
             {chapter.id === 'weather' && <Pipkin className="storybook-companion companion-right"/>}
             {chapter.id === 'finale' && <TheUnfinishedOne className="storybook-companion companion-left"/>}
             <div className="story-atmosphere" aria-hidden="true"><i/><i/><i/><i/><i/><i/></div>
@@ -161,9 +160,7 @@ export default function App() {
             <div className="storybook-dialogue story-page-turn" aria-live="polite" key={`${chapter.id}-${dialog}`}>
               <p>{lines[dialog]}</p>
             </div>
-            {chapter.id === 'workshop' && !awake && !save.completed.includes('workshop') ? (
-              <button className="storybook-action" type="button" onClick={() => { setAwake(true); setBell(n => n + 1); play('bell'); }}>Ring the bell to wake the workshop <Sparkles size={18}/></button>
-            ) : !lastLine ? (
+            {!lastLine ? (
               <button className="storybook-action" type="button" onClick={() => { setDialog(d => Math.min(d + 1, lines.length - 1)); play('chime'); }}>Turn the page <ArrowRight size={18}/></button>
             ) : null}
             <span className="storybook-page-number">{dialog + 1} of {lines.length} · {lastLine ? 'The story continues below' : 'Tap to continue'}</span>
