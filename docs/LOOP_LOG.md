@@ -15,8 +15,8 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 | **L06: Finale & Narrative Clues** | **COMPLETE** | Crooked knot story resolution implemented with Unfinished One cameo and emotional payoff. | Polish microcopy & pacing. |
 | **L07: Epilogue & Persistence** | **COMPLETE** | Defensive `localStorage` ('morrow-v1' / 'morrow-v2'), reset dialog, unlock states preserved, portfolio moved to epilogue only. | Storage persistence & recovery verified. |
 | **L08: Optional Spline 3D Scene** | **DEFERRED / OPTIONAL** | Spline evaluated as strictly optional; 2D SVG fallback always authoritative. | Maintain optionality. |
-| **L09: Mobile & Keyboard QA (G4)** | **COMPLETE** | Full keyboard-only and mobile viewport verification (320px, 375px, 430px, 768px, 1280px) executed with Playwright. 0 console errors, 0 layout overflows, full adventure verified. | Ready for deployment. |
-| **Handcrafted Assets & Starter Drop-In** | **COMPLETE** | `MORROW_DROP_IN` extracted: approved felt Morrow (`public/characters/morrow.png`), approved waking MP4 (`public/cinematics/morrow-waking.mp4`), turnarounds and ensemble reference. | Generate remaining Veo clips offline as optional enhancements. |
+| **L09: Mobile & Keyboard QA (G4)** | **COMPLETE** | Full keyboard-only and mobile viewport verification (320px, 375px, 430px, 768px, 1280px, 1440px) executed with Playwright. 0 console errors, 0 layout overflows, full adventure verified. | Ready for deployment. |
+| **Ship-First Release & Character Drop-In** | **COMPLETE** | `MORROW_DROP_IN` extracted: approved felt Morrow (`public/characters/morrow.png`), approved waking MP4 (`public/cinematics/morrow-waking.mp4`), turnarounds and ensemble reference. Video scope frozen to waking film; all chapters fully interactive. | Public preview & real-device review. |
 
 ---
 
@@ -78,29 +78,32 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 
 ---
 
-### [2026-10-19] Handcrafted Character Drop-In, Multi-Device QA (320–1280px) & Edge-Case Verification
+### [2026-10-19] Ship-First Release: Handcrafted Character Drop-In, Multi-Device QA (320–1440px)
+- **Scope Freezing (`docs/SHIP_FIRST_RELEASE.md`):**
+  - Stopped waiting for additional offline Veo videos.
+  - Preserved the approved `morrow-waking.mp4` as the sole cinematic for opening; all chapters use rich interactive animated storybook scenes and procedural SVG companions.
 - **Starter Asset Extraction (`MORROW_DROP_IN`):**
   - Copied approved felt Morrow character: `public/characters/morrow.png` (86.9 kB). Replaces old SVG mascot across opening scene and storybook stages.
   - Copied approved waking cinematic: `public/cinematics/morrow-waking.mp4` (3.6 MB) and poster `public/cinematics/morrow-waking.jpg` (81.5 kB).
   - Copied production references to `production-references/` (`morrow-turnaround-approved.png`, `ensemble-approved.png`, `seven-character-model-sheets-CONCEPT.png`).
 - **Build & Dependency Verification:**
   - `npm ci`: Added 22 packages, 0 vulnerabilities in 45s.
-  - `npm run build`: Production build succeeded in 3.50s (`dist/index.html` 0.93 kB, CSS 31.50 kB, JS 259.33 kB).
-- **Playwright Test Matrix (`scripts/mobile-qa.mjs`):**
-  - Command: `$env:MORROW_URL="http://127.0.0.1:4173"; node scripts/mobile-qa.mjs`
+  - `npm run build`: Production build succeeded (`dist/index.html` 0.93 kB, CSS 31.50 kB, JS 259.33 kB).
+- **Playwright Test Matrix (`scripts/mobile-qa.mjs` & `scripts/viewport_audit.mjs`):**
   - Result: **MORROW QA PASSED: responsive opening, gameplay sequence, epilogue and reload. Screenshots in qa/screenshots.**
-  - **Multi-Device Responsive Matrix:**
+  - **Multi-Device Responsive Matrix (320px, 375px, 430px, 768px, 1280px, 1440px):**
     - 320×800 (iPhone SE 1st gen): `scrollWidth <= clientWidth + 1` -> PASS, 0 horizontal overflow.
     - 375×812 (iPhone SE / X): `scrollWidth <= clientWidth + 1` -> PASS, 0 horizontal overflow.
     - 430×932 (iPhone 14 Pro Max): `scrollWidth <= clientWidth + 1` -> PASS, 0 horizontal overflow.
     - 768×1024 (iPad / Tablet): `scrollWidth <= clientWidth + 1` -> PASS, 0 horizontal overflow.
-    - 1280×800 (Desktop): `scrollWidth <= clientWidth + 1` -> PASS, 0 horizontal overflow.
+    - 1280×800 (Desktop Laptop): `scrollWidth <= clientWidth + 1` -> PASS, 0 horizontal overflow.
+    - 1440×900 (Large Desktop): `scrollWidth <= clientWidth + 1` -> PASS, 0 horizontal overflow.
     - Javascript errors: 0 across all viewports.
 - **Cinematic Integration & Fallback Verification:**
   - *Normal Motion:* "Open the story" launches `.cinematic-player` with `morrow-waking.mp4`, poster image, Unmute/Mute toggle, and "Skip scene".
   - *Skip:* Clicking "Skip scene" seamlessly transitions into workshop and sets `started: true`.
   - *Reduced Motion:* `prefers-reduced-motion: reduce` immediately bypasses cinematic playback directly into the workshop.
-  - *Missing Video / Error Fallback:* If video fails or is missing, renders `.cinematic-fallback` ("Every wonderful mistake starts somewhere") with "Continue the adventure" button.
+  - *Missing Video / Error Fallback:* If video fails or is missing, renders `.cinematic-fallback` ("Every wonderful mistake starts somewhere") with "Continue the adventure" button without blocking gameplay.
 - **Puzzle Matrix & Edge-Case Automated Assertions:**
   - *Shadow Stitcher:*
     - Wrong match (Duck -> Star shadow): Rebuffed with `"Not quite! Village Duck says: “I have always dreamed of being a forest.” Look for the shadow that fits their wish."`
@@ -120,3 +123,5 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 - **Keyboard Navigation Verification:**
   - Tab navigation moves cleanly between topbar buttons, opening action, dialogue controls, and puzzle elements.
   - Enter and Space keys trigger focused actions without requiring mouse interaction.
+- **Local Network / Phone Preview Verification:**
+  - Preview server active at `http://localhost:4173` and accessible on local WiFi at `http://192.168.1.8:4173/` (HTTP 200).
