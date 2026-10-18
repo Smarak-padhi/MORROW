@@ -16,6 +16,7 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 | **L07: Epilogue & Persistence** | **COMPLETE** | Defensive `localStorage` ('morrow-v1' / 'morrow-v2'), reset dialog, unlock states preserved, portfolio moved to epilogue only. | Storage persistence & recovery verified. |
 | **L08: Optional Spline 3D Scene** | **DEFERRED / OPTIONAL** | Spline evaluated as strictly optional; 2D SVG fallback always authoritative. | Maintain optionality. |
 | **L09: Mobile & Keyboard QA (G4)** | **COMPLETE** | Full keyboard-only and mobile viewport verification (320px, 375px, 430px) verified in real browser with 0 console errors/warnings. | Open Pull Request. |
+| **Veo 3.1 Cinematics Pipeline** | **READY / AUTH PENDING** | SDK installed, reference exported (`assets/morrow-reference.png`), pipeline script verified, pricing documented. Billable API key authorization pending. | Run approved generation once key provided. |
 
 ---
 
@@ -105,3 +106,17 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
     - 375px (iPhone SE 2nd gen): `scrollWidth = 360px`, `clientWidth = 360px`, `hasHorizontalOverflow = false`.
     - 430px (iPhone 14 Pro Max): `scrollWidth = 415px`, `clientWidth = 415px`, `hasHorizontalOverflow = false`.
   - *Console Errors:* **0 Errors, 0 Warnings** reported across the entire automated journey.
+
+---
+
+### [2026-10-18] Veo 3.1 Cinematic Pipeline Preparation & Character Reference Export
+- **Character Reference Export:**
+  - Exported canonical original Stitchling from `src/components/art/Morrow.tsx` to `assets/morrow-reference.png` (137,106 bytes, 500x540px clean PNG).
+  - Verified original silhouette: pear-shaped body, asymmetrical folded petal ears with gold lining, plum patchwork scarf, button eye markings, diamond forehead mark, and spool tail. Zero third-party IP likeness.
+- **SDK Installation & Environment Check:**
+  - Installed official Google GenAI SDK: `google-genai` version 2.31.0 successfully installed.
+  - Checked authentication: `GEMINI_API_KEY` is not currently set in local environment variables.
+- **Veo 3.1 Quota & Pricing Assessment:**
+  - Model: `veo-3.1-generate-preview` (720p / 1080p).
+  - Pricing: Veo 3.1 is billable per second of generated video (~$0.05–$0.40/sec depending on tier; 8-second 720p clip estimated at ~$0.40–$3.20).
+  - Strict guardrail: Approval requested before executing any billable API call.
