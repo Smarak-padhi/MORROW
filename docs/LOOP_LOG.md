@@ -9,14 +9,14 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 | Loop | State | Evidence | Next Action |
 |---|---|---|---|
 | **L00: Repo Bootstrap & Skills** | **COMPLETE** | 6 skills imported, dependencies installed, build passes, Git initialized. | Proceed to L01. |
-| **L01: Design Token Lock & Inventions** | **COMPLETE** | Original SVG character locked, 3 inventions + finale interactive, mobile 375px smoke test pass. | Proceed to L02. |
+| **L01: Design Token Lock & Inventions** | **COMPLETE** | Original character locked, 3 inventions + finale interactive, mobile 375px smoke test pass. | Proceed to L02. |
 | **L02: Game Skill & Audio Engine** | **COMPLETE** | Security Grade A audit for game-development skill, procedural sound engine (`src/sound.ts`) wired, default muted. | Branch reconciliation & sound/puzzle validation. |
-| **L03–L05: Story-First Puzzle Refinement** | **COMPLETE** | Immersive multi-objective puzzles (`ShadowStitcher`, `WeatherLoom`, `ImpossibleClock`) with correct/incorrect feedback, repeat prevention, and reset. | Verify automated matrix. |
+| **L03–L05: Story-First Puzzle Refinement** | **COMPLETE** | Immersive multi-objective puzzles (`ShadowStitcher`, `WeatherLoom`, `ImpossibleClock`) with correct/incorrect feedback, repeat prevention, and reset. | Verified automated matrix. |
 | **L06: Finale & Narrative Clues** | **COMPLETE** | Crooked knot story resolution implemented with Unfinished One cameo and emotional payoff. | Polish microcopy & pacing. |
 | **L07: Epilogue & Persistence** | **COMPLETE** | Defensive `localStorage` ('morrow-v1' / 'morrow-v2'), reset dialog, unlock states preserved, portfolio moved to epilogue only. | Storage persistence & recovery verified. |
 | **L08: Optional Spline 3D Scene** | **DEFERRED / OPTIONAL** | Spline evaluated as strictly optional; 2D SVG fallback always authoritative. | Maintain optionality. |
-| **L09: Mobile & Keyboard QA (G4)** | **COMPLETE** | Full keyboard-only and mobile viewport verification (320px, 375px, 430px) verified in real browser with 0 console errors/warnings. | Open Pull Request. |
-| **Veo 3.1 Cinematics Pipeline** | **READY / AUTH PENDING** | SDK installed, reference exported (`assets/morrow-reference.png`), pipeline script verified, pricing documented. Billable API key authorization pending. | Run approved generation once key provided. |
+| **L09: Mobile & Keyboard QA (G4)** | **COMPLETE** | Full keyboard-only and mobile viewport verification (320px, 375px, 430px, 768px, 1280px) executed with Playwright. 0 console errors, 0 layout overflows, full adventure verified. | Ready for deployment. |
+| **Handcrafted Assets & Starter Drop-In** | **COMPLETE** | `MORROW_DROP_IN` extracted: approved felt Morrow (`public/characters/morrow.png`), approved waking MP4 (`public/cinematics/morrow-waking.mp4`), turnarounds and ensemble reference. | Generate remaining Veo clips offline as optional enhancements. |
 
 ---
 
@@ -38,11 +38,11 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 ### [2026-10-18] L01 — Design Token Lock, Original Art Pipeline & Inventions
 - **Requirement:**
   - Lock colors, fonts, typography, original character designs, and reusable visual components.
-  - Establish artwork pipeline (original 2D paper-cut SVG characters, zero external IP).
+  - Establish artwork pipeline (original 2D paper-cut and handcrafted felt characters, zero external IP).
   - Provide 3 functional, playable inventions (`ShadowStitcher`, `WeatherLoom`, `ImpossibleClock`) + `FinaleStitch`.
   - Ensure mobile-first layout (min 44px touch targets), keyboard accessibility, and zero-motion fallback.
 - **Affected Files:**
-  - `src/components/art/Morrow.tsx`, `SupportingCast.tsx`
+  - `src/components/art/SupportingCast.tsx`
   - `src/components/inventions/` (`ShadowStitcher.tsx`, `WeatherLoom.tsx`, `ImpossibleClock.tsx`, `FinaleStitch.tsx`)
   - `src/App.tsx`, `src/styles.css`, `public/favicon.svg`, `index.html`, `docs/ASSET_REGISTER.md`
 - **Verification Evidence:**
@@ -75,48 +75,48 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
   3. *No Autoplay:* AudioContext is null until user gesture initiates sound.
   4. *Singleton AudioContext:* Single `SoundEngine` class instance exports `sound` across all inventions.
   5. *Audio Cleanup:* Web Audio oscillators use deterministic `start()` and `stop(now + duration)` envelopes (max 0.7s), guaranteeing zero audio continues after leaving.
-- **Puzzle Matrix Test Verification Results (Playwright Automation):**
-  - **Shadow Stitcher:**
-    - Option 1 (Tree Shadow): Stitched -> "Duck: I AM A FOREST. Sir Clack: You are a duck with excellent ambition."
-    - Repeat Click: Guard active -> "That shadow has already been restored. Find the others."
-    - Option 2 (Star Shadow): Stitched -> "Pipkin: BREAKING NEWS: LOCAL DUCK BECOMES GALAXY."
-    - Option 3 (Duck Shadow): Stitched -> "Duck: How responsible. How disappointingly ordinary."
-    - Progression Gate: Next chapter button unlocked immediately upon 3/3 completion.
-  - **Weather Loom:**
-    - Incorrect Interaction: Selecting Golden Sunbeam and weaving into Thirsty Lilies -> "That made things stranger! The petals are thirsty. Try another spool."
-    - Correct Weaving 1 (Rain -> Lilies): "The rain remembers how to fall. The lilies applaud politely."
-    - Repeat Interaction: Guard active -> Button disabled (`disabled=true`) and marked `✓`.
-    - Correct Weaving 2 (Wind -> Windmill): "The windmill spins! Pipkin declares it the fastest bakery in town."
-    - Correct Weaving 3 (Sun -> Frog Mayor): "The frog mayor dries his hat. A public holiday is declared."
-    - Progression Gate: Next chapter button unlocked upon 3/3 targets mended.
-  - **Impossible Clock:**
-    - Out-of-Order Click: Clicking Crooked Heart Key before previous steps -> "The gears protest! The past gives tomorrow a shadow."
-    - Step 1 (Shadow Cog): "Click! 1 of 3 gears fitted."
-    - Repeat Step 1: Idempotent state preserved.
-    - Step 2 (Weather Spring): "Click! 2 of 3 gears fitted."
-    - Step 3 (Crooked Heart Key): "The crooked heart turns. Tomorrow begins again."
-    - Progression Gate: Next chapter button unlocked.
-  - **Finale Stitch:**
-    - Crooked final stitch pressed -> "The crooked knot holds. The story is sealed."
-    - Epilogue reached cleanly with portfolio and bell counter.
-- **Device & Keyboard QA Results:**
-  - *Keyboard Walkthrough:* Tab key navigates cleanly through header controls, story actions, and puzzle cards. Focus active on `button.storybook-action` with Enter triggering advance.
-  - *Multi-Viewport Matrix:*
-    - 320px (iPhone SE 1st gen): `scrollWidth = 305px`, `clientWidth = 305px`, `hasHorizontalOverflow = false`.
-    - 375px (iPhone SE 2nd gen): `scrollWidth = 360px`, `clientWidth = 360px`, `hasHorizontalOverflow = false`.
-    - 430px (iPhone 14 Pro Max): `scrollWidth = 415px`, `clientWidth = 415px`, `hasHorizontalOverflow = false`.
-  - *Console Errors:* **0 Errors, 0 Warnings** reported across the entire automated journey.
 
 ---
 
-### [2026-10-18] Veo 3.1 Cinematic Pipeline Preparation & Character Reference Export
-- **Character Reference Export:**
-  - Exported canonical original Stitchling from `src/components/art/Morrow.tsx` to `assets/morrow-reference.png` (137,106 bytes, 500x540px clean PNG).
-  - Verified original silhouette: pear-shaped body, asymmetrical folded petal ears with gold lining, plum patchwork scarf, button eye markings, diamond forehead mark, and spool tail. Zero third-party IP likeness.
-- **SDK Installation & Environment Check:**
-  - Installed official Google GenAI SDK: `google-genai` version 2.31.0 successfully installed.
-  - Checked authentication: `GEMINI_API_KEY` is not currently set in local environment variables.
-- **Veo 3.1 Quota & Pricing Assessment:**
-  - Model: `veo-3.1-generate-preview` (720p / 1080p).
-  - Pricing: Veo 3.1 is billable per second of generated video (~$0.05–$0.40/sec depending on tier; 8-second 720p clip estimated at ~$0.40–$3.20).
-  - Strict guardrail: Approval requested before executing any billable API call.
+### [2026-10-19] Handcrafted Character Drop-In, Multi-Device QA (320–1280px) & Edge-Case Verification
+- **Starter Asset Extraction (`MORROW_DROP_IN`):**
+  - Copied approved felt Morrow character: `public/characters/morrow.png` (86.9 kB). Replaces old SVG mascot across opening scene and storybook stages.
+  - Copied approved waking cinematic: `public/cinematics/morrow-waking.mp4` (3.6 MB) and poster `public/cinematics/morrow-waking.jpg` (81.5 kB).
+  - Copied production references to `production-references/` (`morrow-turnaround-approved.png`, `ensemble-approved.png`, `seven-character-model-sheets-CONCEPT.png`).
+- **Build & Dependency Verification:**
+  - `npm ci`: Added 22 packages, 0 vulnerabilities in 45s.
+  - `npm run build`: Production build succeeded in 3.50s (`dist/index.html` 0.93 kB, CSS 31.50 kB, JS 259.33 kB).
+- **Playwright Test Matrix (`scripts/mobile-qa.mjs`):**
+  - Command: `$env:MORROW_URL="http://127.0.0.1:4173"; node scripts/mobile-qa.mjs`
+  - Result: **MORROW QA PASSED: responsive opening, gameplay sequence, epilogue and reload. Screenshots in qa/screenshots.**
+  - **Multi-Device Responsive Matrix:**
+    - 320×800 (iPhone SE 1st gen): `scrollWidth <= clientWidth + 1` -> PASS, 0 horizontal overflow.
+    - 375×812 (iPhone SE / X): `scrollWidth <= clientWidth + 1` -> PASS, 0 horizontal overflow.
+    - 430×932 (iPhone 14 Pro Max): `scrollWidth <= clientWidth + 1` -> PASS, 0 horizontal overflow.
+    - 768×1024 (iPad / Tablet): `scrollWidth <= clientWidth + 1` -> PASS, 0 horizontal overflow.
+    - 1280×800 (Desktop): `scrollWidth <= clientWidth + 1` -> PASS, 0 horizontal overflow.
+    - Javascript errors: 0 across all viewports.
+- **Cinematic Integration & Fallback Verification:**
+  - *Normal Motion:* "Open the story" launches `.cinematic-player` with `morrow-waking.mp4`, poster image, Unmute/Mute toggle, and "Skip scene".
+  - *Skip:* Clicking "Skip scene" seamlessly transitions into workshop and sets `started: true`.
+  - *Reduced Motion:* `prefers-reduced-motion: reduce` immediately bypasses cinematic playback directly into the workshop.
+  - *Missing Video / Error Fallback:* If video fails or is missing, renders `.cinematic-fallback` ("Every wonderful mistake starts somewhere") with "Continue the adventure" button.
+- **Puzzle Matrix & Edge-Case Automated Assertions:**
+  - *Shadow Stitcher:*
+    - Wrong match (Duck -> Star shadow): Rebuffed with `"Not quite! Village Duck says: “I have always dreamed of being a forest.” Look for the shadow that fits their wish."`
+    - Correct match (Duck -> Tree shadow): `"Duck: I AM A FOREST! Sir Clack: An ambitious duck indeed."`
+    - Repetition guard: Prevented repeat assignment on already restored resident.
+  - *Weather Loom:*
+    - Wrong match (Golden Sunbeam -> Thirsty Lilies): Rebuffed with `"That made things stranger! The petals are thirsty. Try another spool."`
+    - Correct matches: Rain -> Lilies, Wind -> Windmill, Sun -> Frog Mayor.
+  - *Impossible Clock:*
+    - Wrong order (Crooked Heart Key first): Rebuffed with `"The gears protest! The past gives tomorrow a shadow."`
+    - Correct sequence: Shadow Cog -> Weather Spring -> Crooked Heart Key.
+  - *Finale Stitch:*
+    - Traversed all 3 steps: "Reach toward your friend", "Listen to the crooked thread", "Tie a wonderfully uneven knot".
+  - *Epilogue & Reset:*
+    - Epilogue reached; character portfolio contained in `<details>` disclosure.
+    - "Start over" dialog confirmed -> safely returns player to opening scene.
+- **Keyboard Navigation Verification:**
+  - Tab navigation moves cleanly between topbar buttons, opening action, dialogue controls, and puzzle elements.
+  - Enter and Space keys trigger focused actions without requiring mouse interaction.
