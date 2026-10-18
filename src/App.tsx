@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ArrowRight, BookOpen, Map as MapIcon, Moon, Sun, RotateCcw, Volume2, VolumeX, Sparkles } from 'lucide-react';
 import { chapters, dialogues, type ChapterId } from './story';
 import { sound, type AudioEffect } from './sound';
-import { Morrow, type MorrowExpression } from './components/art/Morrow';
+
 import { SirClack, Pipkin, TheUnfinishedOne } from './components/art/SupportingCast';
 import { ShadowStitcher } from './components/inventions/ShadowStitcher';
 import { WeatherLoom } from './components/inventions/WeatherLoom';
@@ -73,12 +73,6 @@ export default function App() {
     setView('story');
     if (next && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) setCinematic(next.id);
   }
-  const expression: MorrowExpression =
-    chapter.id === 'workshop' ? 'surprised' :
-    chapter.id === 'shadows' ? 'curious' :
-    chapter.id === 'weather' ? 'focused' :
-    chapter.id === 'clock' ? 'determined' :
-    chapter.id === 'finale' ? 'sheepish' : 'happy';
 
   return (
     <div className={`app morrow-story ${night ? 'night' : ''}`}>
@@ -100,7 +94,7 @@ export default function App() {
         <main className="opening-scene">
           <div className="opening-glow" aria-hidden="true"/>
           <span className="opening-kicker">SOMEWHERE BETWEEN A WISH AND A LOOSE THREAD…</span>
-          <div className="opening-character"><Morrow expression="happy" /></div>
+          <div className="opening-character"><img className="felt-morrow" src="/characters/morrow.png" alt="Morrow, a handmade peach felt Stitchling with asymmetric ears and plum scarf" /></div>
           <div className="opening-narration">
             <p className="opening-whisper">Once upon a nearly-perfect morning,</p>
             <h1>a very small mistake <em>woke up.</em></h1>
@@ -132,7 +126,7 @@ export default function App() {
             <div className="storybook-sky" aria-hidden="true"><span className="story-sun"/> <span className="story-cloud cloud-a"/> <span className="story-cloud cloud-b"/></div>
             <div className="storybook-landscape" aria-hidden="true"><span/><span/><span/></div>
             <div className="storybook-scene-label"><span>{chapter.tag}</span><span>{String(idx + 1).padStart(2,'0')} / {String(chapters.length).padStart(2,'0')}</span></div>
-            <div className="storybook-character"><Morrow expression={expression}/></div>
+            <div className="storybook-character"><img className="felt-morrow" src="/characters/morrow.png" alt="Morrow, the handmade Stitchling" /></div>
             {chapter.id === 'workshop' && <SirClack className="storybook-companion companion-left"/>}
             {chapter.id === 'weather' && <Pipkin className="storybook-companion companion-right"/>}
             {chapter.id === 'finale' && <TheUnfinishedOne className="storybook-companion companion-left"/>}
