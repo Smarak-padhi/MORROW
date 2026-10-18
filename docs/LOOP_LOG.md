@@ -16,7 +16,8 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 | **L07: Epilogue & Persistence** | **COMPLETE** | Defensive `localStorage` ('morrow-v1' / 'morrow-v2'), reset dialog, unlock states preserved, portfolio moved to epilogue only. | Storage persistence & recovery verified. |
 | **L08: Optional Spline 3D Scene** | **DEFERRED / OPTIONAL** | Spline evaluated as strictly optional; 2D SVG fallback always authoritative. | Maintain optionality. |
 | **L09: Mobile & Keyboard QA (G4)** | **COMPLETE** | Full keyboard-only and mobile viewport verification (320px, 375px, 430px, 768px, 1280px, 1440px) executed with Playwright. 0 console errors, 0 layout overflows, full adventure verified. | Ready for deployment. |
-| **Motion Pass & Storybook Feel** | **COMPLETE** | Perspective page-turns, Morrow squash/tilt reactions, atmospheric particles, scroll reveals, and golden puzzle completion pulses verified under both normal and reduced motion. | Public deployment. |
+| **Motion Pass & Storybook Feel** | **COMPLETE** | Perspective page-turns, Morrow squash/tilt reactions, atmospheric particles, scroll reveals, and golden puzzle completion pulses verified under both normal and reduced motion. | Proceed to Comic Rebuild. |
+| **Master Build Directive (L01–L08)** | **COMPLETE** | Full stop-motion comic rebuild across all 6 chapters: 9-panel workshop comic with inline video/SVGs, single duck tree shadow, tactile puzzles, bespoke stages for all chapters, epilogue character scrapbook, and 19 Playwright verification screenshots. | Ship & Deploy. |
 
 ---
 
@@ -143,3 +144,44 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
   - Screenshot verified: `qa/screenshots/motion-workshop-375.png`.
 - **Refinement Implemented:**
   - Tuned `.felt-morrow` drop-shadows and container bottom-offset (`bottom: 6%`) so Morrow's desk and contact shadow align naturally with foreground paper cutouts.
+
+---
+
+### [2026-10-19] Master Build Directive: Handcrafted Stop-Motion Comic Rebuild (Loops 01–08)
+- **Directive Mandate:** Transform MORROW into a fully playable, animated, handcrafted stop-motion comic adventure across all 6 chapters (Prologue: The Workshop, Chapter 1: Lost Shadows Village, Chapter 2: Upside-Down Forest, Chapter 3: Tomorrow Town, Finale: The Clock Tower, Epilogue: Wonderfully Wrong).
+- **Core Non-Negotiables Enforced:**
+  1. *Never show turnaround sheet:* Purged `/characters/morrow.png` reference turnaround sheet completely from scenes. Replaced opening still with gold-embossed heirloom cameo vignette (`morrow-waking-poster.jpg`).
+  2. *Single Tree Shadow on Duck:* Duck renders with exactly one impossible tree shadow anchored to duck's feet via transparent CSS overlay (`mix-blend-mode: multiply`, `transform: rotate(-18deg) skewX(-15deg)`). Zero duplicate normal duck shadow.
+  3. *Inline Comic Video Panels:* Cinematic MP4 clips render strictly as inline manga panels with posters, play/mute toggles, and reduced-motion fallback, never full-screen takeovers.
+  4. *Default Muted Audio & Hierarchy:* All Web Audio synthesis and video audio remain muted by default, requiring explicit user gesture.
+  5. *Zero Horizontal Overflow:* Verified across 320px–1440px viewports with zero horizontal scroll and min 44px touch targets.
+  6. *Epilogue-Only Character Scrapbook:* Character portfolio renders strictly in Epilogue after completion, never prematurely.
+- **Detailed Sub-Loop Implementations:**
+  - **Loop 01 (Workshop Comic Rebuild):**
+    - Created `src/components/ComicVideoPanel.tsx` with user-initiated play/pause, volume toggle, and reduced-motion poster fallback.
+    - Created `src/components/art/WorkshopComicScenes.tsx` providing procedural SVG scene stages for all 9 comic beats.
+    - Integrated in `src/components/WorkshopComic.tsx`: Asleep Morrow in woven basket -> Bell chime -> Giant awakening -> Giant POV -> Sir Clack greeting -> Morrow hello -> Pipkin breaking news -> "Which part?" -> Doorway transition.
+  - **Loop 02 (Chapter 1 Lost Shadows Village):**
+    - Built `src/components/art/ShadowStage.tsx` featuring `shadows-01-duck.mp4` with single impossible tree-shaped shadow overlay.
+    - Fixed mobile video control positioning to `top: 64px; right: 14px` to avoid collision with topbar icons.
+  - **Loop 03–05 (Tactile Physical Inventions):**
+    - Upgraded `src/components/art/ShadowIcons.tsx` and `src/components/inventions/ShadowStitcher.tsx`: Replaced emojis with bespoke SVG icons and tactile selection cards.
+    - Overhauled `src/components/inventions/WeatherLoom.tsx`: Tactile wooden thread spools, color pips, and descriptive badges.
+    - Overhauled `src/components/inventions/ImpossibleClock.tsx`: Brass clockwork face, gear teeth, and tactile step badges.
+  - **Loop 06 (Finale & Epilogue Polish):**
+    - Rebuilt `src/components/inventions/FinaleStitch.tsx`: Tactile peach and navy felt paws, glowing golden thread progression, progress bar, accessible step choices, and "Try to make it perfectly straight" ruler lesson.
+    - Created `src/components/CharacterScrapbook.tsx`: Interactive character scrapbook for all 7 characters (Morrow, Sir Clack, Pipkin, Duck, Frog Mayor, Professor Perfect, The Unfinished One), rendering exclusively in the Epilogue.
+  - **Loop 07 (Bespoke Handcrafted Stop-Motion Stages Across All Chapters):**
+    - `src/components/art/WeatherStage.tsx`: Inverted spruce/birch canopy, Frog Mayor with upside-down leaf umbrella, perched Pipkin, felt Morrow, and rising glass raindrops.
+    - `src/components/art/ClockStage.tsx`: Victorian clocktower square, frozen brass clock at 4:01, tangled gear threads, Professor Primrose Perfect with hairline porcelain crack, Sir Clack, and Morrow.
+    - `src/components/art/FinaleStage.tsx`: Cathedral clock tower mechanism, dual gear platforms, The Unfinished One and Morrow reaching across the chasm, glowing golden thread bridge with center crooked knot.
+    - `src/components/art/EpilogueStage.tsx`: Sunlit morning workshop, open window overlooking sleeping duck with tree shadow in meadow, open scrapbook with polaroid sketches and "SOMEHOW LOVELY" stamp, Pipkin with Special Edition, Sir Clack, The Unfinished One, and Morrow sipping tea.
+    - Optimized all mobile safe zones: Centered interactive and character figures within `[150, 440]` viewBox coordinates to prevent mobile edge clipping under `object-fit: cover`.
+  - **Loop 08 (Playwright Verification Matrix & Evidence Capture):**
+    - `npm run build`: PASSED (0 errors, 2.89s).
+    - `scripts/comic-visual-qa.mjs`: PASSED across 320px, 375px, 390px, 430px, 768px (9/9 panels, 0 overflow, 0 balloon-art collisions).
+    - `scripts/mobile-qa.mjs`: PASSED across 320px, 375px, 430px, 768px, 1280px (responsive opening, all 4 puzzle sequences, epilogue, reload, 0 console errors).
+    - `scripts/viewport_audit.mjs`: PASSED across 320px, 375px, 430px, 768px, 1280px, 1440px for all 6 chapters (ZERO horizontal overflow).
+    - Captured 19 Playwright verification screenshots into `qa/screenshots/loop07/` and mirrored to artifact storage:
+      - `00_opening_390px.png`, `01_workshop_comic_390px.png`, `02_shadows_stage_390px.png`, `02_shadows_puzzle_solved_390px.png`, `03_weather_stage_390px.png`, `03_weather_puzzle_solved_390px.png`, `04_clock_stage_390px.png`, `04_clock_puzzle_solved_390px.png`, `05_finale_stage_390px.png`, `05_finale_puzzle_solved_390px.png`, `06_epilogue_stage_390px.png`, `06_epilogue_scrapbook_morrow_390px.png`, `06_epilogue_scrapbook_clack_390px.png`, `06_epilogue_scrapbook_unfinished_390px.png`, `07_chapter_map_390px.png`, `desktop_map_1280px.png`, `desktop_weather_1280px.png`, `desktop_finale_1280px.png`, `desktop_epilogue_1280px.png`.
+
