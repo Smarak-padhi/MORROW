@@ -74,7 +74,9 @@ try {
   await page.screenshot({ path: `${out}/clock-complete.png`, fullPage: true });
   await page.getByRole('button', { name: /step into the next chapter/i }).click();
   await advanceDialogue();
-  await page.getByRole('button', { name: /make the crooked final stitch/i }).click();
+  for (const step of ['Reach toward your friend','Listen to the crooked thread','Tie a wonderfully uneven knot']) {
+    await page.getByRole('button', { name: new RegExp(step,'i') }).click();
+  }
   await page.getByRole('button', { name: /step into the next chapter/i }).click();
   await advanceDialogue();
   check((await chapter()).toLowerCase().includes('epilogue') || await page.locator('.storybook-ending').count() > 0, 'Epilogue not reached');
