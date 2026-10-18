@@ -1096,3 +1096,9 @@ footer button {
 .cinematic-fallback { min-height:100svh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:25px; padding:32px!important; background:radial-gradient(circle at 50% 30%,#72536c,#25324a 75%); color:#fff8f1; }
 .cinematic-fallback h1 { font:700 clamp(2rem,6vw,5rem)/1.15 'Fraunces',Georgia,serif; max-width:750px; }
 @media(max-width:600px) { .cinematic-player-bar { align-items:stretch; flex-direction:column; } .cinematic-player-buttons { justify-content:space-between; } .cinematic-player-buttons button { padding:10px 12px; } }
+
+/* Approved handcrafted felt character art replaces rejected SVG mascot. */
+.felt-morrow { display:block; width:min(70vw,330px); max-height:390px; height:auto; object-fit:contain; mix-blend-mode:multiply; filter:drop-shadow(0 16px 15px rgba(54,32,45,.25)); animation:bob 4.5s ease-in-out infinite; }
+.opening-character .felt-morrow { margin:auto; }
+.storybook-character .felt-morrow { margin:auto; }
+@media(prefers-reduced-motion:reduce) { .felt-morrow { animation:none; } }
