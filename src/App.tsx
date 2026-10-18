@@ -9,6 +9,7 @@ import { WeatherLoom } from './components/inventions/WeatherLoom';
 import { ImpossibleClock } from './components/inventions/ImpossibleClock';
 import { FinaleStitch } from './components/inventions/FinaleStitch';
 import { Cinematic } from './components/Cinematic';
+import { WorkshopComic } from './components/WorkshopComic';
 
 type Saved = { completed: ChapterId[]; active: ChapterId; muted: boolean; easter: boolean; started: boolean };
 const initial: Saved = { completed: [], active: 'workshop', muted: true, easter: false, started: false };
@@ -42,7 +43,7 @@ export default function App() {
   const idx = chapters.findIndex(c => c.id === save.active);
   const chapter = chapters[Math.max(idx, 0)];
   const lines = dialogues[chapter.id];
-  const lastLine = dialog === lines.length - 1;
+  const lastLine = chapter.id === 'workshop' ? dialog >= 6 : dialog === lines.length - 1;
   const puzzleNeeded = puzzleChapters.includes(chapter.id);
   const ready = lastLine && (!puzzleNeeded || puzzleDone || save.completed.includes(chapter.id));
   const completedCount = save.completed.length;
@@ -141,6 +142,7 @@ export default function App() {
         </main>
       ) : (
         <main className={`storybook-chapter chapter-${chapter.id}`}>
+          {chapter.id === 'workshop' ? <WorkshopComic beat={dialog} awake={awake || save.completed.includes('workshop')} onBell={() => { setAwake(true); setBell(n => n + 1); play('bell'); }} onNext={() => { setDialog(d => Math.min(d + 1, 6)); play('chime'); }}/> : <>
           <section key={chapter.id} className="storybook-stage" aria-label={`Illustrated scene: ${chapter.name}`}>
             <div className="storybook-sky" aria-hidden="true"><span className="story-sun"/> <span className="story-cloud cloud-a"/> <span className="story-cloud cloud-b"/></div>
             <div className="storybook-landscape" aria-hidden="true"><span/><span/><span/></div>
@@ -167,6 +169,7 @@ export default function App() {
             <span className="storybook-page-number">{dialog + 1} of {lines.length} · {lastLine ? 'The story continues below' : 'Tap to continue'}</span>
           </section>
 
+          </>}
           {lastLine && (
             <section className="storybook-interaction reveal-on-scroll" aria-label="Chapter interaction">
               {chapter.id === 'shadows' && <ShadowStitcher playChime={() => play('stitch')} onSuccess={() => setPuzzleDone(true)}/>}
