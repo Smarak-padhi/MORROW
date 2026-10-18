@@ -41,8 +41,8 @@ export function WorkshopComic({ beat, awake, onBell, onNext }: Props) {
       <p>Scroll through the story. Each frame is another moment, not another version of Morrow.</p>
     </header>
     <div className="comic-strip" aria-label="Workshop comic panels">
-      {beats.slice(0, awake ? beat + 3 : 1).map((panel, i) => {
-        const current = i === (awake ? Math.min(beat + 2, beats.length - 1) : 0);
+      {beats.slice(0, awake ? beat + 2 : 1).map((panel, i) => {
+        const current = i === (awake ? Math.min(beat + 1, beats.length - 1) : 0);
         return <section ref={current ? newest : undefined} key={panel.shot} className={`comic-panel comic-panel--${panel.shot}`} aria-label={panel.title}>
           <span className="comic-panel-caption">{panel.label}</span>
           {panel.shot === 'establish' && <>
@@ -71,9 +71,9 @@ export function WorkshopComic({ beat, awake, onBell, onNext }: Props) {
       <span className="story-overline">PROLOGUE · A VERY BAD FIRST DAY</span>
       <h2>The Workshop</h2>
       {!awake ? <button type="button" className="storybook-action" onClick={onBell}>Ring the bell to wake the workshop <Bell size={20}/></button>
-        : beat < 6 ? <button className="storybook-action" type="button" onClick={onNext}>Turn the page <ArrowRight size={18}/></button>
+        : beat < 7 ? <button className="storybook-action" type="button" onClick={onNext}>Turn the page <ArrowRight size={18}/></button>
         : null}
-      <span className="storybook-page-number">{awake ? Math.min(beat + 3, 9) : 1} of 9 panels · Scroll to read</span>
+      <span className="storybook-page-number">{awake ? Math.min(beat + 2, 9) : 1} of 9 panels · Scroll to read</span>
     </section>
   </div>;
 }
