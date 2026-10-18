@@ -1269,3 +1269,52 @@ img,svg,video,canvas { max-width:100%; }
  .storybook-stage,.story-page-turn,.story-character-react,.storybook-character.story-character-react .felt-morrow,.story-atmosphere i,.shadow-resident.repaired,.finale-step.finished,.storybook-sky,.storybook-landscape { animation:none!important; }
  .storybook-stage { clip-path:none!important; }
 }
+
+
+/* Comic-first Workshop: persistent scroll panels and in-panel speech. */
+.chapter-workshop {background:#eae0d2}
+.comic-workshop{max-width:1050px;margin:auto;padding:100px 14px 30px}
+.comic-heading{text-align:center;margin:0 auto 24px}
+.comic-heading h1{font:800 clamp(2.5rem,8vw,5rem) Georgia,serif;margin:8px}
+.comic-heading>span,.comic-panel-caption{font:800 .72rem monospace;letter-spacing:.1em}
+.comic-strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.comic-panel{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;min-height:440px;border:5px solid #302631;background:#b9a18b;box-shadow:5px 6px 0 #302631}
+.comic-panel--establish,.comic-panel--reaction,.comic-panel--giant,.comic-panel--exit{grid-column:1/-1;min-height:560px}
+.comic-panel-caption{position:absolute;top:12px;left:12px;z-index:4;max-width:90%;background:#fff6e9;border:2px solid #302631;padding:8px}
+.comic-panel--establish{background:#694632}
+.comic-establish-image{position:absolute;inset:0;background:linear-gradient(0deg,#24151c88,transparent 60%),url('/cinematics/morrow-waking.jpg') center/cover}
+.comic-narrator{z-index:2;position:relative;max-width:70%;margin:0 0 20px 18px;padding:12px;background:#fff4df;border:3px solid #302631;font:700 1.2rem Georgia,serif}
+.comic-panel--bell{align-items:center;justify-content:center;background:radial-gradient(circle,#f1d8a3,#855439)}
+.comic-bell-drawing{color:#54331e;transform:rotate(-15deg)}
+.comic-sfx{font:900 clamp(3rem,10vw,7rem) Georgia,serif;color:#fff1a5;-webkit-text-stroke:2px #302631;transform:rotate(-8deg);text-shadow:6px 7px #a24d59}
+.comic-panel--reaction{background:repeating-conic-gradient(from 15deg at 50% 50%,#f4d8a8 0deg 10deg,#e7b77d 10deg 20deg)}
+.comic-panel--hello{background:radial-gradient(circle,#ffe9c8,#a56c79)}
+.comic-panel--clack{background:linear-gradient(130deg,#604332,#b18b67)}
+.comic-morrow{position:absolute;z-index:1;bottom:-6%;left:25%;width:55%;height:83%;object-fit:contain;object-position:bottom;filter:drop-shadow(9px 13px 6px #301c2b66)}
+.comic-panel--hello .comic-morrow{left:8%;width:65%;transform:rotate(-5deg)}
+.comic-panel--clack .comic-morrow{left:0;width:54%;height:65%}
+.comic-clack-placeholder{position:absolute;right:5%;bottom:10%;width:32%;aspect-ratio:1.2;background:linear-gradient(130deg,#a7784b,#633a24);border:8px ridge #593a23;border-radius:15px;display:grid;place-items:center;color:white;font:800 .7rem monospace;text-align:center}
+.comic-panel--giant{background:radial-gradient(circle at 50% 90%,#f5d7a5,#76606b 60%,#302938)}
+.comic-visitor{position:absolute;left:15%;bottom:-25%;width:70%;height:120%;background:#2a2431;border-radius:45% 45% 0 0;filter:blur(2px)}
+.comic-visitor:before{content:'';position:absolute;left:30%;top:-15%;width:40%;aspect-ratio:1;background:#2a2431;border-radius:50%}
+.comic-panel--pipkin{background:repeating-linear-gradient(-15deg,#dce5df 0 25px,#a6c5ca 25px 29px)}
+.comic-paper{align-self:center;display:grid;place-content:center;gap:10px;width:70%;aspect-ratio:1;transform:rotate(-10deg);padding:15px;background:#fff1dc;border:4px solid #302631;box-shadow:8px 10px #302631;text-align:center}
+.comic-paper strong{font:900 3rem Georgia,serif}
+.comic-paper span{font:800 .8rem monospace}
+.comic-panel--question{background:radial-gradient(circle,#eee2d4,#90818c)}
+.comic-silence{align-self:center;font:900 10rem Georgia,serif}
+.comic-panel--exit{background:radial-gradient(circle at 50% 80%,#f3e6b1,#3c5162)}
+.comic-door{position:absolute;left:30%;bottom:0;width:40%;height:78%;border:15px ridge #775334;border-bottom:0;border-radius:50% 50% 0 0;background:linear-gradient(145deg,#d7edc6,#41656a);display:grid;place-items:center}
+.comic-door span{font:900 8rem Georgia,serif;color:#fff3c4}
+.comic-balloon{position:relative;z-index:3;align-self:flex-start;width:max-content;max-width:65%;margin:0 0 10% 5%;padding:14px;border:3px solid #302631;border-radius:35px;background:#fffdf5;color:#302631;box-shadow:4px 5px #30263144}
+.comic-balloon--right{align-self:flex-end;margin:0 5% 10% 0}
+.comic-balloon:after{content:'';position:absolute;bottom:-20px;left:22%;width:25px;height:25px;background:#fffdf5;border-right:3px solid #302631;transform:skew(22deg) rotate(38deg)}
+.comic-balloon--right:after{left:auto;right:22%;transform:skew(-22deg) rotate(-38deg);border-right:0;border-left:3px solid #302631}
+.comic-speaker{font:900 .65rem monospace;color:#9b4164}
+.comic-balloon p{margin:5px 0;font:800 clamp(1.1rem,3vw,2rem)/1.2 Georgia,serif;overflow-wrap:break-word}
+.comic-bell-action{position:relative;z-index:4;min-height:48px;margin:10px;padding:12px;border:2px solid #302631;background:#fff4dc;border-radius:10px;font-weight:800}
+.comic-reading{text-align:center;padding:24px}
+.comic-reading h2{font:800 1.7rem Georgia,serif}
+.comic-reading .storybook-action{margin:15px auto}
+@media(max-width:650px){.comic-strip{grid-template-columns:1fr}.comic-panel{grid-column:1/-1;min-height:clamp(340px,115vw,550px)}.comic-panel--establish,.comic-panel--reaction,.comic-panel--giant,.comic-panel--exit{min-height:clamp(400px,125vw,630px)}.comic-balloon{max-width:78%}.comic-morrow{left:18%;width:70%;height:73%}.comic-panel--clack .comic-morrow{width:60%}}
+@media(prefers-reduced-motion:reduce){.comic-panel,.comic-panel *{animation:none!important;transition:none!important}}
