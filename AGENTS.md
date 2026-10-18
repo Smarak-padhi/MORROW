@@ -9,6 +9,7 @@ Read this file first. Then read README.md, docs/DESIGN_SYSTEM.md, docs/STORY_BIB
 - Mobile-first tap controls; dragging is optional enhancement.
 - Reuse one stitching engine for all chapters; do not create three incompatible puzzle systems.
 - All audio user-initiated, muted via visible switch; videos skippable with poster and reduced-motion fallback.
+- Spline (https://spline.design/) is approved as an optional 3D enhancement for the floating world map and workshop. It must never replace React game state or mandatory accessible HTML interactions. Always retain a 2D fallback. Follow docs/TRD.md and L06 before integrating.
 - Do not mark unverified features complete. Never fabricate test evidence.
 - No secrets, unlicensed assets or uncontrolled third-party imports.
 
