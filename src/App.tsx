@@ -71,7 +71,9 @@ export default function App() {
     setDialog(0);
     setPuzzleDone(false);
     setView('story');
-    if (next && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) setCinematic(next.id);
+    // Ship-first release: only the approved waking film plays. Chapter arrivals
+    // are interactive story scenes until optional cinematic assets are approved.
+    // Never request missing MP4 files during chapter transitions.
   }
 
   return (
