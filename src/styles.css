@@ -1326,3 +1326,44 @@ img,svg,video,canvas { max-width:100%; }
 .chapter-workshop .comic-reading .storybook-action{margin:4px auto 6px;min-height:48px}
 .chapter-workshop .comic-reading .storybook-page-number{font-size:.7rem}
 .chapter-workshop .comic-strip{padding-bottom:12px}
+
+
+/* Comic QA 03: keep dialogue clear of characters and the sticky reader bar.
+   Until an approved transparent cutout is available, display Morrow's existing
+   reference card as a deliberate framed illustration rather than a fake cutout. */
+.chapter-workshop .comic-panel--reaction,
+.chapter-workshop .comic-panel--clack,
+.chapter-workshop .comic-panel--hello{min-height:clamp(520px,135vw,670px)}
+.chapter-workshop .comic-character-frame{position:absolute;top:76px;left:16%;width:68%;height:calc(100% - 310px);min-height:175px;max-height:340px;overflow:hidden;border:3px solid #302631;background:#f6eede;box-shadow:7px 8px 0 #30263144;transform:rotate(-2deg)}
+.chapter-workshop .comic-character-frame .comic-morrow{position:static;display:block;width:100%;height:100%;max-width:none;object-fit:contain;object-position:center;filter:none;transform:none}
+.chapter-workshop .comic-panel--clack .comic-character-frame{left:5%;width:49%;transform:rotate(-3deg)}
+.chapter-workshop .comic-panel--hello .comic-character-frame{left:16%;width:68%;transform:rotate(2deg)}
+.chapter-workshop .comic-panel--clack .comic-clack-placeholder{top:110px;bottom:auto;right:5%;width:33%;max-height:170px}
+.chapter-workshop .comic-panel--reaction .comic-balloon,
+.chapter-workshop .comic-panel--clack .comic-balloon,
+.chapter-workshop .comic-panel--hello .comic-balloon{position:absolute;bottom:142px;left:5%;right:auto;align-self:auto;max-width:90%;width:fit-content;margin:0;padding:13px 16px}
+.chapter-workshop .comic-panel--clack .comic-balloon{left:auto;right:5%}
+.chapter-workshop .comic-panel--establish .comic-narrator,
+.chapter-workshop .comic-panel--giant .comic-narrator{margin-bottom:155px;max-width:82%}
+.chapter-workshop .comic-panel--pipkin .comic-balloon,
+.chapter-workshop .comic-panel--question .comic-balloon,
+.chapter-workshop .comic-panel--exit .comic-balloon{margin-bottom:148px;max-width:85%}
+.chapter-workshop .comic-panel--pipkin .comic-paper{margin-bottom:65px}
+.chapter-workshop .comic-panel--question .comic-silence{margin-bottom:70px}
+.chapter-workshop .comic-panel--exit .comic-door{bottom:110px;height:65%}
+.chapter-workshop .comic-reading{max-width:100%;overflow:visible}
+.chapter-workshop .comic-reading .storybook-action{font-size:clamp(.9rem,3.8vw,1.15rem);max-width:100%;padding:12px 18px}
+.chapter-workshop .comic-panel{scroll-margin-bottom:170px}
+@media(max-width:650px){
+ .chapter-workshop .comic-panel--reaction,
+ .chapter-workshop .comic-panel--clack,
+ .chapter-workshop .comic-panel--hello{min-height:560px}
+ .chapter-workshop .comic-character-frame{top:78px;left:12%;width:76%;height:255px;min-height:0}
+ .chapter-workshop .comic-panel--clack .comic-character-frame{left:5%;width:51%;height:255px}
+ .chapter-workshop .comic-panel--hello .comic-character-frame{left:12%;width:76%}
+ .chapter-workshop .comic-panel--clack .comic-clack-placeholder{top:120px;width:34%;height:140px}
+ .chapter-workshop .comic-panel--reaction .comic-balloon,
+ .chapter-workshop .comic-panel--clack .comic-balloon,
+ .chapter-workshop .comic-panel--hello .comic-balloon{bottom:135px;max-width:90%;padding:11px 14px}
+ .chapter-workshop .comic-panel--establish .comic-narrator{font-size:1.05rem;max-width:85%}
+}
