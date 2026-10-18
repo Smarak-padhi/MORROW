@@ -1,15 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  ArrowRight,
-  BookOpen,
-  Check,
-  Map as MapIcon,
-  Moon,
-  RotateCcw,
-  Sun,
-  Volume2,
-  VolumeX,
-} from 'lucide-react';
+import { ArrowRight, BookOpen, Map as MapIcon, Moon, Sun, RotateCcw, Volume2, VolumeX, Sparkles } from 'lucide-react';
 import { chapters, dialogues, type ChapterId } from './story';
 import { sound, type AudioEffect } from './sound';
 import { Morrow, type MorrowExpression } from './components/art/Morrow';
@@ -19,416 +9,175 @@ import { WeatherLoom } from './components/inventions/WeatherLoom';
 import { ImpossibleClock } from './components/inventions/ImpossibleClock';
 import { FinaleStitch } from './components/inventions/FinaleStitch';
 
-type Saved = {
-  completed: ChapterId[];
-  active: ChapterId;
-  muted: boolean;
-  easter: boolean;
-};
-
-const initial: Saved = {
-  completed: [],
-  active: 'workshop',
-  muted: true,
-  easter: false,
-};
-
-const known = chapters.map((c) => c.id);
+type Saved = { completed: ChapterId[]; active: ChapterId; muted: boolean; easter: boolean; started: boolean };
+const initial: Saved = { completed: [], active: 'workshop', muted: true, easter: false, started: false };
+const known = chapters.map(c => c.id);
+const puzzleChapters: ChapterId[] = ['shadows', 'weather', 'clock', 'finale'];
 
 function load(): Saved {
   try {
-    const s = JSON.parse(localStorage.getItem('morrow-v1') || 'null');
-    if (!s) return initial;
+    const old = JSON.parse(localStorage.getItem('morrow-v2') || localStorage.getItem('morrow-v1') || 'null');
+    if (!old) return initial;
+    const completed = Array.isArray(old.completed) ? old.completed.filter((id: ChapterId) => known.includes(id)) : [];
     return {
-      completed: Array.isArray(s.completed)
-        ? s.completed.filter((x: ChapterId) => known.includes(x))
-        : [],
-      active: known.includes(s.active) ? s.active : 'workshop',
-      muted: s.muted !== false,
-      easter: s.easter === true,
+      completed,
+      active: known.includes(old.active) ? old.active : 'workshop',
+      muted: old.muted !== false,
+      easter: old.easter === true,
+      started: old.started === true || old.active !== 'workshop' || completed.length > 0,
     };
-  } catch {
-    return initial;
-  }
+  } catch { return initial; }
 }
 
-function App() {
+export default function App() {
   const [save, setSave] = useState<Saved>(load);
   const [dialog, setDialog] = useState(0);
   const [night, setNight] = useState(false);
-  const [bell, setBell] = useState(0);
   const [view, setView] = useState<'story' | 'map'>('story');
+  const [bell, setBell] = useState(0);
+  const [awake, setAwake] = useState(false);
   const [puzzleDone, setPuzzleDone] = useState(false);
+  const idx = chapters.findIndex(c => c.id === save.active);
+  const chapter = chapters[Math.max(idx, 0)];
+  const lines = dialogues[chapter.id];
+  const lastLine = dialog === lines.length - 1;
+  const puzzleNeeded = puzzleChapters.includes(chapter.id);
+  const ready = lastLine && (!puzzleNeeded || puzzleDone || save.completed.includes(chapter.id));
+  const completedCount = save.completed.length;
 
-  useEffect(() => {
-    localStorage.setItem('morrow-v1', JSON.stringify(save));
-  }, [save]);
+  useEffect(() => { localStorage.setItem('morrow-v2', JSON.stringify(save)); }, [save]);
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [save.active, view, save.started]);
 
-  const idx = chapters.findIndex((c) => c.id === save.active);
-  const chapter = chapters[idx];
-  const unlocked = (i: number) => i === 0 || save.completed.includes(chapters[i - 1].id);
-
-  function playSound(effect: AudioEffect = 'chime') {
-    sound.play(effect, save.muted);
-  }
-
+  function play(effect: AudioEffect = 'chime') { sound.play(effect, save.muted); }
   function select(id: ChapterId) {
-    const i = chapters.findIndex((c) => c.id === id);
-    if (!unlocked(i)) return;
-    setSave((s) => ({ ...s, active: id }));
+    const i = chapters.findIndex(c => c.id === id);
+    if (i < 0 || (i !== 0 && !save.completed.includes(chapters[i - 1].id))) return;
+    setSave(s => ({ ...s, active: id }));
     setDialog(0);
-    setPuzzleDone(save.completed.includes(id));
+    setPuzzleDone(false);
     setView('story');
   }
-
-  function complete() {
-    setSave((s) => ({ ...s, completed: [...new Set([...s.completed, s.active])] }));
-    if (idx < chapters.length - 1) {
-      selectNext();
-    } else {
-      setView('map');
-    }
-  }
-
-  function selectNext() {
+  function nextChapter() {
+    if (!ready) return;
+    play('chime');
     const next = chapters[idx + 1];
-    if (next) {
-      setSave((s) => ({
-        ...s,
-        completed: [...new Set([...s.completed, s.active])],
-        active: next.id,
-      }));
-      setDialog(0);
-      setPuzzleDone(save.completed.includes(next.id));
-      setView('story');
-    }
+    setSave(s => ({
+      ...s,
+      completed: [...new Set([...s.completed, chapter.id])],
+      active: next ? next.id : chapter.id,
+    }));
+    setDialog(0);
+    setPuzzleDone(false);
+    setView('story');
   }
-
-  // Derive Morrow's current expression based on narrative context
-  const getExpression = (): MorrowExpression => {
-    if (save.active === 'workshop') return 'surprised';
-    if (save.active === 'shadows') return 'curious';
-    if (save.active === 'weather') return 'focused';
-    if (save.active === 'clock') return 'determined';
-    if (save.active === 'finale') return 'sheepish';
-    return 'happy';
-  };
-
-  const isPuzzleStep = ['shadows', 'weather', 'clock', 'finale'].includes(save.active);
-  const canAdvance = !isPuzzleStep || puzzleDone || save.completed.includes(save.active);
+  const expression: MorrowExpression =
+    chapter.id === 'workshop' ? 'surprised' :
+    chapter.id === 'shadows' ? 'curious' :
+    chapter.id === 'weather' ? 'focused' :
+    chapter.id === 'clock' ? 'determined' :
+    chapter.id === 'finale' ? 'sheepish' : 'happy';
 
   return (
-    <div className={night ? 'app night' : 'app'}>
-      <header className="topbar">
-        <a className="brand" href="#top" onClick={() => setView('story')}>
-          <span className="brand-mark">✳</span> MORROW<span className="brand-dot">.</span>
-        </a>
-        <nav aria-label="Main navigation">
-          <button
-            type="button"
-            onClick={() => setView('story')}
-            aria-pressed={view === 'story'}
-          >
-            <BookOpen size={17} /> Story
-          </button>
-          <button
-            type="button"
-            onClick={() => setView('map')}
-            aria-pressed={view === 'map'}
-          >
-            <MapIcon size={17} /> World map
-          </button>
-        </nav>
-        <div className="top-actions">
-          <button
-            type="button"
-            aria-label={night ? 'Use daylight' : 'Use night mode'}
-            title="Toggle mood"
-            onClick={() => setNight((x) => !x)}
-          >
-            {night ? <Sun size={19} /> : <Moon size={19} />}
-          </button>
-          <button
-            type="button"
-            aria-label={save.muted ? 'Enable sound' : 'Mute sound'}
-            title="Toggle sound"
-            onClick={() => setSave((s) => ({ ...s, muted: !s.muted }))}
-          >
-            {save.muted ? <VolumeX size={19} /> : <Volume2 size={19} />}
-          </button>
+    <div className={`app morrow-story ${night ? 'night' : ''}`}>
+      <header className="story-topbar">
+        <span className="story-brand">✳ MORROW</span>
+        <div className="story-top-actions">
+          {save.started && <button type="button" onClick={() => setView(v => v === 'story' ? 'map' : 'story')} aria-label={view === 'story' ? 'Open chapter map' : 'Return to story'}><MapIcon size={19}/><span className="desktop-label">{view === 'story' ? 'Chapters' : 'Return'}</span></button>}
+          <button type="button" onClick={() => setNight(v => !v)} aria-label={night ? 'Daylight mode' : 'Night mode'}>{night ? <Sun size={19}/> : <Moon size={19}/>}</button>
+          <button type="button" onClick={() => setSave(s => ({ ...s, muted: !s.muted }))} aria-label={save.muted ? 'Enable sound' : 'Mute sound'}>{save.muted ? <VolumeX size={19}/> : <Volume2 size={19}/>}</button>
         </div>
       </header>
 
-      <main id="top">
-        <section className="intro">
-          <p className="eyebrow">AN INTERACTIVE LITTLE ADVENTURE • TRACK 2</p>
-          <h1>
-            Good things start <em>imperfect.</em>
-          </h1>
-          <p>
-            Meet Morrow. A tiny Stitchling inventor with a magical needle, a questionable repair license, and a world to stitch back together.
-          </p>
-        </section>
-
-        <div
-          className="progress"
-          aria-label={`${save.completed.length} of ${chapters.length} chapters completed`}
-        >
-          <div className="progress-label">
-            <span>THE GREAT STITCHED JOURNEY</span>
-            <span>
-              {save.completed.length} / {chapters.length} complete
-            </span>
+      {!save.started ? (
+        <main className="opening-scene">
+          <div className="opening-glow" aria-hidden="true"/>
+          <span className="opening-kicker">SOMEWHERE BETWEEN A WISH AND A LOOSE THREAD…</span>
+          <div className="opening-character"><Morrow expression="happy" /></div>
+          <div className="opening-narration">
+            <p className="opening-whisper">Once upon a nearly-perfect morning,</p>
+            <h1>a very small mistake <em>woke up.</em></h1>
+            <p>His name was Morrow. He could stitch almost anything together. Unfortunately, almost anything was currently falling apart.</p>
+            <button className="storybook-action" type="button" onClick={() => { setSave(s => ({ ...s, started: true })); play('chime'); }}>Open the story <ArrowRight size={20}/></button>
+            <span className="opening-hint">An interactive storybook • sound is off by default</span>
           </div>
-          <div className="track">
-            <div style={{ width: `${(save.completed.length / chapters.length) * 100}%` }} />
+        </main>
+      ) : view === 'map' ? (
+        <main className="storybook-map">
+          <p className="story-overline">THE WORLD BETWEEN THE PAGES</p>
+          <h1>Where shall we go?</h1>
+          <p>Every place has a problem. Some have more than one.</p>
+          <div className="storybook-map-grid">
+            {chapters.map((c, i) => {
+              const unlocked = i === 0 || save.completed.includes(chapters[i - 1].id);
+              return <button key={c.id} type="button" disabled={!unlocked} onClick={() => select(c.id)} className={`storybook-island ${unlocked ? 'is-open' : 'is-locked'}`}>
+                <span aria-hidden="true">{['⌂','♧','☁','◷','✧','✿'][i]}</span>
+                <strong>{c.name}</strong>
+                <small>{save.completed.includes(c.id) ? 'Visited ✓' : unlocked ? 'Enter chapter' : 'Still a mystery'}</small>
+              </button>;
+            })}
           </div>
-        </div>
-
-        {view === 'map' ? (
-          <section className="world-panel">
-            <div className="section-top">
-              <div>
-                <p className="eyebrow">THE WORLD IS NOT QUITE RIGHT</p>
-                <h2>The floating world</h2>
-                <p>Completed islands bloom. Select an unlocked island to explore.</p>
-              </div>
-            </div>
-            <div className="island-map">
-              {chapters.map((c, i) => (
-                <button
-                  key={c.id}
-                  type="button"
-                  className={`island island-${i} ${unlocked(i) ? 'open' : 'locked'}`}
-                  disabled={!unlocked(i)}
-                  onClick={() => select(c.id)}
-                >
-                  <span className="island-emoji" aria-hidden="true">
-                    {['⌂', '♧', '☁', '◷', '✧', '✿'][i]}
-                  </span>
-                  <strong>{c.name}</strong>
-                  <small>
-                    {save.completed.includes(c.id)
-                      ? '✓ Completed'
-                      : unlocked(i)
-                      ? 'Explore'
-                      : 'Locked'}
-                  </small>
-                </button>
-              ))}
-            </div>
-            <div className="map-foot">
-              A stitched path connects the places you have discovered.{' '}
-              <span>Tap a location to explore.</span>
-            </div>
+          <button className="storybook-link" type="button" onClick={() => setView('story')}><BookOpen size={18}/> Return to the story</button>
+        </main>
+      ) : (
+        <main className={`storybook-chapter chapter-${chapter.id}`}>
+          <section className="storybook-stage" aria-label={`Illustrated scene: ${chapter.name}`}>
+            <div className="storybook-sky" aria-hidden="true"><span className="story-sun"/> <span className="story-cloud cloud-a"/> <span className="story-cloud cloud-b"/></div>
+            <div className="storybook-landscape" aria-hidden="true"><span/><span/><span/></div>
+            <div className="storybook-scene-label"><span>{chapter.tag}</span><span>{String(idx + 1).padStart(2,'0')} / {String(chapters.length).padStart(2,'0')}</span></div>
+            <div className="storybook-character"><Morrow expression={expression}/></div>
+            {chapter.id === 'workshop' && <SirClack className="storybook-companion companion-left"/>}
+            {chapter.id === 'weather' && <Pipkin className="storybook-companion companion-right"/>}
+            {chapter.id === 'finale' && <TheUnfinishedOne className="storybook-companion companion-left"/>}
+            <div className="storybook-scene-bottom"><span>{chapter.subtitle}</span><span>✦</span></div>
           </section>
-        ) : (
-          <section className="chapter-layout">
-            <div className="scene">
-              <div className="scene-stars" aria-hidden="true">
-                ✦ · ✧ · ✦
-              </div>
-              <div className="scene-orbit orbit-one" />
-              <div className="scene-orbit orbit-two" />
 
-              <div className="scene-art">
-                <Morrow expression={getExpression()} />
-                <div className="scene-bubble">{chapter.quote}</div>
-              </div>
-
-              {/* Supporting cast cameos based on chapter */}
-              {save.active === 'workshop' && <SirClack className="scene-cast cast-left" />}
-              {save.active === 'weather' && <Pipkin className="scene-cast cast-right" />}
-              {save.active === 'finale' && <TheUnfinishedOne className="scene-cast cast-left" />}
-
-              <div className="scene-bottom">
-                <span>✂ THE ALMOST-RIGHT REPAIR SHOP</span>
-                <span>{chapter.tag}</span>
-              </div>
+          <section className="storybook-reading" aria-label="Story dialogue">
+            <p className="story-overline">{chapter.tag} · {chapter.subtitle}</p>
+            <h1>{chapter.name}</h1>
+            <div className="storybook-dialogue" aria-live="polite" key={`${chapter.id}-${dialog}`}>
+              <p>{lines[dialog]}</p>
             </div>
-
-            <div className="story-panel">
-              <p className="eyebrow">
-                {chapter.tag} / {chapter.subtitle}
-              </p>
-              <h2>{chapter.name}</h2>
-              <p className="chapter-detail">{chapter.detail}</p>
-
-              <div className="dialogue" aria-live="polite">
-                <span className="dialogue-tag">STORYBOOK</span>
-                <p>{dialogues[save.active][dialog]}</p>
-                <div className="dialogue-actions">
-                  <span>
-                    {dialog + 1} / {dialogues[save.active].length}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDialog((d) => (d + 1) % dialogues[save.active].length);
-                      playSound('chime');
-                    }}
-                  >
-                    Next line <ArrowRight size={16} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Functional Inventions per Chapter */}
-              {save.active === 'shadows' && (
-                <ShadowStitcher
-                  playChime={() => playSound('stitch')}
-                  onSuccess={() => setPuzzleDone(true)}
-                />
-              )}
-
-              {save.active === 'weather' && (
-                <WeatherLoom
-                  playChime={() => playSound('chime')}
-                  onSuccess={() => setPuzzleDone(true)}
-                />
-              )}
-
-              {save.active === 'clock' && (
-                <ImpossibleClock
-                  playChime={() => playSound('gear')}
-                  onSuccess={() => setPuzzleDone(true)}
-                />
-              )}
-
-              {save.active === 'finale' && (
-                <FinaleStitch
-                  playChime={() => playSound('stitch')}
-                  onSuccess={() => setPuzzleDone(true)}
-                />
-              )}
-
-              {save.active === 'workshop' && (
-                <div className="note">
-                  <span>✳</span> First mission: wake the workshop and meet the crew. Tap "Next line" to hear the news, then continue your journey!
-                </div>
-              )}
-
-              {save.active === 'epilogue' && (
-                <div className="note">
-                  <span>✳</span> The repair shop's motto is sealed: <em>"We make wonderful mistakes."</em>
-                </div>
-              )}
-
-              <button
-                type="button"
-                className="primary"
-                disabled={!canAdvance}
-                onClick={() => {
-                  playSound('chime');
-                  complete();
-                }}
-              >
-                {idx === chapters.length - 1
-                  ? 'Finish adventure'
-                  : `Continue to ${chapters[Math.min(idx + 1, chapters.length - 1)].name}`}{' '}
-                <ArrowRight size={18} />
-              </button>
-            </div>
+            {chapter.id === 'workshop' && !awake && !save.completed.includes('workshop') ? (
+              <button className="storybook-action" type="button" onClick={() => { setAwake(true); setBell(n => n + 1); play('bell'); }}>Ring the bell to wake the workshop <Sparkles size={18}/></button>
+            ) : !lastLine ? (
+              <button className="storybook-action" type="button" onClick={() => { setDialog(d => Math.min(d + 1, lines.length - 1)); play('chime'); }}>Turn the page <ArrowRight size={18}/></button>
+            ) : null}
+            <span className="storybook-page-number">{dialog + 1} of {lines.length} · {lastLine ? 'The story continues below' : 'Tap to continue'}</span>
           </section>
-        )}
 
-        <section className="extras">
-          <div>
-            <p className="eyebrow">A VERY OFFICIAL RECORD</p>
-            <h2>Disaster department</h2>
-            <p>Sir Clack insists these are 'valuable educational incidents'.</p>
-            <button
-              type="button"
-              className="secondary"
-              onClick={() => {
-                setBell((n) => n + 1);
-                if (bell + 1 >= 5) setSave((s) => ({ ...s, easter: true }));
-                playSound('bell');
-              }}
-            >
-              Ring the workshop bell <span>↗</span>
-            </button>
-            {save.easter && (
-              <p className="secret">
-                SECRET FOUND: The fourth stitch. The website itself is Morrow's newest invention!
-              </p>
-            )}
-          </div>
-          <div className="counter">
-            <small>OFFICIAL DISASTER COUNT</small>
-            <strong>{String(bell + 3).padStart(5, '0')}</strong>
-            <span>
-              {bell > 0
-                ? 'Sir Clack: I am running out of ink.'
-                : 'Sir Clack: A remarkably peaceful afternoon.'}
-            </span>
-          </div>
-        </section>
-
-        <section className="character-sheet">
-          <p className="eyebrow">ORIGINAL CHARACTER SHEET</p>
-          <h2>Meet the Stitchling</h2>
-          <div className="facts">
-            <p>
-              <strong>Name</strong>Morrow
-            </p>
-            <p>
-              <strong>Species</strong>Stitchling (original fantasy creature)
-            </p>
-            <p>
-              <strong>Profession</strong>Apprentice Impossible-Things Repairer
-            </p>
-            <p>
-              <strong>Personality</strong>Gentle, impulsive, curious, clumsy
-            </p>
-            <p>
-              <strong>Story</strong>Born from a wish and loose thread, learning that difference is not damage.
-            </p>
-            <p>
-              <strong>Tagline</strong>We make wonderful mistakes.
-            </p>
-          </div>
-
-          <h3>Three inventions</h3>
-          <div className="inventions">
-            {['Shadow Stitcher', 'Weather Loom', 'Impossible Clock'].map((n, i) => (
-              <article key={n}>
-                <span>0{i + 1}</span>
-                <h4>{n}</h4>
-                <p>
-                  {[
-                    'A magical needle that joins lost shadows to living things.',
-                    'A loom that weaves clouds, rain and wind into unexpected weather.',
-                    'A clock that measures meaningful moments as well as time.',
-                  ][i]}
-                </p>
-              </article>
-            ))}
-          </div>
-        </section>
-      </main>
-
-      <footer>
-        <span>✳ MORROW — A WONDERFULLY WRONG LITTLE WEBSITE</span>
-        <button
-          type="button"
-          onClick={() => {
-            if (window.confirm('Reset saved adventure progress?')) {
-              setSave(initial);
-              setDialog(0);
-              setView('story');
-              setPuzzleDone(false);
-            }
-          }}
-        >
-          <RotateCcw size={15} /> Reset adventure
-        </button>
-        <span>
-          <Check size={15} /> Original character design; all 3 inventions functional; zero external IP
-        </span>
-      </footer>
+          {lastLine && (
+            <section className="storybook-interaction" aria-label="Chapter interaction">
+              {chapter.id === 'shadows' && <ShadowStitcher playChime={() => play('stitch')} onSuccess={() => setPuzzleDone(true)}/>}
+              {chapter.id === 'weather' && <WeatherLoom playChime={() => play('stitch')} onSuccess={() => setPuzzleDone(true)}/>}
+              {chapter.id === 'clock' && <ImpossibleClock playChime={() => play('gear')} onSuccess={() => setPuzzleDone(true)}/>}
+              {chapter.id === 'finale' && <FinaleStitch playChime={() => play('stitch')} onSuccess={() => setPuzzleDone(true)}/>}
+              {chapter.id === 'epilogue' && (
+                <div className="storybook-ending">
+                  <p className="story-overline">THE ALMOST-RIGHT REPAIR SHOP · EST. TODAY</p>
+                  <h2>It was never broken.</h2>
+                  <p>Sir Clack's disaster log turned out to be a scrapbook. Pipkin printed a special edition. Professor Perfect stamped the whole world: <strong>IMPERFECT. ACCEPTABLE. SOMEHOW LOVELY.</strong></p>
+                  <div className="ending-inventions">
+                    <h3>Morrow's three inventions</h3>
+                    <div className="ending-grid">
+                      {['Shadow Stitcher', 'Weather Loom', 'Impossible Clock'].map((name, i) => <button type="button" key={name} onClick={() => select(chapters[i+1].id)}><span>0{i+1}</span><strong>{name}</strong><small>Replay the invention ↗</small></button>)}
+                    </div>
+                  </div>
+                  <details className="ending-character-sheet"><summary>Open Morrow's character portfolio</summary><p><strong>Name:</strong> Morrow · <strong>Species:</strong> Stitchling · <strong>Craft:</strong> Impossible-Things Repairer · <strong>Personality:</strong> curious, clumsy, gentle · <strong>Origin:</strong> born from a wish and loose thread.</p></details>
+                  <button className="storybook-link" type="button" onClick={() => { setBell(n => n+1); play('bell'); if (bell + 1 >= 5) setSave(s => ({ ...s, easter: true })); }}>Ring Sir Clack's bell ({bell})</button>
+                  {save.easter && <p className="story-secret">The fourth invention is this website. You helped make it.</p>}
+                </div>
+              )}
+              {ready && <button type="button" className="storybook-action chapter-continue" onClick={nextChapter}>{idx === chapters.length-1 ? 'Seal the story' : 'Step into the next chapter'} <ArrowRight size={20}/></button>}
+              {lastLine && puzzleNeeded && !ready && <p className="storybook-prompt">Morrow needs your help before the next page can turn.</p>}
+            </section>
+          )}
+          <footer className="storybook-footer">
+            <span>We make wonderful mistakes. ✳</span>
+            <button type="button" onClick={() => { if (window.confirm('Start the adventure over?')) { setSave(initial); setDialog(0); setAwake(false); setPuzzleDone(false); setView('story'); } }}><RotateCcw size={16}/> Start over</button>
+            <span>{completedCount} chapters visited</span>
+          </footer>
+        </main>
+      )}
     </div>
   );
 }
-
-export default App;
