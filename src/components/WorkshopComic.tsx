@@ -38,7 +38,7 @@ export function WorkshopComic({ beat, awake, onBell, onNext }: Props) {
     <header className="comic-heading">
       <span>PROLOGUE · 01 / 06</span>
       <h1>The Workshop</h1>
-      <p>Scroll through the story. Each frame is another moment, not another version of Morrow.</p>
+      <p>A little mistake. A very big adventure.</p>
     </header>
     <div className="comic-strip" aria-label="Workshop comic panels">
       {beats.slice(0, awake ? beat + 2 : 1).map((panel, i) => {
@@ -47,13 +47,13 @@ export function WorkshopComic({ beat, awake, onBell, onNext }: Props) {
           <span className="comic-panel-caption">{panel.label}</span>
           {panel.shot === 'establish' && <>
             <div className="comic-establish-image" role="img" aria-label="Morrow's warmly lit miniature workshop"/>
-            <div className="comic-narrator">Once upon a nearly-perfect morning, a very small mistake was sleeping.</div>
+            <div className="comic-narrator">Once upon a nearly-perfect morning, a very small mistake was sleeping. Then came a bell.</div>
           </>}
           {panel.shot === 'bell' && <>
             <div className="comic-bell-drawing" aria-hidden="true"><Bell size={90} strokeWidth={1.6}/></div>
             <strong className="comic-sfx">DING!</strong>
           </>}
-          {(panel.shot === 'reaction' || panel.shot === 'hello' || panel.shot === 'clack') && <img className="comic-morrow" src="/characters/morrow.png" alt="Morrow, the peach felt Stitchling" />}
+          {(panel.shot === 'reaction' || panel.shot === 'hello' || panel.shot === 'clack') && <div className="comic-character-frame"><img className="comic-morrow" src="/characters/morrow.png" alt="Morrow, the peach felt Stitchling" /></div>}
           {panel.shot === 'giant' && <>
             <div className="comic-visitor" aria-hidden="true"><span/></div>
             <div className="comic-narrator">To someone the size of a spool, every visitor looks enormous.</div>
