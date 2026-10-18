@@ -1166,3 +1166,20 @@ img,svg,video,canvas { max-width:100%; }
 @media(prefers-reduced-motion:reduce) {
  *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }
 }
+
+
+/* Shadow Stitcher — touch-first actual matching game */
+.shadow-residents { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+.shadow-resident { display:flex; flex-direction:column; align-items:center; gap:5px; min-width:0; min-height:100px; border:2px solid var(--line); border-radius:18px; padding:12px 8px; color:var(--ink); background:var(--surface); text-align:center; }
+.shadow-resident > span { font-size:clamp(1.6rem,4vw,2.2rem); }
+.shadow-resident strong { font-size:.9rem; }
+.shadow-resident small { font-size:.72rem; }
+.shadow-resident.selected { border-color:var(--berry); background:rgba(163,64,99,.08); box-shadow:0 0 0 2px rgba(163,64,99,.08); }
+.shadow-resident.repaired { border-color:var(--sage); }
+.shadow-workbench { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:170px; padding:14px; margin:15px 0; border-radius:22px; background:linear-gradient(140deg,#fff0dc,#e6d9e6); color:#392f3b; text-align:center; }
+.shadow-workbench p { max-width:450px; margin:8px auto; }
+.shadow-figure { display:flex; align-items:center; gap:12px; justify-content:center; font-size:clamp(2.2rem,8vw,4.4rem); }
+.shadow-thread { font-size:1.5rem; color:#a34063; }
+.shadow-projection { filter:grayscale(1) brightness(.38); transform:scale(1.1) skew(-8deg); }
+.shadow-choice-symbol { font-size:clamp(1.7rem,5vw,2.6rem); filter:grayscale(1) brightness(.5); }
+@media(max-width:400px) { .shadow-residents { gap:6px; } .shadow-resident { padding:10px 4px; } .shadow-resident strong { font-size:.76rem; } .shadow-resident small { font-size:.65rem; } }
