@@ -1,122 +1,46 @@
-import React, { useState } from 'react';
-import { CloudRain, Sparkles, CheckCircle2 } from 'lucide-react';
+import { useState } from 'react';
+import { CloudRain, CheckCircle2 } from 'lucide-react';
 
-interface WeatherLoomProps {
-  onSuccess: () => void;
-  playChime: () => void;
-}
+interface Props { onSuccess: () => void; playChime: () => void }
+const THREADS = [
+  { id: 'rain', name: 'Gentle Downpour', symbol: '🌧' },
+  { id: 'wind', name: 'Whistling Breeze', symbol: '🍃' },
+  { id: 'sun', name: 'Golden Sunbeam', symbol: '☀️' },
+] as const;
+const TARGETS = [
+  { id: 'flowers', name: 'Thirsty Lilies', clue: 'The petals are thirsty.', thread: 'rain', result: 'The rain remembers how to fall. The lilies applaud politely.' },
+  { id: 'windmill', name: 'Frozen Windmill', clue: 'Its sails have forgotten how to turn.', thread: 'wind', result: 'The windmill spins! Pipkin declares it the fastest bakery in town.' },
+  { id: 'frog', name: 'Frog Mayor', clue: 'His rain bucket needs a little warmth.', thread: 'sun', result: 'The frog mayor dries his hat. A public holiday is declared.' },
+] as const;
+type Thread = typeof THREADS[number]['id'];
+type Target = typeof TARGETS[number]['id'];
 
-interface WeatherThread {
-  id: string;
-  name: string;
-  symbol: string;
-  color: string;
-}
-
-interface LoomTarget {
-  id: string;
-  name: string;
-  desc: string;
-}
-
-const WEATHERS: WeatherThread[] = [
-  { id: 'down-rain', name: 'Gentle Downpour', symbol: '🌧', color: '#88A991' },
-  { id: 'rising-wind', name: 'Whistling Breeze', symbol: '🍃', color: '#8E79A8' },
-  { id: 'sun-patch', name: 'Golden Sunbeam', symbol: '☀️', color: '#E8C878' },
-];
-
-const TARGETS: LoomTarget[] = [
-  { id: 'flowers', name: 'Thirsty Lilies', desc: 'Need moisture falling downwards' },
-  { id: 'windmill', name: 'Frozen Windmill', desc: 'Needs a lively breeze' },
-  { id: 'frog', name: 'Frog Mayor', desc: 'Needs sunshine to dry his bucket' },
-];
-
-export const WeatherLoom: React.FC<WeatherLoomProps> = ({ onSuccess, playChime }) => {
-  const [selectedWeather, setSelectedWeather] = useState<string>('down-rain');
-  const [selectedTarget, setSelectedTarget] = useState<string>('');
-  const [weaving, setWeaving] = useState<boolean>(false);
-  const [log, setLog] = useState<string>('');
-
-  const handleWeave = (targetId: string) => {
-    setSelectedTarget(targetId);
-    setWeaving(true);
+export function WeatherLoom({ onSuccess, playChime }: Props) {
+  const [thread, setThread] = useState<Thread>('rain');
+  const [solved, setSolved] = useState<Target[]>([]);
+  const [message, setMessage] = useState('Choose a thread, then weave it into the place that needs it.');
+  function weave(target: typeof TARGETS[number]) {
+    if (solved.includes(target.id)) { setMessage('This part of the forest is already mended.'); return; }
     playChime();
-
-    setTimeout(() => {
-      setWeaving(false);
-      let outcome = '';
-      if (targetId === 'flowers') {
-        outcome = 'Flowers drink upside-down rain happily. Sir Clack: Well, at least they are hydrated.';
-      } else if (targetId === 'windmill') {
-        outcome = 'Windmill spins backward, churning clouds into sweet spun sugar! Pipkin: SENSATIONAL!';
-      } else {
-        outcome = 'Frog Mayor puts down his bucket umbrella. "A polite rain at last!"';
-      }
-      setLog(outcome);
-      onSuccess();
-    }, 450);
-  };
-
-  return (
-    <div className="game-container weather-loom">
-      <div className="game-header">
-        <div className="game-badge">
-          <CloudRain size={18} /> INVENTION 02
-        </div>
-        <h3>The Weather Loom</h3>
-        <p>The sky is raining upwards. Weave weather threads onto earthly targets to stabilize the forest.</p>
-      </div>
-
-      <div className="loom-palette" role="group" aria-label="Select weather thread">
-        <span className="palette-title">1. Choose weather spool:</span>
-        <div className="spool-options">
-          {WEATHERS.map((w) => (
-            <button
-              key={w.id}
-              type="button"
-              className={`spool-btn ${selectedWeather === w.id ? 'active' : ''}`}
-              onClick={() => {
-                setSelectedWeather(w.id);
-                playChime();
-              }}
-            >
-              <span className="spool-icon">{w.symbol}</span>
-              <span>{w.name}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="targets-section">
-        <span className="palette-title">2. Weave into place:</span>
-        <div className="choices-grid">
-          {TARGETS.map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              className={`choice-card ${selectedTarget === t.id ? 'active' : ''}`}
-              onClick={() => handleWeave(t.id)}
-              disabled={weaving}
-            >
-              <strong>{t.name}</strong>
-              <small>{t.desc}</small>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {weaving && (
-        <div className="stitching-pulse" role="status">
-          <Sparkles className="spin-icon" size={16} /> Shuttle weaving sky threads...
-        </div>
-      )}
-
-      {log && !weaving && (
-        <div className="game-reaction" role="status">
-          <CheckCircle2 size={18} className="reaction-icon" />
-          <p>{log}</p>
-        </div>
-      )}
+    if (thread !== target.thread) {
+      setMessage(`That made things stranger! ${target.clue} Try another spool.`);
+      return;
+    }
+    const next = [...solved, target.id];
+    setSolved(next);
+    setMessage(target.result);
+    if (next.length === TARGETS.length) onSuccess();
+  }
+  return <div className="game-container weather-loom">
+    <div className="game-header"><div className="game-badge"><CloudRain size={18}/> INVENTION 02</div><h3>The Weather Loom</h3><p>Three problems, three kinds of sky-thread. Restore the forest one stitch at a time.</p></div>
+    <p className="palette-title">1. Choose your weather thread</p>
+    <div className="spool-options" role="group" aria-label="Weather thread">
+      {THREADS.map(t => <button type="button" key={t.id} aria-pressed={thread===t.id} className={`spool-btn ${thread===t.id?'active':''}`} onClick={() => setThread(t.id)}><span aria-hidden="true">{t.symbol}</span>{t.name}</button>)}
     </div>
-  );
-};
+    <p className="palette-title">2. Stitch it to the world ({solved.length}/3 repaired)</p>
+    <div className="choices-grid" role="group" aria-label="Places to repair">
+      {TARGETS.map(t => <button type="button" key={t.id} className={`choice-card ${solved.includes(t.id)?'active':''}`} disabled={solved.includes(t.id)} onClick={() => weave(t)}><strong>{solved.includes(t.id)?'✓ ':''}{t.name}</strong><small>{t.clue}</small></button>)}
+    </div>
+    <div className="game-reaction" role="status"><CheckCircle2 size={18} className="reaction-icon"/><p>{message}</p></div>
+  </div>;
+}

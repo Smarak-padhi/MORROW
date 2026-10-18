@@ -11,11 +11,11 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 | **L00: Repo Bootstrap & Skills** | **COMPLETE** | 6 skills imported, dependencies installed, build passes, Git initialized. | Proceed to L01. |
 | **L01: Design Token Lock & Inventions** | **COMPLETE** | Original SVG character locked, 3 inventions + finale interactive, mobile 375px smoke test pass. | Proceed to L02. |
 | **L02: Game Skill & Audio Engine** | **COMPLETE** | Security Grade A audit for game-development skill, procedural sound engine (`src/sound.ts`) wired, default muted. | Branch reconciliation & sound/puzzle validation. |
-| **L03–L05: Puzzle Refinement** | **IN PROGRESS** | Puzzle interactions (correct, incorrect, repeat, reset) active and undergoing Playwright test matrix. | Deep-dive automated test coverage. |
-| **L06: Finale & Narrative Clues** | **COMPLETE** | Crooked knot story resolution implemented with Unfinished One cameo. | Polish microcopy & pacing. |
-| **L07: Epilogue & Persistence** | **COMPLETE** | Defensive `localStorage` ('morrow-v1'), reset dialog, unlock states preserved. | Verify storage recovery on corrupted data. |
-| **L08: Optional Spline 3D Scene** | **DEFERRED / OPTIONAL** | Spline evaluated as strictly optional; 2D SVG fallback always authoritative. | Evaluate after core polish. |
-| **L09: Mobile & Keyboard QA (G4)** | **IN PROGRESS** | Full keyboard-only and mobile viewport verification running. | Pull request creation. |
+| **L03–L05: Story-First Puzzle Refinement** | **COMPLETE** | Immersive multi-objective puzzles (`ShadowStitcher`, `WeatherLoom`, `ImpossibleClock`) with correct/incorrect feedback, repeat prevention, and reset. | Verify automated matrix. |
+| **L06: Finale & Narrative Clues** | **COMPLETE** | Crooked knot story resolution implemented with Unfinished One cameo and emotional payoff. | Polish microcopy & pacing. |
+| **L07: Epilogue & Persistence** | **COMPLETE** | Defensive `localStorage` ('morrow-v1'), reset dialog, unlock states preserved, portfolio moved to epilogue only. | Verify storage recovery on corrupted data. |
+| **L08: Optional Spline 3D Scene** | **DEFERRED / OPTIONAL** | Spline evaluated as strictly optional; 2D SVG fallback always authoritative. | Maintain optionality. |
+| **L09: Mobile & Keyboard QA (G4)** | **IN PROGRESS** | Full keyboard-only and mobile viewport verification running across 320/375/430px. | Final verification & PR. |
 
 ---
 
@@ -57,14 +57,18 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
   - Create `src/sound.ts` procedural Web Audio synthesizer supporting distinct sound effects (`chime`, `stitch`, `bell`, `gear`, `tock`).
   - Gated audio behind user gestures and sound toggle (default muted).
 - **Verification Evidence:**
-  - `npm run build` -> Pass (0 errors).
+  - Security Audit: Grade A (100/100), clean Markdown guides.
+  - Build command: `npm run build` (`tsc -b && vite build`) -> Pass (0 errors).
   - Audio architecture: Zero external mp3/wav downloads; browser native Web Audio API oscillators.
 
 ---
 
-### [2026-10-18] Branch Reconciliation with `origin/bootstrap/l00-documentation`
-- **Action:** Merged `origin/bootstrap/l00-documentation` into `feat/skills-discovery-and-bootstrap`.
-- **Preservation Contract:**
-  - Preserved all working application code (`src/App.tsx`, `src/sound.ts`, `src/components/*`).
-  - Preserved all imported skills in `.agents/skills/`.
-  - Incorporated canonical documentation updates (`AGENT_HANDOFF.md`, `SCENE_MATRIX.md`, `TRACEABILITY.md`, and bounded Spline rules).
+### [2026-10-18] Story-First UX Correction, Branch Reconciliation & Source QA
+- **Context & Correction:** Reconciled documentation from `origin/bootstrap/l00-documentation` and story-first UX upgrades from remote commits (`ab4eafd`, `634569f`, `76bdef9`).
+- **Changes Integrated:**
+  - Immersive opening stage and full-bleed chapter backdrops.
+  - Non-looping dialogue sequence with completion gating.
+  - Epilogue-only portfolio display (story-first experience throughout prologue to finale).
+  - Multi-objective puzzles (`ShadowStitcher` 3 shadows, `WeatherLoom` 3 thread targets, `ImpossibleClock` 3 puzzle gears).
+  - GitHub Actions build gate (`.github/workflows/build.yml`).
+  - Story-first QA report documented in `docs/STORY_FIRST_QA.md`.
