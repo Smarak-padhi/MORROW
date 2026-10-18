@@ -16,7 +16,7 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 | **L07: Epilogue & Persistence** | **COMPLETE** | Defensive `localStorage` ('morrow-v1' / 'morrow-v2'), reset dialog, unlock states preserved, portfolio moved to epilogue only. | Storage persistence & recovery verified. |
 | **L08: Optional Spline 3D Scene** | **DEFERRED / OPTIONAL** | Spline evaluated as strictly optional; 2D SVG fallback always authoritative. | Maintain optionality. |
 | **L09: Mobile & Keyboard QA (G4)** | **COMPLETE** | Full keyboard-only and mobile viewport verification (320px, 375px, 430px, 768px, 1280px, 1440px) executed with Playwright. 0 console errors, 0 layout overflows, full adventure verified. | Ready for deployment. |
-| **Ship-First Release & Character Drop-In** | **COMPLETE** | `MORROW_DROP_IN` extracted: approved felt Morrow (`public/characters/morrow.png`), approved waking MP4 (`public/cinematics/morrow-waking.mp4`), turnarounds and ensemble reference. Video scope frozen to waking film; all chapters fully interactive. | Public preview & real-device review. |
+| **Motion Pass & Storybook Feel** | **COMPLETE** | Perspective page-turns, Morrow squash/tilt reactions, atmospheric particles, scroll reveals, and golden puzzle completion pulses verified under both normal and reduced motion. | Public deployment. |
 
 ---
 
@@ -125,3 +125,21 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
   - Enter and Space keys trigger focused actions without requiring mouse interaction.
 - **Local Network / Phone Preview Verification:**
   - Preview server active at `http://localhost:4173` and accessible on local WiFi at `http://192.168.1.8:4173/` (HTTP 200).
+
+---
+
+### [2026-10-19] Motion Pass QA & Handcrafted Animation Polish
+- **Scope & Additions (`docs/MOTION_PASS.md`):**
+  - Dialogue page-turns remount with 3D perspective page-open keyframes (`morrow-page-open`).
+  - Morrow character reacts on every page turn with tilt, squash, and bounce (`morrow-character-react`).
+  - Chapter entrance circular iris reveal (`morrow-chapter-open`).
+  - Six floating chapter-tinted atmospheric particles (`story-atmosphere`).
+  - Scroll reveals for dialogue and puzzle cards (`IntersectionObserver`).
+  - Golden pulse on repaired puzzle elements (`morrow-repair-spark`).
+  - Progressive CSS `view-timeline` parallax for skies and terrain.
+- **Playwright Normal-Motion Automation (`scripts/test_motion.mjs`):**
+  - Page turns 1 to 4: `text animated = true`, `character reacted = true`.
+  - Reading panel: `revealed on scroll = true`.
+  - Screenshot verified: `qa/screenshots/motion-workshop-375.png`.
+- **Refinement Implemented:**
+  - Tuned `.felt-morrow` drop-shadows and container bottom-offset (`bottom: 6%`) so Morrow's desk and contact shadow align naturally with foreground paper cutouts.

@@ -1098,9 +1098,9 @@ footer button {
 @media(max-width:600px) { .cinematic-player-bar { align-items:stretch; flex-direction:column; } .cinematic-player-buttons { justify-content:space-between; } .cinematic-player-buttons button { padding:10px 12px; } }
 
 /* Approved handcrafted felt character art replaces rejected SVG mascot. */
-.felt-morrow { display:block; width:min(70vw,330px); max-height:390px; height:auto; object-fit:contain; mix-blend-mode:multiply; filter:drop-shadow(0 16px 15px rgba(54,32,45,.25)); animation:bob 4.5s ease-in-out infinite; }
-.opening-character .felt-morrow { margin:auto; }
-.storybook-character .felt-morrow { margin:auto; }
+.felt-morrow { display:block; width:min(70vw,330px); max-height:390px; height:auto; object-fit:contain; filter:drop-shadow(0 14px 12px rgba(54,32,45,.22)); animation:bob 4.5s ease-in-out infinite; }
+.opening-character .felt-morrow { margin:auto; mix-blend-mode:multiply; }
+.storybook-character .felt-morrow { margin:auto; mix-blend-mode:multiply; }
 @media(prefers-reduced-motion:reduce) { .felt-morrow { animation:none; } }
 
 
@@ -1116,7 +1116,7 @@ img,svg,video,canvas { max-width:100%; }
 .storybook-reading,.storybook-interaction,.storybook-ending { overflow-wrap:anywhere; }
 .storybook-reading p,.storybook-ending p { text-wrap:pretty; }
 .storybook-stage { isolation:isolate; }
-.storybook-character { pointer-events:none; }
+.storybook-character { pointer-events:none; bottom:6%; }
 .storybook-character .felt-morrow { width:100%; max-height:min(55svh,390px); object-fit:contain; }
 .opening-character .felt-morrow { width:min(70vw,320px); max-height:min(39svh,370px); object-fit:contain; }
 .storybook-interaction .game-container { width:100%; max-width:min(760px,100%); margin-inline:auto; }
