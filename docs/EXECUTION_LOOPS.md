@@ -20,8 +20,8 @@ Reuse stitching engine for rain/wind/flower/bell interactions; build layered for
 ## L05 — Impossible Clock and finale
 Build clock puzzle combining prior skills, Perfect's conflict, Unfinished One reveal, last stitch and epilogue workshop with three inventions. Test narrative coherence and replay. Exit: start-to-finish playable experience with no dead ends.
 
-## L06 — Floating 2.5D map
-Layer illustrated islands, clouds, depth, stitched path, location previews, progress animations and locked/fog states. Keep portrait mobile controls and static fallback. Exit: readable navigation and stable 60fps-targeted interactions on representative devices.
+## L06 — Floating 2.5D map with optional Spline diorama
+First build a complete functional 2D SVG/CSS map with five chapter nodes, fog/locked states, stitched route, replay and mobile-friendly controls. Then evaluate Spline for a lightweight 3D island diorama and optional workshop scene. Integrate Spline as a lazy-loaded enhancement; React remains the source of truth. Ensure fallback when WebGL is unsupported, Spline is blocked, network is slow, or reduced motion is requested. Test 320/375/430px, touch and keyboard navigation, map-to-chapter transitions, memory, bundle cost and offscreen behavior. Exit: working map on all tested devices; Spline only enabled if it improves the experience without harming gameplay.
 
 ## L07 — Personality and bonus
 Add Sir Clack disaster log, Pipkin newspaper, dialogue variants, sound/mute, Easter egg, sparkle trail and visitor-memory polish. Each enhancement must have a mobile fallback and cannot block progression. Exit: features verified, mute respected and no accessibility regressions.
@@ -30,10 +30,10 @@ Add Sir Clack disaster log, Pipkin newspaper, dialogue variants, sound/mute, Eas
 Storyboard wake, villain entrance and finale; lock characters; generate short clips; compress, provide posters, skip and reduced-motion fallback. Video cannot be a dependency of gameplay. Exit: clips are consistent, licensed, lightweight and nonblocking. Cut entirely if schedule threatens core.
 
 ## L09 — Quality gate
-Test 320/375/430px phones and desktop, keyboard, touch, landscape, no sound, slow network, refresh, save migration, reduced motion and replay. Run typecheck/build, inspect console, measure performance and fix critical bugs. Exit: no blocking issue or horizontal overflow.
+Test 320/375/430px phones and desktop, keyboard, touch, landscape, no sound, slow network, refresh, save migration, reduced motion and replay. Test WebGL disabled, Spline scene failure, 2D map fallback, scene unload and memory pressure if Spline is enabled. Run typecheck/build, inspect console, measure performance and fix critical bugs. Exit: no blocking issue or horizontal overflow.
 
 ## L10 — Release and submission
 Confirm repository commit history, live URL, story write-up, character sheet, asset credits, mobile demo, README, screenshots and submission requirements. Freeze risky features. Exit: independently verified live deployed experience and submitted links.
 
 ## Emergency cut policy
-Keep L00–L05 and L09–L10. Reduce L06 to static map, L07 to mute + one Easter egg, omit L08. Prefer a complete story over broken Tier 3.
+Keep L00–L05 and L09–L10. Reduce L06 to static map, L07 to mute + one Easter egg, omit L08. Disable Spline if it delays release or reduces mobile reliability. Prefer a complete story over broken Tier 3.
