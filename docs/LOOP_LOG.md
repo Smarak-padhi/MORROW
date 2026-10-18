@@ -19,7 +19,7 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 ### Verification Evidence
 1. **Local Skill Discovery:**
    - Scanned `Desktop/Multi-agent`, `Desktop/o-travelz`, `Desktop/Algoryxz 001`, and global Antigravity config.
-   - Identified and audited skills for license, stack compatibility (React 19 / Vite / TS / SVG / CSS), and duplication.
+   - Audited for licenses and compatibility (React 19 / TS / Vite / SVG / CSS).
    - Imported 6 core skills into `.agents/skills/`.
 2. **Environment & Dependency Installation:**
    - Command: `npm install`
@@ -27,19 +27,45 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 3. **Production Build Verification:**
    - Command: `npm run build` (`tsc -b && vite build`)
    - Result: Passed with zero errors.
-   - Output artifacts:
-     - `dist/index.html` (0.87 kB)
-     - `dist/assets/index-CFNLA4vJ.css` (9.81 kB)
-     - `dist/assets/index-DlC2JAEe.js` (240.25 kB)
 4. **Git Branch & Hygiene:**
    - Branch: `feat/skills-discovery-and-bootstrap`
    - Remote origin: `https://github.com/Smarak-padhi/MORROW.git`
-   - Status: Clean build verified, ready for scoped commit.
+   - Status: Committed `feat(bootstrap): complete L00 bootstrap and import verified local skills`.
 
 ---
 
-## Next Steps (L01 — Design Token & Art Lock)
-- Deconstruct monolithic `App.tsx` and `styles.css` into modular components and design tokens.
-- Lock 2D paper-cut character SVG illustrations and expressions for Morrow.
-- Ensure minimum 44px touch targets across all interactive elements.
-- Verify `prefers-reduced-motion` compliance.
+## [2026-10-18] L01 — Design Token Lock, Original Art Pipeline & Inventions
+
+### Scope & Invariant Grounding
+- **Requirement:**
+  - Lock colors, fonts, typography, original character designs, and reusable visual components.
+  - Establish artwork pipeline (original 2D paper-cut SVG characters, zero external IP).
+  - Provide 3 functional, playable inventions (`ShadowStitcher`, `WeatherLoom`, `ImpossibleClock`) + `FinaleStitch`.
+  - Ensure mobile-first layout (min 44px touch targets), keyboard accessibility, and zero-motion fallback.
+- **Affected Files:**
+  - `src/components/art/Morrow.tsx` (original character SVG with 6 expression states)
+  - `src/components/art/SupportingCast.tsx` (Sir Clack, Pipkin, The Unfinished One)
+  - `src/components/inventions/ShadowStitcher.tsx` (playable invention 01)
+  - `src/components/inventions/WeatherLoom.tsx` (playable invention 02)
+  - `src/components/inventions/ImpossibleClock.tsx` (playable invention 03)
+  - `src/components/inventions/FinaleStitch.tsx` (finale interactive resolution)
+  - `src/App.tsx` (wired dynamic expressions, progression gating, supporting cast cameos)
+  - `src/styles.css` (design tokens, 44px min touch targets, mobile breakpoints, reduced-motion overrides)
+  - `public/favicon.svg` & `index.html` (brand star mark)
+  - `docs/ASSET_REGISTER.md` (complete asset inventory)
+
+### Verification Evidence
+1. **Production Build:**
+   - Command: `npm run build` (`tsc -b && vite build`)
+   - Result: Pass, 0 type errors, 0 warnings.
+   - Bundle size: JS 260.18 kB (gzip: 80.61 kB), CSS 12.35 kB (gzip: 3.62 kB).
+2. **Interactive Browser Smoke Test (Playwright):**
+   - Viewport: Mobile 375x667px (iPhone SE standard).
+   - End-to-end journey traversed:
+     - Prologue: Workshop wakes up, Sir Clack cameo displayed, text advances.
+     - Chapter 1: Duck shadow experiment played (`Tree shadow`), dynamic reaction rendered, progress unlocked.
+     - Chapter 2: Weather Loom played (`Gentle Downpour` -> `Thirsty Lilies`), Pipkin cameo displayed, progress unlocked.
+     - Chapter 3: Impossible Clock played (`Shadow Cog`, `Weather Spring`, `Crooked Heart Key` all fitted), clock ticked, progress unlocked.
+     - Finale: The Unfinished One cameo displayed, `FinaleStitch` executed joining hands with crooked knot, story resolved.
+     - Epilogue: Reached cleanly.
+   - Browser Console Messages: **0 Errors, 0 Warnings** across entire playthrough.
