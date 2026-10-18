@@ -31,7 +31,7 @@ function load(): Saved {
 
 export default function App() {
   const [save, setSave] = useState<Saved>(load);
-  const [introPlaying, setIntroPlaying] = useState(true);
+  const [introPlaying, setIntroPlaying] = useState(() => !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const [introFailed, setIntroFailed] = useState(false);
   const [dialog, setDialog] = useState(0);
   const [night, setNight] = useState(false);
@@ -194,7 +194,7 @@ export default function App() {
           )}
           <footer className="storybook-footer">
             <span>We make wonderful mistakes. ✳</span>
-            <button type="button" onClick={() => { if (window.confirm('Start the adventure over?')) { setSave(initial); setDialog(0); setAwake(false); setPuzzleDone(false); setView('story'); setIntroPlaying(true); } }}><RotateCcw size={16}/> Start over</button>
+            <button type="button" onClick={() => { if (window.confirm('Start the adventure over?')) { setSave(initial); setDialog(0); setAwake(false); setPuzzleDone(false); setView('story'); setIntroPlaying(!window.matchMedia('(prefers-reduced-motion: reduce)').matches); } }}><RotateCcw size={16}/> Start over</button>
             <span>{completedCount} chapters visited</span>
           </footer>
         </main>
