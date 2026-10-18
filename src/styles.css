@@ -1193,3 +1193,79 @@ img,svg,video,canvas { max-width:100%; }
 .finale-step > span:first-child { display:grid; place-items:center; width:25px; height:25px; flex:none; color:var(--berry); }
 .finale-perfect { display:block; margin:12px auto; border:0; border-bottom:1px dashed currentColor; background:transparent; color:var(--ink); min-height:44px; font-size:.9rem; }
 .finale-perfect:hover { color:var(--berry); }
+
+
+/* MORROW MOTION LANGUAGE — a book that responds to every page turn.
+   Progressive enhancement: all content remains readable without JS. */
+@keyframes morrow-page-open {
+  0% { opacity:0; transform:perspective(850px) rotateY(-9deg) translate3d(18px,14px,0); filter:blur(5px); }
+  60% { opacity:1; filter:blur(0); }
+  100% { opacity:1; transform:perspective(850px) rotateY(0) translate3d(0,0,0); filter:blur(0); }
+}
+@keyframes morrow-character-react {
+  0% { opacity:.55; transform:translate3d(0,22px,0) rotate(-8deg) scale(.91); }
+  48% { opacity:1; transform:translate3d(0,-10px,0) rotate(5deg) scale(1.055); }
+  75% { transform:translate3d(0,2px,0) rotate(-2deg) scale(.99); }
+  100% { opacity:1; transform:translate3d(0,0,0) rotate(0) scale(1); }
+}
+@keyframes morrow-chapter-open {
+  from { opacity:.6; filter:saturate(.7); clip-path:inset(0 50% 0 50% round 50%); }
+  to { opacity:1; filter:saturate(1); clip-path:inset(0 0 0 0); }
+}
+@keyframes morrow-particle-float {
+  0%,100% { opacity:.15; transform:translate3d(0,8px,0) rotate(-12deg) scale(.7); }
+  50% { opacity:.85; transform:translate3d(18px,-28px,0) rotate(14deg) scale(1.15); }
+}
+@keyframes morrow-scroll-sky {
+  from { transform:translate3d(0,-4%,0) scale(1.07); }
+  to { transform:translate3d(0,13%,0) scale(1.07); }
+}
+@keyframes morrow-scroll-land {
+  from { transform:translate3d(0,10%,0) scale(1.07); }
+  to { transform:translate3d(0,-8%,0) scale(1.07); }
+}
+@keyframes morrow-repair-spark {
+  0% { transform:scale(.92); box-shadow:0 0 0 0 rgba(232,200,120,.8); }
+  65% { transform:scale(1.025); box-shadow:0 0 0 16px rgba(232,200,120,0); }
+  100% { transform:scale(1); box-shadow:0 0 0 0 rgba(232,200,120,0); }
+}
+.storybook-stage { animation:morrow-chapter-open .95s cubic-bezier(.16,1,.3,1) both; }
+.story-page-turn { transform-origin:0 50%; animation:morrow-page-open .72s cubic-bezier(.16,1,.3,1) both; }
+.story-character-react { transform-origin:50% 88%; animation:morrow-character-react .85s cubic-bezier(.2,1,.3,1) both; }
+.storybook-character.story-character-react .felt-morrow { animation:bob 4.5s ease-in-out 1s infinite; }
+.storybook-action:not(:disabled):active { transform:translateY(3px) scale(.975); }
+.storybook-action:not(:disabled),.choice-card:not(:disabled),.shadow-resident:not(:disabled),.finale-step:not(:disabled) { transition:transform .2s cubic-bezier(.2,1,.3,1),box-shadow .25s ease,background-color .25s ease; }
+@media(hover:hover) and (pointer:fine) {
+ .storybook-action:not(:disabled):hover { transform:translateY(-3px); }
+ .choice-card:not(:disabled):hover,.shadow-resident:not(:disabled):hover,.finale-step:not(:disabled):hover { transform:translateY(-4px) rotate(-.5deg); }
+}
+.motion-ready .reveal-on-scroll { opacity:0; transform:translate3d(0,38px,0); transition:opacity .85s ease,transform .85s cubic-bezier(.16,1,.3,1); }
+.motion-ready .reveal-on-scroll.is-revealed { opacity:1; transform:translate3d(0,0,0); }
+.story-atmosphere { position:absolute; inset:0; pointer-events:none; z-index:2; overflow:hidden; }
+.story-atmosphere i { position:absolute; display:block; width:9px; height:9px; border-radius:40% 60% 40% 60%; background:rgba(255,245,192,.85); box-shadow:0 0 18px rgba(255,244,188,.7); animation:morrow-particle-float 4.6s ease-in-out infinite; }
+.story-atmosphere i:nth-child(1) { left:14%; top:27%; animation-delay:-.4s; }
+.story-atmosphere i:nth-child(2) { left:78%; top:19%; width:6px; height:6px; animation-delay:-2.5s; }
+.story-atmosphere i:nth-child(3) { left:62%; top:55%; width:5px; height:5px; animation-delay:-1.2s; }
+.story-atmosphere i:nth-child(4) { left:25%; top:72%; width:7px; height:7px; animation-delay:-3.3s; }
+.story-atmosphere i:nth-child(5) { left:88%; top:68%; width:5px; height:5px; animation-delay:-2.1s; }
+.story-atmosphere i:nth-child(6) { left:42%; top:12%; width:4px; height:4px; animation-delay:-4s; }
+.chapter-shadows .story-atmosphere i { background:rgba(173,195,154,.9); }
+.chapter-weather .story-atmosphere i { border-radius:80% 10% 80% 10%; background:rgba(169,217,247,.85); }
+.chapter-clock .story-atmosphere i { background:rgba(232,200,120,.9); }
+.chapter-finale .story-atmosphere i { background:rgba(236,165,209,.9); }
+.shadow-resident.repaired,.finale-step.finished { animation:morrow-repair-spark .8s ease-out; }
+@supports (animation-timeline:view()) {
+ .storybook-sky { animation:morrow-scroll-sky linear both; animation-timeline:view(); animation-range:entry 0% exit 100%; }
+ .storybook-landscape { animation:morrow-scroll-land linear both; animation-timeline:view(); animation-range:entry 0% exit 100%; }
+}
+@media(max-width:600px) {
+ .storybook-stage { animation-duration:.65s; }
+ .story-page-turn { animation-duration:.55s; }
+ .story-character-react { animation-duration:.65s; }
+ .story-atmosphere i:nth-child(n+5) { display:none; }
+}
+@media(prefers-reduced-motion:reduce) {
+ .motion-ready .reveal-on-scroll { opacity:1!important; transform:none!important; }
+ .storybook-stage,.story-page-turn,.story-character-react,.storybook-character.story-character-react .felt-morrow,.story-atmosphere i,.shadow-resident.repaired,.finale-step.finished,.storybook-sky,.storybook-landscape { animation:none!important; }
+ .storybook-stage { clip-path:none!important; }
+}
