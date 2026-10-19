@@ -118,3 +118,6 @@ export function WeatherLoom({ onSuccess, playChime }: Props) {
     </div>
   );
 }
+
+export { TactileWeatherLoom } from './TactileWeatherLoom';
+

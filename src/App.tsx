@@ -3,7 +3,6 @@ import { ArrowRight, BookOpen, Map as MapIcon, Moon, Sun, RotateCcw, Volume2, Vo
 import { chapters, dialogues, type ChapterId } from './story';
 import { sound, type AudioEffect } from './sound';
 
-import { WeatherLoom } from './components/inventions/WeatherLoom';
 import { ImpossibleClock } from './components/inventions/ImpossibleClock';
 import { FinaleStitch } from './components/inventions/FinaleStitch';
 import { Cinematic } from './components/Cinematic';
@@ -49,14 +48,14 @@ export default function App() {
   const lines = dialogues[chapter.id];
   const lastLine = chapter.id === 'workshop'
     ? dialog >= 7
-    : chapter.id === 'shadows'
-    ? (puzzleDone || save.completed.includes('shadows'))
+    : (chapter.id === 'shadows' || chapter.id === 'weather')
+    ? (puzzleDone || save.completed.includes(chapter.id))
     : dialog === lines.length - 1;
   const puzzleNeeded = puzzleChapters.includes(chapter.id);
   const ready = (chapter.id === 'workshop'
     ? dialog >= 7
-    : chapter.id === 'shadows'
-    ? (puzzleDone || save.completed.includes('shadows'))
+    : (chapter.id === 'shadows' || chapter.id === 'weather')
+    ? (puzzleDone || save.completed.includes(chapter.id))
     : lastLine) && (!puzzleNeeded || puzzleDone || save.completed.includes(chapter.id));
   const completedCount = save.completed.length;
 
@@ -171,11 +170,17 @@ export default function App() {
               onNextChapter={nextChapter}
               playChime={() => play('stitch')}
             />
+          ) : chapter.id === 'weather' ? (
+            <WeatherStage
+              dialog={dialog}
+              puzzleDone={puzzleDone || save.completed.includes('weather')}
+              onPuzzleSuccess={() => setPuzzleDone(true)}
+              onNextChapter={nextChapter}
+              playChime={() => play('stitch')}
+            />
           ) : (
             <>
-              {chapter.id === 'weather' ? (
-                <WeatherStage dialog={dialog} />
-              ) : chapter.id === 'clock' ? (
+              {chapter.id === 'clock' ? (
                 <ClockStage dialog={dialog} />
               ) : chapter.id === 'finale' ? (
                 <FinaleStage dialog={dialog} />
@@ -196,9 +201,8 @@ export default function App() {
               </section>
             </>
           )}
-          {lastLine && chapter.id !== 'shadows' && (
+          {lastLine && chapter.id !== 'shadows' && chapter.id !== 'weather' && (
             <section className="storybook-interaction reveal-on-scroll" aria-label="Chapter interaction">
-              {chapter.id === 'weather' && <WeatherLoom playChime={() => play('stitch')} onSuccess={() => setPuzzleDone(true)}/>}
               {chapter.id === 'clock' && <ImpossibleClock playChime={() => play('gear')} onSuccess={() => setPuzzleDone(true)}/>}
               {chapter.id === 'finale' && <FinaleStitch playChime={() => play('stitch')} onSuccess={() => setPuzzleDone(true)}/>}
               {chapter.id === 'epilogue' && (

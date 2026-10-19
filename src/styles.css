@@ -1697,7 +1697,8 @@ img,svg,video,canvas { max-width:100%; }
   transition: left 0.4s ease;
 }
 
-.scene-speech-balloon.speaker-duck::after {
+.scene-speech-balloon.speaker-duck::after,
+.scene-speech-balloon.speaker-frog::after {
   left: clamp(35%, 45%, 55%);
 }
 
@@ -1831,6 +1832,224 @@ img,svg,video,canvas { max-width:100%; }
   .scene-duck-art.is-celebrating .duck-wings {
     animation: none !important;
   }
+  .rain-rising .rising-raindrop {
+    animation: none !important;
+  }
+  .spinning-blades {
+    animation: none !important;
+  }
+}
+
+/* LIVING UPSIDE-DOWN FOREST (Loop 12: The Sky Is Broken) */
+.living-weather-forest-container {
+  padding-top: clamp(68px, 11vw, 92px);
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.living-weather-scene {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border-radius: 20px;
+  border: 2px solid var(--line);
+  background: #253528;
+  min-height: clamp(520px, 82vw, 680px);
+  user-select: none;
+}
+
+.living-scene-camera.camera-focus-frog {
+  transform: scale(1.03) translate3d(-3%, -1%, 0);
+}
+
+.living-scene-camera.camera-focus-loom {
+  transform: scale(1.02) translate3d(0, 0, 0);
+}
+
+/* Weather Scene Background Layers */
+.living-forest-sky-layer {
+  position: absolute;
+  inset: 0;
+  height: 70%;
+  background: linear-gradient(180deg, #18231a 0%, #253528 55%, #314635 100%);
+  pointer-events: none;
+}
+
+.forest-sun-orb {
+  position: absolute;
+  top: clamp(55px, 9vw, 75px);
+  left: clamp(24px, 6vw, 60px);
+  width: clamp(38px, 6vw, 50px);
+  height: clamp(38px, 6vw, 50px);
+  border-radius: 50%;
+  background: #FFF8F1;
+  box-shadow: 0 0 25px rgba(255, 248, 241, 0.7), 0 0 50px rgba(232, 200, 120, 0.45);
+}
+
+.living-inverted-canopy-layer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 48%;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.living-forest-ground-layer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 38%;
+  pointer-events: none;
+}
+
+/* Rising Rain Animation (Reversed gravity effect) */
+.living-rising-rain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.rising-raindrop {
+  position: absolute;
+  width: 3px;
+  height: 14px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, rgba(255, 248, 241, 0.9), rgba(92, 147, 214, 0.8));
+  box-shadow: 0 0 6px rgba(176, 213, 235, 0.85);
+}
+
+.rain-rising .rising-raindrop {
+  animation: rising-raindrop-travel 2.2s infinite linear;
+}
+
+@keyframes rising-raindrop-travel {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.85;
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(-190px);
+    opacity: 0;
+  }
+}
+
+.reduced-motion-static .rising-raindrop {
+  animation: none !important;
+  opacity: 0.6;
+}
+
+/* Frog Mayor Positioning and Art */
+.living-frog-wrap {
+  left: clamp(105px, 28vw, 215px);
+  bottom: 10%;
+  width: clamp(96px, 15vw, 130px);
+  z-index: 4;
+}
+
+.scene-frog-mayor-art {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  transition: transform 0.3s ease;
+}
+
+.scene-frog-mayor-art.is-speaking {
+  transform: scale(1.05);
+  filter: drop-shadow(0 4px 14px rgba(232, 200, 120, 0.5));
+}
+
+.scene-frog-mayor-art.is-warmed {
+  filter: drop-shadow(0 0 12px rgba(247, 213, 96, 0.6));
+}
+
+/* Windmill Turning Effect */
+@keyframes windmill-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spinning-blades {
+  animation: windmill-spin 3s linear infinite;
+  transform-origin: 50px 45px;
+}
+
+/* TACTILE WEATHER LOOM INTERACTION STYLES */
+.tactile-weather-loom {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.spool-tabs-nav {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.spool-tab-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: var(--ink);
+  min-height: 48px;
+}
+
+.spool-tab-btn.active {
+  border-color: var(--berry);
+  background: rgba(163, 64, 99, 0.08);
+  box-shadow: 0 4px 12px rgba(163, 64, 99, 0.15);
+}
+
+.spool-tab-btn.repaired {
+  border-color: var(--sage);
+  background: rgba(136, 169, 145, 0.12);
+}
+
+.loom-stage-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.tactile-weather-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  touch-action: none;
+  border-radius: 14px;
+  border: 1.5px solid rgba(232, 200, 120, 0.35);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.loom-spool {
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.loom-spool.is-active-spool {
+  filter: drop-shadow(0 0 8px rgba(247, 213, 96, 0.8));
+  transform: scale(1.08);
 }
 
 

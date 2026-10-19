@@ -290,5 +290,49 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
     - `loop11_08_celebration_payoff_390px.png`: Blooming golden oak tree shadow, flapping Duck wings (*“I AM A FOREST!”*), and payoff continue card.
     - `loop11_09_desktop_stage_1280px.png`: Centered, balanced 1280px desktop view with rich village depth.
 
+---
+
+### [2026-10-19] Loop 12 — The Sky Is Broken (Living 2.5D Upside-Down Forest & Tactile Weather Loom)
+- **Objective:** Transform Chapter 2, Upside-Down Forest (`weather`), into a living 2.5D cinematic weather adventure where the player physically weaves the weather back into the world while characters react and the environment transforms in real time.
+- **Implementation Deliverables:**
+  1. *Living 2.5D Forest Stage (`src/components/art/WeatherStage.tsx`):*
+     - Layered environment with inverted physics: Layer 1 deep forest sky with glowing sun orb, Layer 2 inverted canopy trees swaying downward from clouds, Layer 3 mossy ground floor with blooming vegetation mounds.
+     - Rising raindrop beads (`.rain-rising`, `@keyframes rising-raindrop-travel`) traveling upward from ground to sky with reduced-motion fallback.
+     - Persistent simultaneous presence of all 4 characters: Sir Clack on the left, Pipkin perched upside down on an inverted twig above Sir Clack, Frog Mayor with spectacles and inverted umbrella bucket on his moss log in the center, and Morrow with peach felt body, plum scarf, and brass needle on the right.
+     - Sequential in-scene dialogue system with dynamic camera attention (`camera-focus-frog`, `camera-focus-morrow`, `camera-focus-clack`, `camera-focus-pipkin`, `camera-focus-loom`) and responsive speech balloons with speaker tails anchored directly over the active character.
+     - Seamless inline cinematic bridge: Frog Mayor's umbrella disaster reveal film (`/cinematics/weather-02-umbrella.mp4`), with handcrafted stop-motion SVG fallback and inline "Return to Scene ✕" modal returning smoothly to identical scene coordinates.
+  2. *Tactile Weather Loom (`src/components/inventions/TactileWeatherLoom.tsx`):*
+     - Replaced static click-cards with an interactive carved brass weather loom featuring 3 physical spools:
+       - Rain Spool (`#5C93D6` cool water thread) $\to$ Thirsty Lilies (water ripples and lilies bloom).
+       - Wind Spool (`#8E79A8` lavender spiral thread) $\to$ Frozen Windmill (windmill sails rotate with `@keyframes windmill-spin` and Pipkin's flight stabilizes).
+       - Sun Spool (`#E8C878` golden sunbeam thread) $\to$ Frog Mayor (golden sunbeams warm Mayor, giving him rosy cheeks and a happy smile).
+     - Physical pointer and touch drag tracking (`onPointerDown`, `onPointerMove`, `onPointerUp`) with Morrow's peach mitten paw and polished brass needle cursor trailing colored thread.
+     - Forgiving hit detection radius (~40px / ~80px touch boundaries) with numbered brass guide eyelets and pulsing active target beacons (`.target-beacon-pulse`).
+     - Full WCAG AA keyboard accessibility (`role="application"`, Space/Enter, Arrow keys, 1-3) and accessible resident buttons (`['Gentle Downpour','Thirsty Lilies']`, etc.) preserving 100% compatibility with automated regression test suites.
+  3. *Celebration Payoff (`src/components/art/WeatherStage.tsx` & `src/styles.css`):*
+     - Upon weaving all three threads, the forest transforms: lilies bloom with downward ripples, the windmill spins merrily, and sunbeams bathe Frog Mayor.
+     - Frog Mayor celebrates (*“Congratulations! You invented very wet, wonderfully warm furniture! The lilies are sipping downward and my velvet coat is toasty!”*).
+     - Centered payoff card with Pipkin's Notebook reflection and direct transition button (*“Step into the next chapter · Tomorrow Town ➔”*).
+  4. *Asset & Video Slot Registry (`docs/ASSET_REGISTER.md`):*
+     - Documented `WEATHER-01` through `WEATHER-05` video slots specifying start/end frames, camera composition, and guaranteed procedural SVG fallbacks without claiming ungenerated media files are present.
+  5. *`src/App.tsx`:*
+     - Routed `WeatherStage` as the uninterrupted hero chapter experience for Chapter 2, excluding duplicate interaction cards.
+- **Verification Evidence:**
+  - `npm run build`: PASSED (0 TypeScript errors, clean bundle).
+  - `scripts/viewport_audit.mjs`: PASSED across 320px, 375px, 430px, 768px, 1280px, 1440px for all 6 chapters (ZERO horizontal overflow).
+  - `scripts/comic-visual-qa.mjs`: PASSED across 320px–768px (panel count, overflow, balloon/image geometry).
+  - `scripts/mobile-qa.mjs`: PASSED across all viewports (responsive opening, full adventure walkthrough, 4 inventions, epilogue, and reload).
+  - `scripts/test-weather-scene.mjs`: Captured and verified all 9 screenshots in `master_delivery`:
+    - `loop12_01_beat0_frog_390px.png`: Frog Mayor speaking with inverted umbrella bucket, anchored balloon tail, and rising raindrops.
+    - `loop12_02_beat1_morrow_390px.png`: Morrow speaking (*“I can fix that!”*) with raised needle and camera attention.
+    - `loop12_03_beat2_clack_390px.png`: Sir Clack speaking with camera attention and grumpy skepticism.
+    - `loop12_04_beat3_pipkin_390px.png`: Pipkin perched upside-down above Sir Clack, speaking headlines (*“BREAKING NEWS: LOCAL CLOUD REFUSES GRAVITY”*).
+    - `loop12_05_cinematic_bridge_390px.png`: Inline stop-motion reveal modal (`weather-02-umbrella.mp4` / in-engine fallback).
+    - `loop12_06_loom_initial_390px.png`: Tactile Weather Loom initial state with 3 brass spools and environmental targets.
+    - `loop12_07_loom_dragging_390px.png`: Live pointer drag showing Morrow's peach mitten paw cursor, brass needle, and trailing water thread to Thirsty Lilies.
+    - `loop12_08_celebration_payoff_390px.png`: Environmental payoff with blooming lilies, rotating windmill, warmed Mayor (*“Very wet, wonderfully warm furniture!”*), and continue card.
+    - `loop12_09_desktop_stage_1280px.png`: Centered, balanced 1280px desktop view with rich forest depth and all 4 characters in living harmony.
+
+
 
 
