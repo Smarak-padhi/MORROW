@@ -541,7 +541,7 @@ export const ShadowStage: React.FC<ShadowStageProps> = ({
                     type="button"
                     className={`shadow-inspect-btn ${isDone ? 'repaired' : ''}`}
                     onClick={() => {
-                      playChime();
+                      if (index > repairedCount) return; // enforce seam order
                       if (index + 1 >= 3) {
                         handleStitchSuccess();
                       } else {

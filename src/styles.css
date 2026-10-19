@@ -3473,6 +3473,12 @@ img,svg,video,canvas { max-width:100%; }
   line-height: 1.25;
 }
 
+.stage-actor-anchor:focus-visible {
+  outline: 3px solid var(--accent, #E8C878);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
 /* Mobile Scaling for Tomorrow Town */
 @media (max-width: 600px) {
   .stage-actor-anchor {

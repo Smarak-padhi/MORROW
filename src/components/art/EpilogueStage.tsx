@@ -378,6 +378,8 @@ export const EpilogueStage: React.FC<EpilogueStageProps> = ({
 
         {/* 1. PROFESSOR PRIMROSE PERFECT (Left Workshop Corner - Proud & Approving) */}
         <div
+          role="button"
+          tabIndex={0}
           className="stage-actor-anchor epilogue-professor-anchor"
           style={{
             position: 'absolute',
@@ -389,7 +391,15 @@ export const EpilogueStage: React.FC<EpilogueStageProps> = ({
             zIndex: 4,
           }}
           onClick={() => handleCharacterClick('professor')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleCharacterClick('professor');
+            }
+          }}
           title="Professor Primrose Perfect · Click to hear her thoughts"
+          aria-label="Professor Primrose Perfect · Click to hear her thoughts"
+          aria-expanded={activeSpeech === 'professor'}
         >
           <StopMotionActor
             character="professor"
@@ -423,6 +433,8 @@ export const EpilogueStage: React.FC<EpilogueStageProps> = ({
 
         {/* 2. PIPKIN (Perched on the Sunny Arched Window Sill with Newspaper) */}
         <div
+          role="button"
+          tabIndex={0}
           className="stage-actor-anchor epilogue-pipkin-anchor"
           style={{
             position: 'absolute',
@@ -434,7 +446,15 @@ export const EpilogueStage: React.FC<EpilogueStageProps> = ({
             zIndex: 4,
           }}
           onClick={() => handleCharacterClick('pipkin')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleCharacterClick('pipkin');
+            }
+          }}
           title="Pipkin the Delivery Bird · Click to read the headline"
+          aria-label="Pipkin the Delivery Bird · Click to read the headline"
+          aria-expanded={activeSpeech === 'pipkin'}
         >
           <StopMotionActor
             character="pipkin"
@@ -453,6 +473,8 @@ export const EpilogueStage: React.FC<EpilogueStageProps> = ({
 
         {/* 3. SIR CLACK (On Workbench beside his Scrapbook) */}
         <div
+          role="button"
+          tabIndex={0}
           className="stage-actor-anchor epilogue-clack-anchor"
           style={{
             position: 'absolute',
@@ -464,7 +486,15 @@ export const EpilogueStage: React.FC<EpilogueStageProps> = ({
             zIndex: 4,
           }}
           onClick={() => handleCharacterClick('clack')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleCharacterClick('clack');
+            }
+          }}
           title="Sir Clack · Click to hear grumpy mentor praise"
+          aria-label="Sir Clack · Click to hear grumpy mentor praise"
+          aria-expanded={activeSpeech === 'clack'}
         >
           <StopMotionActor
             character="clack"
@@ -483,6 +513,8 @@ export const EpilogueStage: React.FC<EpilogueStageProps> = ({
 
         {/* 4. THE UNFINISHED ONE (Right-Center Workbench - Proud with Golden Knot) */}
         <div
+          role="button"
+          tabIndex={0}
           className="stage-actor-anchor epilogue-unfinished-anchor"
           style={{
             position: 'absolute',
@@ -494,7 +526,15 @@ export const EpilogueStage: React.FC<EpilogueStageProps> = ({
             zIndex: 5,
           }}
           onClick={() => handleCharacterClick('unfinished')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleCharacterClick('unfinished');
+            }
+          }}
           title="The Unfinished One · Click to hear Morrow's first friend"
+          aria-label="The Unfinished One · Click to hear Morrow's first friend"
+          aria-expanded={activeSpeech === 'unfinished'}
         >
           <StopMotionActor
             character="unfinished"
@@ -528,6 +568,8 @@ export const EpilogueStage: React.FC<EpilogueStageProps> = ({
 
         {/* 5. MORROW (Right Workbench - Holding Hot Teacup & Brass Needle) */}
         <div
+          role="button"
+          tabIndex={0}
           className="stage-actor-anchor epilogue-morrow-anchor"
           style={{
             position: 'absolute',
@@ -539,7 +581,15 @@ export const EpilogueStage: React.FC<EpilogueStageProps> = ({
             zIndex: 5,
           }}
           onClick={() => handleCharacterClick('morrow')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleCharacterClick('morrow');
+            }
+          }}
           title="Morrow · Click to hear Morrow's words"
+          aria-label="Morrow · Click to hear Morrow's words"
+          aria-expanded={activeSpeech === 'morrow'}
         >
           <StopMotionActor
             character="morrow"

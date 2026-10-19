@@ -281,13 +281,7 @@ export const CinematicWeatherReveal: React.FC<CinematicWeatherRevealProps> = ({
     if (onToggleMute) {
       onToggleMute();
     } else {
-      setInternalMuted((prev) => {
-        const next = !prev;
-        if (videoRef.current) {
-          videoRef.current.muted = next;
-        }
-        return next;
-      });
+      setInternalMuted((prev) => !prev);
     }
   };
 
@@ -301,7 +295,7 @@ export const CinematicWeatherReveal: React.FC<CinematicWeatherRevealProps> = ({
           className="cinematic-media-video"
           playsInline
           autoPlay
-          muted={isMuted}
+          muted={activeMuted}
           loop
           onLoadedData={() => setVideoLoaded(true)}
           style={{ display: videoLoaded ? 'block' : 'none', width: '100%', height: '100%', objectFit: 'contain' }}
@@ -391,9 +385,9 @@ export const CinematicWeatherReveal: React.FC<CinematicWeatherRevealProps> = ({
             type="button"
             className="comic-video-btn"
             onClick={toggleMute}
-            aria-label={isMuted ? 'Unmute video audio' : 'Mute video audio'}
+            aria-label={activeMuted ? 'Unmute video audio' : 'Mute video audio'}
           >
-            {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+            {activeMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
           </button>
           <button
             type="button"

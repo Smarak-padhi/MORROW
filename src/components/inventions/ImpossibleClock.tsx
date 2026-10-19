@@ -211,8 +211,7 @@ export function ImpossibleClock({
     setFeedback(
       'TICK! TOCK! The mainspring seats taut. The impossible clock awakens with roaring brass gears and chime bells!'
     );
-    onSuccess();
-  }, [playChime, onSuccess]);
+  }, [playChime]);
 
   const handleHeartPointerDown = (e: React.PointerEvent) => {
     if (heartInserted || !weatherAligned || !gearFitted) return;
@@ -266,9 +265,13 @@ export function ImpossibleClock({
   // =========================================================================
   const sequenceStartedRef = useRef(initialRestartStage >= 8);
   const playChimeRef = useRef(playChime);
+  const onSuccessRef = useRef(onSuccess);
   useEffect(() => {
     playChimeRef.current = playChime;
   }, [playChime]);
+  useEffect(() => {
+    onSuccessRef.current = onSuccess;
+  }, [onSuccess]);
 
   useEffect(() => {
     if (!heartInserted || sequenceStartedRef.current) return;
@@ -309,6 +312,7 @@ export function ImpossibleClock({
 
     const t8 = setTimeout(() => {
       setRestartStage(8); // Stage 8 (4500ms): Sequence complete, hold transformation
+      onSuccessRef.current();
     }, 4500 * factor);
 
     return () => {
