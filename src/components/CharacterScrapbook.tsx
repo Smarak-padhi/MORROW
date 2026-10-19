@@ -14,6 +14,7 @@ export interface MilestoneMemory {
   stampColor: string;
   photoBg: string;
   photoIcon: string;
+  photoSrc?: string;
 }
 
 export interface CharacterProfile {
@@ -26,6 +27,7 @@ export interface CharacterProfile {
   description: string;
   stamp: string;
   badgeColor: string;
+  portraitSrc?: string;
 }
 
 const MILESTONE_MEMORIES: MilestoneMemory[] = [
@@ -42,6 +44,7 @@ const MILESTONE_MEMORIES: MilestoneMemory[] = [
     stampColor: 'var(--gold, #E8C878)',
     photoBg: 'linear-gradient(135deg, #4A2E1D 0%, #2A170F 100%)',
     photoIcon: '✳',
+    photoSrc: '/cinematics/morrow-waking-poster.jpg',
   },
   {
     id: 'shadows',
@@ -56,6 +59,7 @@ const MILESTONE_MEMORIES: MilestoneMemory[] = [
     stampColor: 'var(--sage, #88A991)',
     photoBg: 'linear-gradient(135deg, #1C2E24 0%, #0F1B14 100%)',
     photoIcon: '♧',
+    photoSrc: '/cinematics/shadows-01-duck-poster.jpg',
   },
   {
     id: 'weather',
@@ -70,6 +74,7 @@ const MILESTONE_MEMORIES: MilestoneMemory[] = [
     stampColor: 'var(--moss, #799F84)',
     photoBg: 'linear-gradient(135deg, #1A3222 0%, #0D1D13 100%)',
     photoIcon: '☁',
+    photoSrc: '/environments/forest-canopy.webp',
   },
   {
     id: 'clock',
@@ -84,6 +89,7 @@ const MILESTONE_MEMORIES: MilestoneMemory[] = [
     stampColor: 'var(--rust, #A34063)',
     photoBg: 'linear-gradient(135deg, #322538 0%, #17101C 100%)',
     photoIcon: '◷',
+    photoSrc: '/cinematics/clock-01-freeze-poster.jpg',
   },
   {
     id: 'finale',
@@ -98,6 +104,7 @@ const MILESTONE_MEMORIES: MilestoneMemory[] = [
     stampColor: 'var(--berry, #8E2D4E)',
     photoBg: 'linear-gradient(135deg, #2D1F38 0%, #150D1C 100%)',
     photoIcon: '✧',
+    photoSrc: '/environments/tomorrow-town.webp',
   },
 ];
 
@@ -113,6 +120,7 @@ const CHARACTERS: CharacterProfile[] = [
       'Handcrafted peach felt body with asymmetric petal ears, a gold diamond forehead stitch, two black button eyes, a cozy plum scarf, mitten paws, and a wooden spool tail trailing golden thread. Clumsy, endlessly curious, and gentle.',
     stamp: 'ORIGINAL HERO',
     badgeColor: 'var(--gold, #E8C878)',
+    portraitSrc: '/characters/morrow-happy.png',
   },
   {
     id: 'clack',
@@ -125,6 +133,7 @@ const CHARACTERS: CharacterProfile[] = [
       'A weathered mahogany toolbox with brass corner reinforcements, twin latches, and an arched carrying handle. Beneath his perpetually unimpressed wooden brow lies a heart that secretly pins every adventure into his scrapbook.',
     stamp: 'KEEPER OF RECORDS',
     badgeColor: 'var(--rust, #A34063)',
+    portraitSrc: '/characters/clack-talking.png',
   },
   {
     id: 'pipkin',
@@ -137,6 +146,7 @@ const CHARACTERS: CharacterProfile[] = [
       'A tiny blue messenger bird with round panic-stricken eyes, a miniature leather shoulder satchel, and a loud editorial voice. Never seen without the latest special edition clutched in his beak.',
     stamp: 'PRESS PASS',
     badgeColor: 'var(--sage, #88A991)',
+    portraitSrc: '/characters/pipkin-surprised.png',
   },
   {
     id: 'duck',
@@ -149,6 +159,7 @@ const CHARACTERS: CharacterProfile[] = [
       'A cream felt duck in an olive sage neckerchief. Formerly missing a shadow until Morrow stitched a giant 200-year-old oak tree shadow to his webbed feet. Extremely satisfied with the upgrade.',
     stamp: 'IMPOSSIBLE SILHOUETTE',
     badgeColor: 'var(--sage, #88A991)',
+    portraitSrc: '/characters/duck-talking.png',
   },
   {
     id: 'frog',
@@ -161,6 +172,7 @@ const CHARACTERS: CharacterProfile[] = [
       'A plump emerald felt frog wearing a mustard waistcoat and gold civic medallion. Calmly adapted to upward rainfall by converting his upside-down leaf umbrella into a flower-filled water basin.',
     stamp: 'OFFICIAL MUNICIPAL',
     badgeColor: 'var(--moss, #799F84)',
+    portraitSrc: '/characters/frog-happy.png',
   },
   {
     id: 'perfect',
@@ -173,6 +185,7 @@ const CHARACTERS: CharacterProfile[] = [
       'An elegant Victorian administrator in lilac silk with delicate golden hairline repair cracks along her porcelain cheek. Discovered that measuring people with brass rulers only erases what makes them lovely.',
     stamp: 'APPROVED IMPERFECT',
     badgeColor: 'var(--lilac, #B298DC)',
+    portraitSrc: '/characters/professor-talking.png',
   },
   {
     id: 'unfinished',
@@ -185,6 +198,7 @@ const CHARACTERS: CharacterProfile[] = [
       'Morrow’s very first creation from his earliest days in the workshop. Stitched with uneven navy felt, tender luminous golden eyes, and the original crooked golden knot on its chest. Has been quietly keeping the world together all along.',
     stamp: 'WONDERFULLY CROOKED',
     badgeColor: 'var(--berry, #8E2D4E)',
+    portraitSrc: '/characters/unfinished-action.png',
   },
 ];
 
@@ -281,13 +295,23 @@ export const CharacterScrapbook: React.FC<CharacterScrapbookProps> = ({ playChim
             <div className="washi-tape-accent" aria-hidden="true" />
 
             <div className="milestone-content-layout">
-              {/* Polaroid Photo Frame */}
+              {/* Polaroid Photo Frame with Real Chapter Imagery */}
               <div className="polaroid-frame" aria-label={`Polaroid photograph: ${activeMemory.photoCaption}`}>
                 {/* Brass Pushpin */}
                 <div className="polaroid-pushpin" aria-hidden="true" />
 
                 <div className="polaroid-photo" style={{ background: activeMemory.photoBg }}>
-                  <span className="polaroid-symbol" aria-hidden="true">{activeMemory.photoIcon}</span>
+                  {activeMemory.photoSrc ? (
+                    <img
+                      src={activeMemory.photoSrc}
+                      alt={activeMemory.photoCaption}
+                      className="polaroid-real-img"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span className="polaroid-symbol" aria-hidden="true">{activeMemory.photoIcon}</span>
+                  )}
                   <div className="polaroid-photo-overlay">
                     <span className="polaroid-date-badge">{activeMemory.date}</span>
                   </div>
@@ -353,23 +377,38 @@ export const CharacterScrapbook: React.FC<CharacterScrapbookProps> = ({ playChim
             ))}
           </div>
 
-          {/* Selected Character Portfolio Card */}
+          {/* Selected Character Portfolio Card with Real Puppet Portrait */}
           <div className="scrapbook-card" role="tabpanel" key={activeChar.id}>
-            <div className="scrapbook-card-top">
-              <div className="scrapbook-titles">
-                <span className="scrapbook-role">{activeChar.title}</span>
-                <h3 className="scrapbook-name">{activeChar.name}</h3>
-                <span className="scrapbook-species">{activeChar.species} · {activeChar.craft}</span>
-              </div>
-              <div className="scrapbook-stamp" style={{ borderColor: activeChar.badgeColor, color: activeChar.badgeColor }}>
-                <Sparkles size={12} aria-hidden="true" />
-                <span>{activeChar.stamp}</span>
+            <div className="character-portfolio-layout">
+              {activeChar.portraitSrc && (
+                <div className="character-portrait-frame">
+                  <img
+                    src={activeChar.portraitSrc}
+                    alt={activeChar.name}
+                    className="character-portrait-img"
+                    style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+                    loading="lazy"
+                  />
+                </div>
+              )}
+              <div className="character-portfolio-details">
+                <div className="scrapbook-card-top">
+                  <div className="scrapbook-titles">
+                    <span className="scrapbook-role">{activeChar.title}</span>
+                    <h3 className="scrapbook-name">{activeChar.name}</h3>
+                    <span className="scrapbook-species">{activeChar.species} · {activeChar.craft}</span>
+                  </div>
+                  <div className="scrapbook-stamp" style={{ borderColor: activeChar.badgeColor, color: activeChar.badgeColor }}>
+                    <Sparkles size={12} aria-hidden="true" />
+                    <span>{activeChar.stamp}</span>
+                  </div>
+                </div>
+
+                <blockquote className="scrapbook-quote">{activeChar.quote}</blockquote>
+
+                <p className="scrapbook-description">{activeChar.description}</p>
               </div>
             </div>
-
-            <blockquote className="scrapbook-quote">{activeChar.quote}</blockquote>
-
-            <p className="scrapbook-description">{activeChar.description}</p>
           </div>
         </div>
       )}
