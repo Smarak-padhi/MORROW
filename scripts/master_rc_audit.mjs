@@ -166,7 +166,7 @@ try {
   auditResults.capturedScreenshots.push(shotWeather);
 
   // Test Weather reveal film modal
-  const weatherFilm = journeyPage.getByRole('button', { name: /reveal film/i });
+  const weatherFilm = journeyPage.getByRole('button', { name: /reveal film/i }).first();
   if (await weatherFilm.isVisible()) {
     await weatherFilm.click();
     await journeyPage.waitForTimeout(300);

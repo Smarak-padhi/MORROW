@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export type ActorId =
   | 'morrow'
@@ -71,6 +71,12 @@ export const StopMotionActor: React.FC<StopMotionActorProps> = ({
   };
 
   const [imageLoaded, setImageLoaded] = useState(false);
+
+  // Reset loading and error states whenever character or effective pose changes
+  useEffect(() => {
+    setImageLoaded(false);
+    setImageError(false);
+  }, [character, effectiveState]);
 
   return (
     <div

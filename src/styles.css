@@ -1547,12 +1547,14 @@ img,svg,video,canvas { max-width:100%; }
 .living-shadow-scene {
   position: relative;
   overflow: hidden;
-  width: 100%;
+  width: min(100%, 780px);
+  margin: 0 auto;
   border-radius: 20px;
   border: 2px solid var(--line);
   background: #20192e;
-  min-height: clamp(520px, 82vw, 680px);
+  min-height: clamp(520px, 82vw, 640px);
   user-select: none;
+  box-shadow: 0 12px 36px rgba(16, 12, 24, 0.4);
 }
 
 .living-shadow-scene .storybook-scene-label {

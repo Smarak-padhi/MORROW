@@ -232,7 +232,21 @@ export const SceneFrogMayor: React.FC<{ isSpeaking?: boolean; isWarmed?: boolean
  * Full-Frame In-Engine Cinematic Reveal Modal (Frog Mayor's Umbrella Disaster)
  * Plays real Google Flow MP4 when present; otherwise renders authoritative in-engine stop-motion sequence.
  */
-export const CinematicWeatherReveal: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
+export interface CinematicWeatherRevealProps {
+  onReturn: () => void;
+  videoSrc?: string;
+  title?: string;
+  speaker?: string;
+  caption?: string;
+}
+
+export const CinematicWeatherReveal: React.FC<CinematicWeatherRevealProps> = ({
+  onReturn,
+  videoSrc = '/cinematics/weather-02-umbrella.mp4',
+  title = 'UPSIDE-DOWN FOREST DISASTER',
+  speaker = 'FROG MAYOR',
+  caption = '“The rain is falling UP. My umbrella is now a bucket.”',
+}) => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const [videoLoaded, setVideoLoaded] = useState(false);
@@ -260,12 +274,12 @@ export const CinematicWeatherReveal: React.FC<{ onReturn: () => void }> = ({ onR
   };
 
   return (
-    <div className="living-cinematic-bridge-modal" role="dialog" aria-modal="true" aria-label="Frog Mayor Umbrella Disaster Reveal">
+    <div className="living-cinematic-bridge-modal" role="dialog" aria-modal="true" aria-label={`${speaker} ${title} Reveal`}>
       <div className="cinematic-reveal-stage">
         {/* Real MP4 Video if available in public/cinematics/ */}
         <video
           ref={videoRef}
-          src="/cinematics/weather-02-umbrella.mp4"
+          src={videoSrc}
           className="cinematic-media-video"
           playsInline
           autoPlay
@@ -336,10 +350,10 @@ export const CinematicWeatherReveal: React.FC<{ onReturn: () => void }> = ({ onR
             <g transform="translate(60, 285)">
               <rect width="520" height="55" rx="12" fill="#FFF8F1" stroke="#392F3B" strokeWidth="2.5" />
               <text x="20" y="24" style={{ font: '800 11px Space Mono, monospace' }} fill="#A34063" letterSpacing="0.06em">
-                FROG MAYOR · UPSIDE-DOWN FOREST DISASTER
+                {speaker} · {title}
               </text>
               <text x="20" y="44" style={{ font: '600 15px Nunito, sans-serif' }} fill="#392F3B">
-                “The rain is falling UP. My umbrella is now a bucket.”
+                {caption}
               </text>
             </g>
           </svg>
@@ -610,6 +624,21 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
         </div>
         <div className="storybook-scene-label-pill">
           <span>03 / 06</span>
+          <button
+            type="button"
+            className="balloon-action-btn balloon-video-btn"
+            style={{ padding: '2px 8px', fontSize: '0.68rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+            onClick={() => setShowCinematic(true)}
+            aria-label={
+              isCelebrating
+                ? 'Watch forest bloom celebration film'
+                : isWeaving
+                ? 'Watch weather loom weaving film'
+                : 'Watch Frog Mayor umbrella disaster reveal film'
+            }
+          >
+            <Film size={12} /> {isCelebrating ? 'Bloom Film' : isWeaving ? 'Loom Film' : 'Reveal Film'}
+          </button>
           <button
             type="button"
             className="auto-dialogue-toggle"
@@ -1178,18 +1207,28 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
                   </button>
                 </>
               ) : (
-                <button
-                  type="button"
-                  className="balloon-action-btn balloon-video-btn"
-                  onClick={() => {
-                    setCurrentBeat(4);
-                    setSolvedTargets([]);
-                    setActivePointProgress(0);
-                  }}
-                  aria-label="Re-weave the weather loom"
-                >
-                  <RotateCcw size={14} /> Re-weave loom
-                </button>
+                <>
+                  <button
+                    type="button"
+                    className="balloon-action-btn balloon-video-btn"
+                    onClick={() => {
+                      setCurrentBeat(4);
+                      setSolvedTargets([]);
+                      setActivePointProgress(0);
+                    }}
+                    aria-label="Re-weave the weather loom"
+                  >
+                    <RotateCcw size={14} /> Re-weave loom
+                  </button>
+                  <button
+                    type="button"
+                    className="balloon-action-btn balloon-video-btn"
+                    onClick={() => setShowCinematic(true)}
+                    aria-label="Watch forest bloom celebration film"
+                  >
+                    <Film size={14} /> Bloom Film
+                  </button>
+                </>
               )}
             </div>
           </div>
@@ -1205,11 +1244,46 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
             <span style={{ fontSize: '0.75rem', opacity: 0.85, fontFamily: 'Space Mono, monospace' }}>
               Guide {activePointProgress + 1}/5
             </span>
+            <button
+              type="button"
+              className="balloon-action-btn balloon-video-btn"
+              style={{ marginLeft: 'auto', padding: '2px 8px', fontSize: '0.68rem' }}
+              onClick={() => setShowCinematic(true)}
+              aria-label="Watch weather loom weaving film"
+            >
+              <Film size={12} /> Loom Film
+            </button>
           </div>
         )}
 
         {/* IN-ENGINE CINEMATIC REVEAL MODAL */}
-        {showCinematic && <CinematicWeatherReveal onReturn={() => setShowCinematic(false)} />}
+        {showCinematic && (
+          <CinematicWeatherReveal
+            onReturn={() => setShowCinematic(false)}
+            videoSrc={
+              isCelebrating
+                ? '/cinematics/weather-05-bloom.mp4'
+                : isWeaving
+                ? '/cinematics/weather-04-loom.mp4'
+                : '/cinematics/weather-02-umbrella.mp4'
+            }
+            title={
+              isCelebrating
+                ? 'FOREST RESTORATION BLOOM'
+                : isWeaving
+                ? 'BRASS WEATHER LOOM IN MOTION'
+                : 'UPSIDE-DOWN FOREST DISASTER'
+            }
+            speaker={isCelebrating ? 'FROG MAYOR' : isWeaving ? 'MORROW' : 'FROG MAYOR'}
+            caption={
+              isCelebrating
+                ? '“Look! The canopy is lush, the blossoms drink deep, and warm sunlight fills the forest!”'
+                : isWeaving
+                ? '“Guiding the golden wool through the brass loom to weave the weather back into order.”'
+                : '“The rain is falling UP. My umbrella is now a bucket.”'
+            }
+          />
+        )}
       </section>
 
       {/* COMPACT CELEBRATION CONTINUATION BUTTON (Directly Below Stage) */}
