@@ -7,6 +7,7 @@ export type ActorId =
   | 'frog'
   | 'duck'
   | 'professor'
+  | 'baker'
   | 'unfinished';
 
 export type ActorState =

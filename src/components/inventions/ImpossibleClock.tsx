@@ -217,7 +217,7 @@ export function ImpossibleClock({ onSuccess, playChime }: Props) {
           className={`gear-btn ${gearFitted ? 'fitted' : activeStep === 1 ? 'active' : ''}`}
           onClick={handleFitGear}
           disabled={gearFitted}
-          aria-label="Drag brass cog onto the central clockwork spindle"
+          aria-label="Fit Brass Cog on Spindle (Shadow Cog)"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -232,7 +232,7 @@ export function ImpossibleClock({ onSuccess, playChime }: Props) {
         >
           <Settings size={22} color={gearFitted ? '#2e603b' : '#E8C878'} />
           <div>
-            <strong style={{ display: 'block', fontSize: '0.9rem' }}>1. Fit Brass Cog on Spindle</strong>
+            <strong style={{ display: 'block', fontSize: '0.9rem' }}>1. Fit Brass Cog on Spindle (Shadow Cog)</strong>
             <small style={{ color: 'var(--ink)', opacity: 0.8 }}>
               {gearFitted ? '✓ Meshed firmly on spindle' : 'Click/Tap to mount gear'}
             </small>
@@ -262,7 +262,7 @@ export function ImpossibleClock({ onSuccess, playChime }: Props) {
             </small>
           </div>
           {!weatherAligned ? (
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               <button
                 type="button"
                 className="balloon-action-btn"
@@ -281,6 +281,22 @@ export function ImpossibleClock({ onSuccess, playChime }: Props) {
               >
                 Rotate ↷ +45°
               </button>
+              <button
+                type="button"
+                className="balloon-action-btn"
+                onClick={() => {
+                  playChime();
+                  setWeatherAngle(180);
+                  setWeatherAligned(true);
+                  setActiveStep(3);
+                  setFeedback('Whirrr! The weather vane locks at 180°. Rainfall now powers the pendulum! Insert the crooked heart spring.');
+                }}
+                disabled={!gearFitted}
+                aria-label="Align Weather Spring"
+                style={{ width: '100%', padding: '4px 8px', fontSize: '0.76rem', background: 'rgba(232, 200, 120, 0.15)' }}
+              >
+                Align Weather Spring ↷ 180°
+              </button>
             </div>
           ) : (
             <small style={{ color: '#2e603b', fontWeight: 600 }}>Rainfall power flowing to pendulum.</small>
@@ -293,7 +309,7 @@ export function ImpossibleClock({ onSuccess, playChime }: Props) {
           className={`heart-btn ${heartInserted ? 'fitted' : activeStep === 3 ? 'active' : ''}`}
           onClick={handleInsertHeart}
           disabled={heartInserted || !weatherAligned}
-          aria-label="Insert glowing mainspring heart into central mechanism"
+          aria-label="Insert Heart Spring (Crooked Heart Key)"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -308,7 +324,7 @@ export function ImpossibleClock({ onSuccess, playChime }: Props) {
         >
           <Heart size={22} color={heartInserted ? '#2e603b' : '#A34063'} fill={heartInserted ? '#A34063' : 'none'} />
           <div>
-            <strong style={{ display: 'block', fontSize: '0.9rem' }}>3. Insert Heart Spring</strong>
+            <strong style={{ display: 'block', fontSize: '0.9rem' }}>3. Insert Heart Spring (Crooked Heart Key)</strong>
             <small style={{ color: 'var(--ink)', opacity: 0.8 }}>
               {heartInserted ? '✓ Mainspring seated taut' : weatherAligned ? 'Click/Tap to seat heart spring' : 'Awaiting weather alignment'}
             </small>

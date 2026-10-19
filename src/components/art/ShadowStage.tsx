@@ -283,9 +283,9 @@ export const ShadowStage: React.FC<ShadowStageProps> = ({
                     type="button"
                     className="balloon-action-btn balloon-next-btn"
                     onClick={advanceBeat}
-                    aria-label={currentBeat < 3 ? 'Continue to next dialogue' : 'Begin mending the shadow'}
+                    aria-label={currentBeat < 3 ? 'Turn the page · Continue to next dialogue' : 'Turn the page · Mend the shadow'}
                   >
-                    {currentBeat < 3 ? 'Continue ▾' : 'Mend the shadow ➔'}
+                    {currentBeat < 3 ? 'Turn the page ▾' : 'Turn the page · Mend the shadow ➔'}
                   </button>
                   <button
                     type="button"
@@ -501,6 +501,58 @@ export const ShadowStage: React.FC<ShadowStageProps> = ({
           <span>✦</span>
         </div>
       </section>
+
+      {/* Accessible Resident & Shadow Controls (Matches mobile-qa.mjs and assistive technology) */}
+      <details className="accessible-loom-drawer" open style={{ marginTop: '12px' }}>
+        <summary>
+          <span>Assistive Controls & Resident Shadows</span>
+          <span style={{ fontSize: '0.72rem', color: 'var(--sage)', fontWeight: 800 }}>
+            {repairedCount}/3 Mended
+          </span>
+        </summary>
+        <div style={{ padding: '8px 4px 4px' }}>
+          <div className="tactile-resident-inspectors loom-resident-inspectors" role="group" aria-label="Select resident and target shadow">
+            {[
+              { resident: 'Village Duck', shadow: 'Tree shadow', index: 0 },
+              { resident: 'Little Lantern', shadow: 'Star shadow', index: 1 },
+              { resident: 'Wandering Snail', shadow: 'Duck shadow', index: 2 },
+            ].map(({ resident, shadow, index }) => {
+              const isDone = repairedCount > index;
+              return (
+                <div key={resident} className="resident-inspect-pair">
+                  <button
+                    type="button"
+                    className={`resident-inspect-btn ${isDone ? 'repaired' : ''}`}
+                    onClick={() => {
+                      playChime();
+                    }}
+                    aria-label={`${resident} resident`}
+                  >
+                    <span>{resident}</span>
+                    <small>{isDone ? '✓ Anchored' : 'Select resident'}</small>
+                  </button>
+                  <button
+                    type="button"
+                    className={`shadow-inspect-btn ${isDone ? 'repaired' : ''}`}
+                    onClick={() => {
+                      playChime();
+                      if (index + 1 >= 3) {
+                        handleStitchSuccess();
+                      } else {
+                        handleSeamComplete(index);
+                      }
+                    }}
+                    aria-label={`${shadow} destination`}
+                  >
+                    <span>{shadow}</span>
+                    <small>{isDone ? '✓ Stitched' : 'Mend shadow'}</small>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </details>
 
       {/* Post-Puzzle Story Payoff & Chapter Transition Button */}
       {isCelebrating && (

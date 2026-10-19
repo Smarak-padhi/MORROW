@@ -276,7 +276,15 @@ export default function App() {
           ) : (
             <>
               {chapter.id === 'clock' ? (
-                <ClockStage dialog={dialog} />
+                <ClockStage
+                  dialog={dialog}
+                  puzzleDone={puzzleDone || save.completed.includes('clock')}
+                  onPuzzleSuccess={() => setPuzzleDone(true)}
+                  onNextChapter={nextChapter}
+                  playChime={() => play('gear')}
+                  isMuted={save.muted}
+                  onToggleMute={toggleGlobalMute}
+                />
               ) : chapter.id === 'finale' ? (
                 <FinaleStage dialog={dialog} />
               ) : (

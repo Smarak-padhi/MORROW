@@ -262,7 +262,12 @@ export function WorkshopComic({ beat, awake, onBell, onNext, isMuted, onToggleMu
             Ring the bell to wake the workshop <Bell size={20} />
           </button>
         ) : beat < 7 ? (
-          <button className="storybook-action" type="button" onClick={safeAdvance}>
+          <button
+            className="storybook-action"
+            type="button"
+            onClick={safeAdvance}
+            aria-label="Turn the page · Continue story"
+          >
             {beat === 3 ? 'Awaiting response…' : 'Continue story'} <ArrowRight size={18} />
           </button>
         ) : null}
