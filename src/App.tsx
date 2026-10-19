@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ArrowRight, BookOpen, Map as MapIcon, Moon, Sun, RotateCcw, Volume2, VolumeX } from 'lucide-react';
+import { ArrowRight, BookOpen, Map as MapIcon, Moon, Sun, RotateCcw, Volume2, VolumeX, Sparkles } from 'lucide-react';
 import { chapters, dialogues, type ChapterId } from './story';
 import { sound, type AudioEffect } from './sound';
 
@@ -159,7 +159,7 @@ export default function App() {
           ) : (
             <>
               {chapter.id === 'shadows' ? (
-                <ShadowStage dialog={dialog} />
+                <ShadowStage dialog={dialog} puzzleDone={puzzleDone || save.completed.includes('shadows')} />
               ) : chapter.id === 'weather' ? (
                 <WeatherStage dialog={dialog} />
               ) : chapter.id === 'clock' ? (
@@ -185,7 +185,24 @@ export default function App() {
           )}
           {lastLine && (
             <section className="storybook-interaction reveal-on-scroll" aria-label="Chapter interaction">
-              {chapter.id === 'shadows' && <ShadowStitcher playChime={() => play('stitch')} onSuccess={() => setPuzzleDone(true)}/>}
+              {chapter.id === 'shadows' && (
+                <>
+                  <ShadowStitcher playChime={() => play('stitch')} onSuccess={() => setPuzzleDone(true)}/>
+                  {(puzzleDone || save.completed.includes('shadows')) && (
+                    <div className="chapter-payoff-card" aria-live="polite">
+                      <div className="payoff-badge">
+                        <Sparkles size={16} /> BEAT 06 PAYOFF: THREE IMPOSSIBLE SHADOWS RESTORED
+                      </div>
+                      <p>
+                        <strong>Duck</strong> is a towering oak. <strong>Little Lantern</strong> lights the sky like a constellation. And <strong>Wandering Snail</strong> waddles with quiet courage.
+                      </p>
+                      <p className="payoff-reflection">
+                        <em>Pipkin's Notebook:</em> “Local Stitchling proves that mistakes make the world much more interesting than perfection.”
+                      </p>
+                    </div>
+                  )}
+                </>
+              )}
               {chapter.id === 'weather' && <WeatherLoom playChime={() => play('stitch')} onSuccess={() => setPuzzleDone(true)}/>}
               {chapter.id === 'clock' && <ImpossibleClock playChime={() => play('gear')} onSuccess={() => setPuzzleDone(true)}/>}
               {chapter.id === 'finale' && <FinaleStitch playChime={() => play('stitch')} onSuccess={() => setPuzzleDone(true)}/>}

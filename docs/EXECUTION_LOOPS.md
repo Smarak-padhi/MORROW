@@ -32,8 +32,11 @@ Storyboard wake, villain entrance and finale; lock characters; generate short cl
 ## L09 — Quality gate
 Test 320/375/430px phones and desktop, keyboard, touch, landscape, no sound, slow network, refresh, save migration, reduced motion and replay. Test WebGL disabled, Spline scene failure, 2D map fallback, scene unload and memory pressure if Spline is enabled. Run typecheck/build, inspect console, measure performance and fix critical bugs. Exit: no blocking issue or horizontal overflow.
 
-## L10 — Release and submission
-Confirm repository commit history, live URL, story write-up, character sheet, asset credits, mobile demo, README, screenshots and submission requirements. Freeze risky features. Exit: independently verified live deployed experience and submitted links.
+## L10 — Cinematic 2.5D Architecture & Shadow Village Integration
+Adopt the ~4,000 Google Flow credit allocation across four accounts to build MORROW as an interactive 2.5D cinematic adventure. Implement the 7-beat narrative loop for each chapter (2.5D Establishing Scene → Sequential Dialogue → Cinematic Reveal Video → Return to Stage → Tactile Invention Minigame → Cinematic Success Payoff → Transition). Build the progressive playback engine with graceful fallbacks (posters, in-engine stages, keyboard controls, reduced-motion bypass). Fully integrate Chapter 1 (Lost Shadows Village) with `shadows-01-duck.mp4`, ground-projected tree shadow, Duck/Lantern/Snail minigame, and celebratory payoff. Exit: clean mobile execution, zero gameplay blocking, and evidence in LOOP_LOG.md.
+
+## L11 — Full 6-Chapter Cinematic Rollout & Multi-Account Generation
+Execute the 48-shot cinematic shot list (`docs/CINEMATIC_EXPANSION_PLAN.md`) across accounts A–D. Progressively ingest approved stop-motion clips for Weather Forest, Tomorrow Town, Clock Tower Finale, and the Epilogue. Preserve mobile responsiveness (320px–1440px), min 44px touch targets, default muted Web Audio, and zero horizontal overflow. Exit: complete six-chapter cinematic storybook verified with automated Playwright matrix and visual screenshots.
 
 ## Emergency cut policy
-Keep L00–L05 and L09–L10. Reduce L06 to static map, L07 to mute + one Easter egg, omit L08. Disable Spline if it delays release or reduces mobile reliability. Prefer a complete story over broken Tier 3.
+Keep L00–L05 and L09–L10. If Flow credits expire or generations fail, seamlessly fall back to the built-in 2.5D SVG/CSS stages and posters without interrupting progression. Prefer a complete, playable, beautifully crafted story over broken video players.

@@ -1398,9 +1398,15 @@ img,svg,video,canvas { max-width:100%; }
   gap: 6px;
 }
 
-.shadow-video-wrap .comic-video-controls {
+.shadow-video-wrap .comic-video-controls,
+.cinematic-player-wrap .comic-video-controls {
+  position: absolute;
   top: 64px;
   right: 14px;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .comic-video-btn {
@@ -1430,18 +1436,191 @@ img,svg,video,canvas { max-width:100%; }
   background: #252338;
 }
 
-.shadow-video-wrap {
+.shadow-video-wrap,
+.cinematic-player-wrap {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
-.shadow-duck-video {
+.shadow-duck-video,
+.cinematic-media-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+}
+
+.cinematic-fallback-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #252338;
+}
+
+.cinematic-poster-fallback {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cinematic-poster-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cinematic-caption-banner,
+.cinematic-caption-overlay {
+  position: absolute;
+  bottom: clamp(48px, 8svh, 64px);
+  left: 14px;
+  right: 14px;
+  width: auto;
+  max-width: 440px;
+  margin: 0 auto;
+  background: rgba(30, 24, 38, 0.90);
+  backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(229, 185, 90, 0.4);
+  border-radius: 12px;
+  padding: 8px 14px;
+  color: #fff8f1;
+  text-align: center;
+  z-index: 5;
+  box-shadow: 0 4px 16px rgba(10, 8, 14, 0.45);
+}
+
+.cinematic-speaker {
+  display: block;
+  font: 800 0.68rem 'Space Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #e5b95a;
+  margin-bottom: 2px;
+}
+
+.cinematic-caption-overlay p,
+.cinematic-caption-banner p {
+  margin: 0;
+  font: 600 0.84rem/1.35 'Nunito', sans-serif;
+  color: #fff8f1;
+}
+
+/* Payoff Banner & Celebrating Tree Shadow */
+.shadow-stage-interactive.is-solved .comic-video-controls {
+  display: none;
+}
+
+.shadow-payoff-banner {
+  position: absolute;
+  top: clamp(68px, 9svh, 84px);
+  left: 14px;
+  right: 14px;
+  width: auto;
+  max-width: 440px;
+  margin: 0 auto;
+  background: rgba(45, 34, 56, 0.94);
+  backdrop-filter: blur(8px);
+  border: 2px solid #e5b95a;
+  border-radius: 14px;
+  padding: 8px 14px;
+  color: #fff8f1;
+  text-align: center;
+  z-index: 6;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  animation: payoff-fade-in 0.35s ease-out both;
+}
+
+@keyframes payoff-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.shadow-payoff-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 800 0.65rem 'Space Mono', monospace;
+  letter-spacing: 0.08em;
+  color: #e5b95a;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.shadow-payoff-quote {
+  margin: 0;
+  font: 600 0.82rem/1.35 'Nunito', sans-serif;
+  color: #fff8f1;
+}
+
+.tree-shadow-sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.tree-shadow-sparkles .sparkle {
+  position: absolute;
+  color: #f7d560;
+  font-size: 1.1rem;
+  filter: drop-shadow(0 0 5px #e5b95a);
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+.tree-shadow-sparkles .s1 { top: 22%; left: 32%; animation-delay: 0s; }
+.tree-shadow-sparkles .s2 { top: 44%; right: 22%; animation-delay: 0.6s; }
+.tree-shadow-sparkles .s3 { bottom: 28%; left: 48%; animation-delay: 1.2s; }
+
+/* Chapter Payoff Post-Puzzle Card (Beat 6 -> Beat 7) */
+.chapter-payoff-card {
+  margin: 20px auto 16px;
+  max-width: 680px;
+  padding: 16px 20px;
+  background: #fff8f0;
+  border: 2px solid #e5b95a;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(57, 47, 59, 0.08);
+  text-align: left;
+  animation: story-rise 0.4s ease-out both;
+}
+
+.payoff-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 800 0.72rem 'Space Mono', monospace;
+  letter-spacing: 0.06em;
+  color: #9c6c1f;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.chapter-payoff-card p {
+  margin: 0 0 8px;
+  font: 600 0.95rem/1.5 'Nunito', sans-serif;
+  color: #392F3B;
+}
+
+.chapter-payoff-card .payoff-reflection {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #5d4f61;
+  border-left: 3px solid #e5b95a;
+  padding-left: 10px;
 }
 
 /* The Impossible Tree Shadow anchored directly at Duck's feet and projected across the cobblestones */

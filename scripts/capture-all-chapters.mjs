@@ -68,6 +68,9 @@ try {
   }
   await page.waitForTimeout(300);
   await snap('02_shadows_puzzle_solved_390px.png');
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(300);
+  await snap('02_shadows_payoff_stage_390px.png');
 
   // Step to Weather Forest
   await page.getByRole('button', { name: /step into the next chapter/i }).click();

@@ -214,4 +214,36 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 - **Phase 6 (Release Candidate Baseline):**
   - Ready for final review. No merge or deployment initiated without user authorization.
 
+---
+
+### [2026-10-19] Loop 10 — Cinematic 2.5D Architecture & Shadow Village Integration
+- **Objective:** Establish the reusable, resilient cinematic player architecture and implement the full 7-Beat Chapter Structure in Chapter 1: Lost Shadows Village.
+- **Implementation Deliverables:**
+  1. *`src/components/CinematicVideoPlayer.tsx`:*
+     - Resilient 16:9 inline stop-motion player with accessible controls: Play/Pause, Replay upon finish, and Mute/Unmute audio gating.
+     - Supports `poster` fallback, custom `overlayArt` (such as Duck's ground-projected tree shadow), optional `speaker` and `caption` banner, and accessible `ariaLabel`.
+     - Instant reduced-motion bypass via `prefers-reduced-motion: reduce` rendering the accessible 2D stop-motion SVG fallback stage without animation or video playback.
+  2. *`src/components/art/ShadowStage.tsx`:*
+     - Integrated `CinematicVideoPlayer` with `/cinematics/shadows-01-duck.mp4`, poster `/cinematics/shadows-01-duck-poster.jpg`, and the ground-projected impossible tree shadow overlay (`perspective(260px) rotateX(45deg) rotate(25deg)`).
+     - Added Beat 06 Cinematic Success Payoff banner: When `puzzleDone` is true, renders centered payoff banner (`BEAT 06 PAYOFF · ALL 3 SHADOWS RESTORED`, Duck: "I AM A FOREST!"), updates scene bottom badge to `✦ The Shadows Are Singing ✦`, emits golden sparkles from the tree shadow branches, and suppresses floating video controls during celebration to avoid UI collisions.
+     - Conditionally renders Duck's caption banner strictly on initial dialogue beat (Beat 3 reveal), keeping subsequent dialogue turns clean.
+  3. *`src/App.tsx`:*
+     - Wired `puzzleDone={puzzleDone || save.completed.includes('shadows')}` into `ShadowStage`.
+     - Added post-puzzle celebration payoff card (`.chapter-payoff-card`) below `ShadowStitcher`: "Duck is a towering oak. Little Lantern lights the sky like a constellation. And Wandering Snail waddles with quiet courage." with Pipkin's Notebook story reflection.
+     - Unlocks Beat 7 transition button ("Step into the next chapter ->").
+  4. *`src/styles.css`:*
+     - Added dedicated styles for `.cinematic-player-wrap`, `.cinematic-media-video`, `.cinematic-fallback-stage`, `.cinematic-poster-fallback`, `.cinematic-caption-banner`, and `.cinematic-caption-overlay`.
+     - Added `.shadow-payoff-banner`, `.shadow-payoff-badge`, `.tree-shadow-sparkles`, and `@keyframes payoff-fade-in` with margin auto centering (zero horizontal displacement risk).
+     - Added `.chapter-payoff-card` styling with warm paper cream, gold accent border, and high-contrast typography.
+- **Verification Evidence:**
+  - `npm run build`: PASSED in 2.94s (0 TypeScript/bundler errors, CSS 51.33 kB, JS 356.05 kB).
+  - `scripts/comic-visual-qa.mjs`: PASSED across 320px–768px (9/9 panels, 0 overflow, 0 collision).
+  - `scripts/viewport_audit.mjs`: PASSED across 320px, 375px, 430px, 768px, 1280px, 1440px for all 6 chapters (ZERO horizontal overflow).
+  - `scripts/mobile-qa.mjs`: PASSED across all viewports (responsive opening, gameplay sequence, epilogue, and reload).
+  - High-res visual verification screenshots captured and inspected via `view_file`:
+    - `shadows_01_cinematic_player_390px.png`: Normal-motion Duck stop-motion player with controls and ground tree shadow.
+    - `shadows_02_minigame_payoff_390px.png`: Restored minigame and Beat 6 payoff story reflection card.
+    - `shadows_03_stage_payoff_banner_390px.png`: Centered Beat 6 celebration banner on stage with clean typography and zero button overlap.
+
+
 
