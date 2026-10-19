@@ -20,6 +20,8 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 | **Loop 09: Release Hardening & Polish** | **COMPLETE** | Ground-projected tree shadow anchored to Duck's feet, scene bottom text breathing room, high-contrast scrapbook tabs, 0 horizontal overflow across 320–1440px, full Playwright verification. | Release Candidate Ready. |
 | **Loop 10: Cinematic Architecture** | **COMPLETE** | Inline 16:9 cinematic video player (`CinematicVideoPlayer`), stop-motion player fallback, Beat 06 payoff banner, and responsive verification. | Proceed to Loop 11. |
 | **Loop 11: The Living Scene** | **COMPLETE** | Uninterrupted 2.5D village sequence: in-scene character dialogue, inline cinematic bridge, tactile pointer drag-to-stitch tree shadow, blooming oak payoff. Verified across 320–1440px. | Ready for Loop 12. |
+| **Loop 12: The Sky is Broken** | **COMPLETE** | Living 2.5D forest weather adventure: inverted canopy, sequential dialogue, tactile weather loom, rising rain, environmental transformations. | Proceed to Loop 12.5. |
+| **Loop 12.5: Immersion Overhaul** | **COMPLETE** | Mobile game-first layout (>75% first viewport, compact header), in-world carved brass loom directly inside shared SVG stage, unified 600x520 aspect ratio without letterboxing, 1:1 proportional character coordinates, full-frame stop-motion reveal modal, persistent environmental transformations. Verified across 320–1440px with 0 overflow and full Playwright test suite pass. | RC Ready. |
 
 ---
 
@@ -332,6 +334,37 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
     - `loop12_07_loom_dragging_390px.png`: Live pointer drag showing Morrow's peach mitten paw cursor, brass needle, and trailing water thread to Thirsty Lilies.
     - `loop12_08_celebration_payoff_390px.png`: Environmental payoff with blooming lilies, rotating windmill, warmed Mayor (*“Very wet, wonderfully warm furniture!”*), and continue card.
     - `loop12_09_desktop_stage_1280px.png`: Centered, balanced 1280px desktop view with rich forest depth and all 4 characters in living harmony.
+
+---
+
+### [2026-10-19] L12.5 — Immersion Overhaul: In-World Weather Loom & Mobile Game-First Layout
+- **Requirement:**
+  - Priority 1: Mobile Game-First Layout — Eliminate excessive vertical whitespace and oversized chapter landing cards. Stage must occupy >75% of the first mobile viewport on phone load without requiring scrolling.
+  - Priority 2: In-World Loom Integration — Remove separate form-like cards and floating UI blocks. Embed the carved brass loom directly inside the living SVG stage as a physical in-world apparatus.
+  - Priority 3: Character Hierarchy & 1:1 Proportional Scaling — Ensure Sir Clack, Pipkin, Frog Mayor, and Morrow occupy distinct horizontal coordinate lanes with zero overlap across mobile (320px–430px), tablet (768px), and desktop (1280px–1440px). Fix branch connection for perched Pipkin.
+  - Priority 4: Cinematic Reveal Quality — Full-frame 16:9 stop-motion reveal fallback with rising raindrops, sloshing leaf-bucket water, and graphic novel subtitles.
+  - Priority 5: Persistent Environmental Transformations — Real-time visual feedback upon weaving Rain (blooming lilies with ripples), Wind (spinning windmill), and Sun (sunbeams warming Mayor with rosy cheeks), followed by celebration payoff and single next-chapter transition.
+- **Affected Files:**
+  - `src/components/art/WeatherStage.tsx`
+  - `src/styles.css`
+  - `scripts/test-weather-scene.mjs`
+  - `docs/LOOP_LOG.md`
+- **Verification Evidence:**
+  - `npm run build`: PASSED (0 TypeScript errors, 0 warnings, clean production bundle).
+  - `scripts/viewport_audit.mjs`: PASSED across 320px, 375px, 430px, 768px, 1280px, 1440px for all 6 chapters (0 horizontal overflow).
+  - `scripts/comic-visual-qa.mjs`: PASSED across 320px–768px (panel geometry and speech balloon bounds).
+  - `scripts/mobile-qa.mjs`: PASSED (full interactive adventure playthrough from workshop through epilogue).
+  - `scripts/test-weather-scene.mjs`: Captured 9 high-resolution screenshots in `master_delivery` and visually inspected via `view_file`:
+    - `loop12_01_beat0_frog_390px.png`: Mobile-first layout verified. Stage occupies >75% of first mobile viewport. Zero landing-page scroll.
+    - `loop12_02_beat1_morrow_390px.png`: Morrow speaking with camera attention and right-anchored balloon pointer.
+    - `loop12_03_beat2_clack_390px.png`: Sir Clack speaking with camera attention and left-anchored balloon pointer.
+    - `loop12_04_beat3_pipkin_390px.png`: Pipkin perched upside-down on tree branch, breaking news balloon anchored directly above.
+    - `loop12_05_cinematic_bridge_390px.png`: 16:9 full-frame stop-motion reveal fallback with sloshing water and graphic novel subtitles.
+    - `loop12_06_loom_initial_390px.png`: In-world carved brass loom on left with glowing spools, compact guidance pill replacing form cards.
+    - `loop12_07_loom_dragging_390px.png`: Interactive pointer/touch drag tracking with Morrow's peach mitten paw cursor and trailing colored thread.
+    - `loop12_08_celebration_payoff_390px.png`: Persistent environmental transformations (blooming lilies, spinning windmill, sunbeams warming Frog Mayor) with single compact chapter continue button.
+    - `loop12_09_desktop_stage_1280px.png`: Pristine 1280px desktop presentation maintaining 600/520 aspect ratio without letterboxing or character overlap.
+
 
 
 

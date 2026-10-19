@@ -71,11 +71,11 @@ try {
   await page.waitForTimeout(200);
   const box = await svgEl.boundingBox();
   if (box) {
-    // Rain spool is at (50, 110) in 540x460 viewBox
-    const startX = box.x + box.width * (50 / 540);
-    const startY = box.y + box.height * (110 / 460);
-    const midX = box.x + box.width * (130 / 540);
-    const midY = box.y + box.height * (170 / 460);
+    // Rain spool is at (66, 220) and Loom Eyelet is at (140, 240) in 600x520 viewBox
+    const startX = box.x + box.width * (66 / 600);
+    const startY = box.y + box.height * (220 / 520);
+    const midX = box.x + box.width * (140 / 600);
+    const midY = box.y + box.height * (240 / 520);
 
     await page.mouse.move(startX, startY);
     await page.mouse.down();
