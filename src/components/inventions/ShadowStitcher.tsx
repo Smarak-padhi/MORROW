@@ -170,3 +170,6 @@ export function ShadowStitcher({ onSuccess, playChime }: Props) {
     </div>
   );
 }
+
+export { TactileShadowStitcher } from './TactileShadowStitcher';
+

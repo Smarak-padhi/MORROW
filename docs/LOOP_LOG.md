@@ -18,6 +18,8 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 | **L09: Mobile & Keyboard QA (G4)** | **COMPLETE** | Full keyboard-only and mobile viewport verification (320px, 375px, 430px, 768px, 1280px, 1440px) executed with Playwright. 0 console errors, 0 layout overflows, full adventure verified. | Ready for deployment. |
 | **Master Build Directive (L01–L08)** | **COMPLETE** | Full stop-motion comic rebuild across all 6 chapters: 9-panel workshop comic with inline video/SVGs, single duck tree shadow, tactile puzzles, bespoke stages for all chapters, epilogue character scrapbook, and 19 Playwright verification screenshots. | Proceed to Loop 09. |
 | **Loop 09: Release Hardening & Polish** | **COMPLETE** | Ground-projected tree shadow anchored to Duck's feet, scene bottom text breathing room, high-contrast scrapbook tabs, 0 horizontal overflow across 320–1440px, full Playwright verification. | Release Candidate Ready. |
+| **Loop 10: Cinematic Architecture** | **COMPLETE** | Inline 16:9 cinematic video player (`CinematicVideoPlayer`), stop-motion player fallback, Beat 06 payoff banner, and responsive verification. | Proceed to Loop 11. |
+| **Loop 11: The Living Scene** | **COMPLETE** | Uninterrupted 2.5D village sequence: in-scene character dialogue, inline cinematic bridge, tactile pointer drag-to-stitch tree shadow, blooming oak payoff. Verified across 320–1440px. | Ready for Loop 12. |
 
 ---
 
@@ -244,6 +246,49 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
     - `shadows_01_cinematic_player_390px.png`: Normal-motion Duck stop-motion player with controls and ground tree shadow.
     - `shadows_02_minigame_payoff_390px.png`: Restored minigame and Beat 6 payoff story reflection card.
     - `shadows_03_stage_payoff_banner_390px.png`: Centered Beat 6 celebration banner on stage with clean typography and zero button overlap.
+
+---
+
+### [2026-10-19] Loop 11 — The Living Scene (Uninterrupted 2.5D Village Sequence)
+- **Objective:** Build one uninterrupted, interactive Shadow Village sequence:
+  **Character performance → cinematic reveal → physical shadow repair → cinematic payoff → character reaction.**
+  Replace disconnected cards and buttons with a persistent 2.5D Living Scene where characters converse in-scene and the player physically stitches Duck's impossible oak tree shadow.
+- **Implementation Deliverables:**
+  1. *`docs/CHARACTER_CONTINUITY.md`:*
+     - Comprehensive character continuity bible covering all 7 characters (Morrow, Sir Clack, Pipkin, Village Duck, Frog Mayor, Professor Primrose Perfect, The Unfinished One).
+     - Proportions, palette tokens, z-index layering, camera attention rules, and strict AI generation rejection criteria.
+  2. *Living 2.5D Village Stage (`src/components/art/ShadowStage.tsx`):*
+     - Layered environment with parallax depth: Layer 1 deep twilight sky with glowing moon, Layer 2 medieval timber cottages with glowing windows, Layer 3 perspective cobblestone streets.
+     - Persistent simultaneous presence of all 4 characters: Sir Clack (with Pipkin perched on his handle) on left, Village Duck with mint knitted scarf in center, and Morrow with peach felt body, plum scarf, and brass needle on right.
+     - Sequential in-scene dialogue system with dynamic camera attention (`camera-focus-duck`, `camera-focus-clack`, `camera-focus-pipkin`, `camera-focus-morrow`) and responsive speech balloons with speaker tails anchored directly over the active character.
+     - Seamless inline cinematic bridge: Duck reveals his impossible giant oak tree shadow via `shadows-01-duck.mp4`, with an inline "Return to Scene ✕" modal returning to the exact same village coordinates.
+  3. *Tactile Shadow Stitcher (`src/components/inventions/TactileShadowStitcher.tsx`):*
+     - Physical pointer and touch drag-to-stitch mechanic on the oak tree shadow with forgiving hit detection (~76px touch targets).
+     - Follows player's finger/cursor with Morrow's peach mitten paw and brass needle, trailing luminous golden thread (`#E8C878`, `#F7D560`).
+     - Repairs 3 damaged seams in order: Seam 1 (Trunk Anchor Seam), Seam 2 (Branch Fray Seam), Seam 3 (Canopy Crown Seam) with blanket-stitch embroidery renderings.
+     - Encouraging character voice lines on slipped stitches without resetting repaired progress.
+     - Full keyboard accessibility (`role="application"`, Space/Enter, Arrow keys, 1-3) and accessible resident buttons (`['Village Duck','Tree shadow']`, etc.) preserving 100% compatibility with regression suites.
+  4. *Celebration Payoff (`src/components/art/ShadowStage.tsx` & `src/styles.css`):*
+     - Upon repairing all 3 seams, the tree shadow blooms with rustling golden oak leaves (`✦ The Shadows Are Singing ✦`).
+     - Duck flaps wings proudly (*“I AM A FOREST! Look at my leaves rustle across the cobblestones! Every seam is sturdy and proud!”*).
+     - Centered payoff card with Pipkin's Notebook reflection and direct transition button (*“Step into the next chapter · Upside-Down Forest ➔”*).
+  5. *`src/App.tsx`:*
+     - Routed `ShadowStage` as the uninterrupted chapter experience for Chapter 1 without duplicate cards or disjointed reading sections.
+- **Verification Evidence:**
+  - `npm run build`: PASSED in 2.78s (0 TypeScript errors, clean bundle).
+  - `scripts/viewport_audit.mjs`: PASSED across 320px, 375px, 430px, 768px, 1280px, 1440px for all 6 chapters (ZERO horizontal overflow).
+  - `scripts/comic-visual-qa.mjs`: PASSED across 320px–768px (9/9 panels, 0 overflow, 0 collision).
+  - `scripts/mobile-qa.mjs`: PASSED across all viewports (responsive opening, full adventure walkthrough, 4 inventions, epilogue, and reload).
+  - `scripts/test-living-scene.mjs`: Captured and verified all 9 screenshots in `master_delivery`:
+    - `loop11_01_beat0_duck_390px.png`: Duck speaking with anchored speech tail and camera attention.
+    - `loop11_02_beat1_clack_390px.png`: Sir Clack speaking with camera attention.
+    - `loop11_03_beat2_pipkin_390px.png`: Pipkin speaking with wing flutter.
+    - `loop11_04_beat3_morrow_390px.png`: Morrow raising brass needle to mend seams.
+    - `loop11_05_cinematic_bridge_390px.png`: Inline stop-motion video modal (`shadows-01-duck.mp4`).
+    - `loop11_06_stitcher_initial_390px.png`: Tactile shadow stitcher with 3 damaged seams and guide holes.
+    - `loop11_07_stitcher_dragging_390px.png`: Live pointer drag showing Morrow mitten paw cursor, brass needle, and trailing golden thread.
+    - `loop11_08_celebration_payoff_390px.png`: Blooming golden oak tree shadow, flapping Duck wings (*“I AM A FOREST!”*), and payoff continue card.
+    - `loop11_09_desktop_stage_1280px.png`: Centered, balanced 1280px desktop view with rich village depth.
 
 
 
