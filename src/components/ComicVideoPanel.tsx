@@ -9,6 +9,8 @@ interface ComicVideoPanelProps {
   captionTitle?: string;
   autoPlay?: boolean;
   onEnded?: () => void;
+  isMuted?: boolean;
+  onToggleMute?: () => void;
 }
 
 export const ComicVideoPanel: React.FC<ComicVideoPanelProps> = ({
@@ -18,12 +20,17 @@ export const ComicVideoPanel: React.FC<ComicVideoPanelProps> = ({
   ariaLabel,
   autoPlay = false,
   onEnded,
+  isMuted: propMuted,
+  onToggleMute,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
+  const [localMuted, setLocalMuted] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [isReducedMotion, setIsReducedMotion] = useState(false);
+
+  // Authoritative sound state: prop takes precedence if passed
+  const effectiveMuted = propMuted !== undefined ? propMuted : localMuted;
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -33,17 +40,37 @@ export const ComicVideoPanel: React.FC<ComicVideoPanelProps> = ({
     return () => mq.removeEventListener('change', handler);
   }, []);
 
+  // Synchronize audio element muted property with effectiveMuted
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = effectiveMuted;
+    }
+  }, [effectiveMuted]);
+
   useEffect(() => {
     if (autoPlay && videoRef.current && !isReducedMotion) {
+      videoRef.current.muted = effectiveMuted;
       videoRef.current
         .play()
         .then(() => setIsPlaying(true))
         .catch(() => {
-          // Autoplay was prevented by browser policy; stay on poster ready to click
-          setIsPlaying(false);
+          // Browser autoplay policy might reject unmuted autoplay.
+          // Fall back gracefully to playing muted if unmuted was rejected
+          if (!effectiveMuted && videoRef.current) {
+            videoRef.current.muted = true;
+            videoRef.current
+              .play()
+              .then(() => setIsPlaying(true))
+              .catch(() => {
+                // If even muted autoplay fails, stay on poster ready to click
+                setIsPlaying(false);
+              });
+          } else {
+            setIsPlaying(false);
+          }
         });
     }
-  }, [autoPlay, isReducedMotion, src]);
+  }, [autoPlay, isReducedMotion, src, effectiveMuted]);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
@@ -51,22 +78,31 @@ export const ComicVideoPanel: React.FC<ComicVideoPanelProps> = ({
       videoRef.current.pause();
       setIsPlaying(false);
     } else {
-      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => setHasError(true));
+      videoRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => setHasError(true));
     }
   };
 
   const replay = () => {
     if (!videoRef.current) return;
     videoRef.current.currentTime = 0;
-    videoRef.current.play().then(() => setIsPlaying(true)).catch(() => setHasError(true));
+    videoRef.current
+      .play()
+      .then(() => setIsPlaying(true))
+      .catch(() => setHasError(true));
   };
 
-  const toggleMute = (e: React.MouseEvent) => {
+  const handleToggleMute = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!videoRef.current) return;
-    const nextMuted = !isMuted;
-    videoRef.current.muted = nextMuted;
-    setIsMuted(nextMuted);
+    if (onToggleMute) {
+      onToggleMute();
+    } else {
+      const next = !localMuted;
+      if (videoRef.current) videoRef.current.muted = next;
+      setLocalMuted(next);
+    }
   };
 
   if (hasError || isReducedMotion) {
@@ -80,7 +116,7 @@ export const ComicVideoPanel: React.FC<ComicVideoPanelProps> = ({
         src={src}
         poster={poster}
         playsInline
-        muted={isMuted}
+        muted={effectiveMuted}
         preload="metadata"
         onEnded={() => {
           setIsPlaying(false);
@@ -93,18 +129,34 @@ export const ComicVideoPanel: React.FC<ComicVideoPanelProps> = ({
         <button
           type="button"
           className="comic-video-btn"
-          onClick={isPlaying ? togglePlay : isPlaying === false && videoRef.current && videoRef.current.currentTime > 0 ? replay : togglePlay}
+          onClick={
+            isPlaying
+              ? togglePlay
+              : isPlaying === false && videoRef.current && videoRef.current.currentTime > 0
+              ? replay
+              : togglePlay
+          }
           aria-label={isPlaying ? 'Pause cinematic' : 'Play cinematic animation'}
         >
-          {isPlaying ? '⏸ Pause' : videoRef.current && videoRef.current.currentTime > 0 ? <><RotateCcw size={14}/> Replay</> : <><Play size={14}/> Play clip</>}
+          {isPlaying ? (
+            '⏸ Pause'
+          ) : videoRef.current && videoRef.current.currentTime > 0 ? (
+            <>
+              <RotateCcw size={14} /> Replay
+            </>
+          ) : (
+            <>
+              <Play size={14} /> Play clip
+            </>
+          )}
         </button>
         <button
           type="button"
           className="comic-video-btn"
-          onClick={toggleMute}
-          aria-label={isMuted ? 'Unmute video audio' : 'Mute video audio'}
+          onClick={handleToggleMute}
+          aria-label={effectiveMuted ? 'Unmute video audio' : 'Mute video audio'}
         >
-          {isMuted ? <VolumeX size={15}/> : <Volume2 size={15}/>}
+          {effectiveMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
         </button>
       </div>
     </div>

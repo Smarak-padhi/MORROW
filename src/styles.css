@@ -1046,6 +1046,60 @@ footer button {
 .storybook-dialogue { min-height:130px; display:grid; place-items:center; padding:10px 0 25px; animation:story-rise .35s both; }
 .storybook-dialogue p { margin:0; font:600 clamp(1.25rem,2.5vw,1.85rem)/1.6 'Nunito',sans-serif; }
 .storybook-page-number { display:block; font:.72rem 'Space Mono',monospace; opacity:.65; margin-top:26px; }
+
+/* STORY DIRECTOR PACING & AUTOPLAY CONTROLS */
+.story-director-controls {
+  max-width: 480px;
+  margin: 16px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.story-director-progress-track {
+  width: 100%;
+  max-width: 260px;
+  height: 4px;
+  border-radius: 99px;
+  background: rgba(57, 47, 59, 0.14);
+  overflow: hidden;
+}
+
+.story-director-progress-bar {
+  height: 100%;
+  background: var(--berry);
+  transition: width 0.1s linear;
+}
+
+.story-director-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.story-director-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 16px;
+  font: 700 0.72rem 'Space Mono', monospace;
+  background: rgba(255, 248, 241, 0.95);
+  color: var(--ink);
+  border: 1.5px solid var(--line);
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.story-director-toggle-btn:hover {
+  background: #FFF8F1;
+  border-color: var(--berry);
+}
+
 .storybook-interaction { max-width:800px; margin:0 auto; padding:0 22px 70px; text-align:center; }
 .storybook-interaction .game-container { text-align:left; background:var(--surface); border:1px solid var(--line); box-shadow:0 12px 40px rgba(57,47,59,.08); }
 .storybook-interaction .chapter-continue { margin:25px auto; }
