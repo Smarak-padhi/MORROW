@@ -1,205 +1,568 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { StopMotionActor } from './StopMotionActor';
+import { Morrow } from './Morrow';
+import { SirClack, Pipkin } from './SupportingCast';
 
-interface Props {
+export interface EpilogueStageProps {
   dialog?: number;
+  playChime?: () => void;
+  isMuted?: boolean;
+  onToggleMute?: () => void;
 }
 
-export const EpilogueStage: React.FC<Props> = ({ dialog: _dialog }) => {
+/**
+ * EpilogueStage: The Almost-Right Repair Shop
+ * Handcrafted miniature stop-motion artisan workshop at golden morning hour.
+ * Features full character ensemble: Morrow & The Unfinished One side-by-side,
+ * Sir Clack beside his open scrapbook, Pipkin on the sunny windowsill,
+ * Professor Perfect observing with an approving nod, and Duck resting outside in the meadow.
+ */
+export const EpilogueStage: React.FC<EpilogueStageProps> = ({
+  dialog: _dialog = 0,
+  playChime = () => {},
+  isMuted: _isMuted = true,
+  onToggleMute: _onToggleMute,
+}) => {
+  const [activeSpeech, setActiveSpeech] = useState<string | null>(null);
+
+  const handleCharacterClick = (speaker: string) => {
+    playChime();
+    setActiveSpeech((prev) => (prev === speaker ? null : speaker));
+  };
+
   return (
-    <section className="storybook-stage epilogue-stage-bespoke" aria-label="The Workshop at golden morning with Sir Clack's scrapbook, Morrow, and all their friends">
-      {/* Warm golden morning atmosphere */}
-      <div className="storybook-sky epilogue-sunlit-sky" aria-hidden="true">
-        <span className="epilogue-sunbeam beam-1" />
-        <span className="epilogue-sunbeam beam-2" />
-      </div>
+    <section
+      className="epilogue-stage-bespoke storybook-stage-container"
+      aria-label="The Almost-Right Repair Shop at sunrise with Morrow, The Unfinished One, Sir Clack, Pipkin, Professor Perfect, and Duck"
+    >
+      <div className="epilogue-theatre-plate storybook-stage">
+        {/* Dynamic Warm Morning Atmosphere & Volumetric Sunbeams */}
+        <div className="storybook-sky epilogue-sunlit-sky" aria-hidden="true">
+          <div className="epilogue-warm-sun-wash" />
+          {/* Floating morning dust motes */}
+          <div className="epilogue-dust-motes" aria-hidden="true">
+            <span style={{ position: 'absolute', top: '25%', left: '22%', color: '#F7D560', fontSize: '11px', opacity: 0.7 }}>✧</span>
+            <span style={{ position: 'absolute', top: '38%', left: '46%', color: '#FFF8F1', fontSize: '13px', opacity: 0.8 }}>✦</span>
+            <span style={{ position: 'absolute', top: '18%', left: '68%', color: '#F7D560', fontSize: '10px', opacity: 0.65 }}>✧</span>
+            <span style={{ position: 'absolute', top: '52%', left: '35%', color: '#FFF8F1', fontSize: '9px', opacity: 0.7 }}>✦</span>
+            <span style={{ position: 'absolute', top: '44%', left: '78%', color: '#F7D560', fontSize: '12px', opacity: 0.75 }}>✧</span>
+          </div>
+        </div>
 
-      <div className="storybook-scene-label">
-        <span>EPILOGUE</span>
-        <span>06 / 06</span>
-      </div>
+        <div className="storybook-scene-label">
+          <span>EPILOGUE · 06 / 06</span>
+          <span style={{ marginLeft: 'auto', font: "700 0.68rem 'Space Mono', monospace", color: '#E8C878' }}>
+            ✦ The World Approved
+          </span>
+        </div>
 
-      {/* Main Stop-Motion SVG Epilogue Stage */}
-      <div className="stage-svg-wrap">
-        <svg
-          viewBox="0 0 600 380"
-          preserveAspectRatio="xMidYMid slice"
-          className="stage-svg-art"
-          role="img"
-          aria-label="Handcrafted scene of the Almost-Right Repair Shop at sunrise with Sir Clack's open scrapbook, Pipkin with the celebration edition, Duck under the tree shadow outside the window, and Morrow"
+        {/* =========================================================================
+            WORKSHOP ARCHITECTURE & ENVIRONMENT (SVG 960x540 multiplane depth stage)
+           ========================================================================= */}
+        <div className="stage-svg-wrap">
+          <svg
+            viewBox="0 0 960 540"
+            preserveAspectRatio="xMidYMid slice"
+            className="stage-svg-art epilogue-architecture-svg"
+            role="img"
+            aria-label="Handcrafted scene of the Almost-Right Repair Shop at sunrise with wooden workbench, sunny arched window, shelves of spools, and Sir Clack's open scrapbook"
+          >
+            <defs>
+              <linearGradient id="epilogue-wall-grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#FFF2D6" />
+                <stop offset="45%" stopColor="#F7E2B5" />
+                <stop offset="100%" stopColor="#E2C194" />
+              </linearGradient>
+
+              <linearGradient id="epilogue-timber-dark" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#553022" />
+                <stop offset="50%" stopColor="#3E2016" />
+                <stop offset="100%" stopColor="#25120B" />
+              </linearGradient>
+
+              <linearGradient id="epilogue-workbench-wood" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#9C6B52" />
+                <stop offset="35%" stopColor="#7E4F39" />
+                <stop offset="100%" stopColor="#4A2B1D" />
+              </linearGradient>
+
+              <linearGradient id="epilogue-sunbeam-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#FFFDF5" stopOpacity="0.45" />
+                <stop offset="50%" stopColor="#F7D560" stopOpacity="0.22" />
+                <stop offset="100%" stopColor="#E8C878" stopOpacity="0" />
+              </linearGradient>
+
+              <linearGradient id="epilogue-brass-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#F7D560" />
+                <stop offset="50%" stopColor="#D4A853" />
+                <stop offset="100%" stopColor="#8C6527" />
+              </linearGradient>
+
+              <radialGradient id="epilogue-contact-blur" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#1B120C" stopOpacity="0.75" />
+                <stop offset="60%" stopColor="#1B120C" stopOpacity="0.35" />
+                <stop offset="100%" stopColor="#1B120C" stopOpacity="0" />
+              </radialGradient>
+
+              <filter id="epilogue-soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3.5" />
+              </filter>
+            </defs>
+
+            {/* Warm plaster wall with aged timber panelling */}
+            <rect width="960" height="540" fill="url(#epilogue-wall-grad)" />
+
+            {/* Ceiling Timber Beams & Hanging Workshop Crafts */}
+            <g className="workshop-ceiling-beams">
+              <rect x="0" y="0" width="960" height="24" fill="url(#epilogue-timber-dark)" />
+              <rect x="180" y="0" width="28" height="85" fill="url(#epilogue-timber-dark)" />
+              <rect x="520" y="0" width="28" height="85" fill="url(#epilogue-timber-dark)" />
+              <rect x="820" y="0" width="28" height="85" fill="url(#epilogue-timber-dark)" />
+
+              {/* Hanging bundle of dried lavender & sage on Beam 1 */}
+              <g transform="translate(194, 85)">
+                <line x1="0" y1="0" x2="0" y2="18" stroke="#E8C878" strokeWidth="1.2" />
+                <path d="M -5 18 Q 0 42 0 46 Q 0 42 5 18 Z" fill="#88A991" />
+                <circle cx="-2" cy="28" r="2.5" fill="#8E79A8" />
+                <circle cx="2" cy="34" r="2.5" fill="#8E79A8" />
+                <circle cx="0" cy="42" r="2" fill="#8E79A8" />
+              </g>
+
+              {/* Dangling brass gear windchime on Beam 2 */}
+              <g transform="translate(534, 85)">
+                <line x1="0" y1="0" x2="0" y2="24" stroke="#E8C878" strokeWidth="1.2" />
+                <circle cx="0" cy="30" r="8" fill="none" stroke="url(#epilogue-brass-grad)" strokeWidth="3" strokeDasharray="3,2" />
+                <line x1="-4" y1="38" x2="-4" y2="52" stroke="url(#epilogue-brass-grad)" strokeWidth="1.5" />
+                <line x1="4" y1="38" x2="4" y2="48" stroke="url(#epilogue-brass-grad)" strokeWidth="1.5" />
+              </g>
+            </g>
+
+            {/* =========================================================================
+                LARGE SUNLIT ARCHED WORKSHOP WINDOW (Center-Left: 220 to 480)
+               ========================================================================= */}
+            <g className="workshop-arched-window" transform="translate(220, 45)">
+              {/* Outer Deep Wooden Window Sill & Arched Casing */}
+              <path
+                d="M 0 90 Q 130 -30 260 90 L 260 260 L 0 260 Z"
+                fill="#2A1C13"
+                stroke="#1B120B"
+                strokeWidth="6"
+              />
+              {/* Sunny Meadow View Outside Window */}
+              <path
+                d="M 6 92 Q 130 -22 254 92 L 254 254 L 6 254 Z"
+                fill="#94C5E0"
+              />
+              {/* Distant Sunny Rolling Hills & Forest Trees */}
+              <path
+                d="M 6 185 Q 120 150 254 180 L 254 254 L 6 254 Z"
+                fill="#587A5E"
+              />
+              <path
+                d="M 6 205 Q 140 180 254 200 L 254 254 L 6 254 Z"
+                fill="#7E9A82"
+              />
+
+              {/* DUCK SLEEPING UNDER THE 200-YEAR OAK TREE SHADOW (Outside in Garden) */}
+              <g className="duck-in-meadow" transform="translate(70, 155)">
+                {/* Impossible Oak Tree Shadow Spreading Over the Meadow */}
+                <path
+                  d="M 35 45 Q 25 25 18 -10 Q -8 -30 -2 -60 Q 30 -90 65 -65 Q 85 -35 55 -15 Q 42 20 35 45 Z"
+                  fill="#243828"
+                  opacity="0.8"
+                />
+                {/* Cream Felt Duck Sleeping Happily */}
+                <ellipse cx="36" cy="45" rx="18" ry="12" fill="#FFF8F1" stroke="#392F3B" strokeWidth="1.8" />
+                <circle cx="48" cy="38" r="9" fill="#FFF8F1" stroke="#392F3B" strokeWidth="1.8" />
+                <path d="M 55 40 L 63 43 L 55 46 Z" fill="#E8C878" stroke="#392F3B" strokeWidth="1.2" />
+                {/* Sage neckerchief */}
+                <rect x="42" y="41" width="7" height="12" rx="1.5" fill="#88A991" stroke="#392F3B" strokeWidth="1" />
+                {/* Closed sleepy eye (contented crescent) */}
+                <path d="M 46 37 Q 49 40 52 37" fill="none" stroke="#392F3B" strokeWidth="1.5" strokeLinecap="round" />
+              </g>
+
+              {/* Window Mullions / Wooden Panes */}
+              <line x1="130" y1="10" x2="130" y2="254" stroke="#4A3425" strokeWidth="5" />
+              <line x1="6" y1="165" x2="254" y2="165" stroke="#4A3425" strokeWidth="5" />
+
+              {/* Solid Heavy Wooden Window Sill Shelf (Where Pipkin sits) */}
+              <rect x="-14" y="254" width="288" height="20" rx="3" fill="#6A4532" stroke="#25120B" strokeWidth="2.5" />
+            </g>
+
+            {/* VOLUMETRIC MORNING SUNBEAM (Streaming Across from Window to Workbench) */}
+            <polygon
+              points="220,60 480,60 760,540 280,540"
+              fill="url(#epilogue-sunbeam-grad)"
+              style={{ mixBlendMode: 'screen', pointerEvents: 'none' }}
+            />
+
+            {/* =========================================================================
+                ARTISAN WORKSHOP SHELVING (Left & Right Walls)
+               ========================================================================= */}
+            {/* Left Shelving Unit (Behind Professor Perfect) */}
+            <g className="workshop-shelves-left" transform="translate(15, 90)">
+              <rect x="0" y="0" width="16" height="280" fill="url(#epilogue-timber-dark)" />
+              <rect x="135" y="0" width="16" height="280" fill="url(#epilogue-timber-dark)" />
+              {/* Shelf 1 */}
+              <rect x="0" y="70" width="150" height="12" rx="2" fill="url(#epilogue-workbench-wood)" stroke="#25120B" strokeWidth="1.5" />
+              {/* Glass jar of golden buttons */}
+              <rect x="25" y="42" width="22" height="28" rx="4" fill="#E8DEC8" stroke="#392F3B" strokeWidth="1.2" opacity="0.85" />
+              <circle cx="36" cy="56" r="3" fill="#F7D560" />
+              <circle cx="36" cy="64" r="2.5" fill="#E8C878" />
+              {/* Stack of parchment books with ribbon bookmarks */}
+              <rect x="65" y="48" width="55" height="10" rx="1.5" fill="#A34063" stroke="#25120B" strokeWidth="1" />
+              <rect x="62" y="58" width="60" height="12" rx="1.5" fill="#25324A" stroke="#25120B" strokeWidth="1" />
+              {/* Shelf 2 */}
+              <rect x="0" y="170" width="150" height="12" rx="2" fill="url(#epilogue-workbench-wood)" stroke="#25120B" strokeWidth="1.5" />
+              {/* Spool rack of embroidery threads */}
+              <rect x="22" y="146" width="14" height="24" rx="2" fill="#8F5D48" stroke="#25120B" strokeWidth="1" />
+              <rect x="24" y="150" width="10" height="16" fill="#F7D560" />
+              <rect x="42" y="146" width="14" height="24" rx="2" fill="#8F5D48" stroke="#25120B" strokeWidth="1" />
+              <rect x="44" y="150" width="10" height="16" fill="#A34063" />
+              <rect x="62" y="146" width="14" height="24" rx="2" fill="#8F5D48" stroke="#25120B" strokeWidth="1" />
+              <rect x="64" y="150" width="10" height="16" fill="#88A991" />
+              {/* Pinned handwritten craft label */}
+              <rect x="88" y="152" width="46" height="16" rx="2" fill="#FFF8F1" stroke="#392F3B" strokeWidth="1" />
+              <text x="111" y="163" fill="#A34063" fontSize="6.5" fontWeight="bold" textAnchor="middle" letterSpacing="0.04em">
+                TO BE LOVED
+              </text>
+            </g>
+
+            {/* Right Shelving Unit (Clockwork Parts & Ceramic Pots) */}
+            <g className="workshop-shelves-right" transform="translate(805, 90)">
+              <rect x="0" y="0" width="16" height="280" fill="url(#epilogue-timber-dark)" />
+              <rect x="125" y="0" width="16" height="280" fill="url(#epilogue-timber-dark)" />
+              {/* Shelf 1 */}
+              <rect x="0" y="90" width="140" height="12" rx="2" fill="url(#epilogue-workbench-wood)" stroke="#25120B" strokeWidth="1.5" />
+              {/* Needle-felted flower pot */}
+              <path d="M 28 90 L 32 68 L 52 68 L 56 90 Z" fill="#C98F70" stroke="#392F3B" strokeWidth="1.2" />
+              <circle cx="42" cy="58" r="9" fill="#A34063" stroke="#392F3B" strokeWidth="1" />
+              <circle cx="42" cy="58" r="3.5" fill="#F7D560" />
+              {/* Miniature restored clock model */}
+              <circle cx="85" cy="68" r="16" fill="#25324A" stroke="url(#epilogue-brass-grad)" strokeWidth="2.5" />
+              <circle cx="85" cy="68" r="3" fill="#F7D560" />
+              <line x1="85" y1="68" x2="85" y2="58" stroke="#FFF8F1" strokeWidth="1.5" />
+              <line x1="85" y1="68" x2="93" y2="68" stroke="#FFF8F1" strokeWidth="1.5" />
+            </g>
+
+            {/* =========================================================================
+                MASSIVE SOLID TIMBER WORKBENCH (Lower Countertop Across Base)
+               ========================================================================= */}
+            <path
+              d="M -20 330 L 980 330 L 980 540 L -20 540 Z"
+              fill="url(#epilogue-workbench-wood)"
+              stroke="#25120B"
+              strokeWidth="4"
+            />
+            {/* Workbench Front Bevel Highlight */}
+            <line x1="-20" y1="332" x2="980" y2="332" stroke="#DDB095" strokeWidth="3" opacity="0.6" />
+            <line x1="-20" y1="346" x2="980" y2="346" stroke="#25120B" strokeWidth="2" opacity="0.45" />
+
+            {/* =========================================================================
+                SIR CLACK'S OPEN SCRAPBOOK (Center-Left of Workbench: x=360, y=320)
+               ========================================================================= */}
+            <g className="open-scrapbook-display" transform="translate(350, 318)">
+              {/* Contact shadow */}
+              <ellipse cx="110" cy="115" rx="130" ry="22" fill="url(#epilogue-contact-blur)" />
+
+              {/* Distressed leather binding cover */}
+              <path
+                d="M 0 75 Q 110 88 220 75 L 226 102 Q 110 114 -6 102 Z"
+                fill="#553022"
+                stroke="#25120B"
+                strokeWidth="2.5"
+              />
+              {/* Left Page (Cream pressed linen paper) */}
+              <path
+                d="M 12 68 Q 110 56 110 68 L 110 148 Q 12 156 12 148 Z"
+                fill="#FFF8F1"
+                stroke="#392F3B"
+                strokeWidth="1.8"
+              />
+              {/* Right Page */}
+              <path
+                d="M 110 68 Q 110 56 208 68 L 208 148 Q 110 156 110 148 Z"
+                fill="#FFF8F1"
+                stroke="#392F3B"
+                strokeWidth="1.8"
+              />
+
+              {/* Center Binding Thread Stitches */}
+              <line x1="110" y1="68" x2="110" y2="148" stroke="#A34063" strokeWidth="2" strokeDasharray="4,3" />
+
+              {/* Pinned Polaroid 1: Duck with Tree Shadow */}
+              <g transform="translate(24, 76) rotate(-5)">
+                <rect x="0" y="0" width="34" height="40" fill="#FAF6EE" stroke="#392F3B" strokeWidth="1.2" />
+                <rect x="4" y="4" width="26" height="24" fill="#7E9A82" />
+                <circle cx="17" cy="16" r="6" fill="#FFF8F1" />
+                {/* Brass pushpin */}
+                <circle cx="17" cy="2" r="2.5" fill="#E8C878" stroke="#392F3B" strokeWidth="0.8" />
+              </g>
+
+              {/* Pinned Polaroid 2: Inverted Umbrella Bloom */}
+              <g transform="translate(68, 80) rotate(4)">
+                <rect x="0" y="0" width="34" height="40" fill="#FAF6EE" stroke="#392F3B" strokeWidth="1.2" />
+                <rect x="4" y="4" width="26" height="24" fill="#25324A" />
+                <path d="M 10 20 Q 17 26 24 20" fill="none" stroke="#F7D560" strokeWidth="2" />
+                <circle cx="17" cy="2" r="2.5" fill="#A34063" stroke="#392F3B" strokeWidth="0.8" />
+              </g>
+
+              {/* Pinned Polaroid 3: Clock Ticking 4:03 */}
+              <g transform="translate(122, 78) rotate(-3)">
+                <rect x="0" y="0" width="34" height="40" fill="#FAF6EE" stroke="#392F3B" strokeWidth="1.2" />
+                <rect x="4" y="4" width="26" height="24" fill="#FFF8F1" />
+                <circle cx="17" cy="16" r="9" fill="none" stroke="url(#epilogue-brass-grad)" strokeWidth="1.6" />
+                <line x1="17" y1="16" x2="17" y2="10" stroke="#392F3B" strokeWidth="1.2" />
+                <line x1="17" y1="16" x2="21" y2="16" stroke="#392F3B" strokeWidth="1.2" />
+              </g>
+
+              {/* Pinned Polaroid 4: The Golden Crooked Knot */}
+              <g transform="translate(162, 82) rotate(6)">
+                <rect x="0" y="0" width="34" height="40" fill="#FAF6EE" stroke="#392F3B" strokeWidth="1.2" />
+                <rect x="4" y="4" width="26" height="24" fill="#1B1726" />
+                <circle cx="17" cy="16" r="5" fill="#F7D560" />
+                <circle cx="17" cy="16" r="2" fill="#A34063" />
+              </g>
+
+              {/* Official Purple Approval Stamp: "IMPERFECT · SOMEHOW LOVELY" */}
+              <g transform="translate(125, 122) rotate(-4)">
+                <rect x="0" y="0" width="76" height="20" rx="3" fill="none" stroke="#A34063" strokeWidth="2" strokeDasharray="3,2" />
+                <text x="38" y="14" fill="#A34063" fontSize="7.2" fontWeight="800" textAnchor="middle" letterSpacing="0.04em">
+                  SOMEHOW LOVELY
+                </text>
+              </g>
+            </g>
+
+            {/* SIR CLACK'S BRASS COUNTER BELL (Beside Scrapbook: x=580, y=380) */}
+            <g className="clack-counter-bell" transform="translate(580, 395)">
+              <ellipse cx="14" cy="22" rx="18" ry="6" fill="url(#epilogue-contact-blur)" />
+              <path d="M 0 20 Q 14 -2 28 20 Z" fill="url(#epilogue-brass-grad)" stroke="#25120B" strokeWidth="1.8" />
+              <rect x="12" y="-4" width="4" height="6" fill="#8C6527" stroke="#25120B" strokeWidth="1" />
+              <circle cx="14" cy="-5" r="3" fill="#F7D560" stroke="#25120B" strokeWidth="1" />
+            </g>
+
+            {/* WORKSHOP DETAILS & TOOLS ON BENCH */}
+            {/* Spool of Golden Thread with Trailing Ribbon */}
+            <g transform="translate(710, 435)">
+              <rect x="0" y="0" width="18" height="28" rx="3" fill="#8F5D48" stroke="#25120B" strokeWidth="1.5" />
+              <rect x="2" y="4" width="14" height="20" fill="#F7D560" />
+              <path d="M 9 28 Q 20 42 42 38" fill="none" stroke="#F7D560" strokeWidth="2.5" strokeLinecap="round" />
+            </g>
+
+            {/* Brass Tailor Shears */}
+            <g transform="translate(850, 440) rotate(-25)">
+              <ellipse cx="6" cy="4" rx="6" ry="4" fill="none" stroke="url(#epilogue-brass-grad)" strokeWidth="2" />
+              <ellipse cx="6" cy="16" rx="6" ry="4" fill="none" stroke="url(#epilogue-brass-grad)" strokeWidth="2" />
+              <line x1="12" y1="10" x2="38" y2="5" stroke="url(#epilogue-brass-grad)" strokeWidth="2.5" />
+              <line x1="12" y1="10" x2="38" y2="15" stroke="url(#epilogue-brass-grad)" strokeWidth="2.5" />
+              <circle cx="15" cy="10" r="2" fill="#25120B" />
+            </g>
+
+            {/* Ground Contact Shadows for Actors */}
+            <g className="actor-contact-shadows" aria-hidden="true">
+              {/* Professor Perfect shadow (Left, x ≈ 155, y ≈ 410) */}
+              <ellipse cx="155" cy="410" rx="38" ry="12" fill="url(#epilogue-contact-blur)" />
+              {/* Sir Clack shadow (Center-left, x ≈ 340, y ≈ 415) */}
+              <ellipse cx="340" cy="415" rx="38" ry="12" fill="url(#epilogue-contact-blur)" />
+              {/* The Unfinished One shadow (Right-center, x ≈ 665, y ≈ 420) */}
+              <ellipse cx="665" cy="420" rx="42" ry="13" fill="url(#epilogue-contact-blur)" />
+              {/* Morrow shadow (Right, x ≈ 805, y ≈ 422) */}
+              <ellipse cx="805" cy="422" rx="44" ry="14" fill="url(#epilogue-contact-blur)" />
+            </g>
+          </svg>
+        </div>
+
+        {/* =========================================================================
+            STOP-MOTION CHARACTER ACTORS (Positioned with Responsive Percentage Coordinates)
+           ========================================================================= */}
+
+        {/* 1. PROFESSOR PRIMROSE PERFECT (Left Workshop Corner - Proud & Approving) */}
+        <div
+          className="stage-actor-anchor epilogue-professor-anchor"
+          style={{
+            position: 'absolute',
+            left: '11%',
+            bottom: '22%',
+            width: '95px',
+            height: '135px',
+            cursor: 'pointer',
+            zIndex: 4,
+          }}
+          onClick={() => handleCharacterClick('professor')}
+          title="Professor Primrose Perfect · Click to hear her thoughts"
         >
-          <defs>
-            <linearGradient id="morning-sun-grad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#FFF2D6" />
-              <stop offset="50%" stopColor="#F5DF9E" />
-              <stop offset="100%" stopColor="#E3B378" />
-            </linearGradient>
-            <linearGradient id="workbench-wood" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#8F5D48" />
-              <stop offset="100%" stopColor="#553022" />
-            </linearGradient>
-            <filter id="morning-glow" x="-10%" y="-10%" width="120%" height="120%">
-              <feDropShadow dx="0" dy="4" stdDeviation="3" floodColor="#4a301a" floodOpacity="0.25" />
-            </filter>
-          </defs>
+          <StopMotionActor
+            character="professor"
+            state="happy"
+            isSpeaking={activeSpeech === 'professor'}
+            alt="Professor Primrose Perfect in Victorian lilac dress with golden hairline repair crack, smiling approvingly"
+            fallbackSvg={
+              <svg viewBox="0 0 100 120" width="100%" height="100%">
+                <ellipse cx="50" cy="110" rx="30" ry="7" fill="#1e1828" opacity="0.3" />
+                <rect x="25" y="48" width="50" height="60" rx="6" fill="#FFF8F1" stroke="#252030" strokeWidth="2.5" />
+                <path d="M 40 48 Q 50 56 60 48" fill="#A34063" />
+                <circle cx="50" cy="38" r="22" fill="#E8DEC8" stroke="#252030" strokeWidth="2.5" />
+                <circle cx="43" cy="36" r="3" fill="#252030" />
+                <circle cx="57" cy="36" r="3" fill="#252030" />
+                <path d="M 44 54 Q 50 62 56 54" fill="none" stroke="#252030" strokeWidth="2" strokeLinecap="round" />
+                {/* Hairline golden crack */}
+                <path d="M 52 18 Q 50 26 53 32" fill="none" stroke="#E8C878" strokeWidth="1.5" strokeLinecap="round" />
+                <rect x="34" y="24" width="32" height="18" fill="#252030" rx="2" />
+                <ellipse cx="50" cy="40" rx="24" ry="4" fill="#252030" />
+                <rect x="34" y="34" width="32" height="4" fill="#A34063" />
+              </svg>
+            }
+          />
+          {activeSpeech === 'professor' && (
+            <div className="character-speech-bubble bubble-professor" role="tooltip">
+              <strong>Professor Perfect</strong>
+              <p>“Imperfect. Acceptable. Somehow lovely. You may keep the shop open forever.”</p>
+            </div>
+          )}
+        </div>
 
-          {/* Golden morning wall */}
-          <rect width="600" height="380" fill="url(#morning-sun-grad)" />
+        {/* 2. PIPKIN (Perched on the Sunny Arched Window Sill with Newspaper) */}
+        <div
+          className="stage-actor-anchor epilogue-pipkin-anchor"
+          style={{
+            position: 'absolute',
+            left: '26%',
+            top: '32%',
+            width: '80px',
+            height: '100px',
+            cursor: 'pointer',
+            zIndex: 4,
+          }}
+          onClick={() => handleCharacterClick('pipkin')}
+          title="Pipkin the Delivery Bird · Click to read the headline"
+        >
+          <StopMotionActor
+            character="pipkin"
+            state="happy"
+            isSpeaking={activeSpeech === 'pipkin'}
+            alt="Pipkin the Delivery Bird perched with special celebration edition newspaper"
+            fallbackSvg={<Pipkin />}
+          />
+          {activeSpeech === 'pipkin' && (
+            <div className="character-speech-bubble bubble-pipkin" role="tooltip">
+              <strong>Pipkin</strong>
+              <p>“SPECIAL EDITION: LOCAL DISASTER DECLARED A COMPLETE MASTERPIECE!”</p>
+            </div>
+          )}
+        </div>
 
-          {/* LARGE WORKSHOP ARCHED WINDOW (Center-Left) */}
-          <g className="workshop-window" transform="translate(60, 20)">
-            {/* Window frame */}
-            <path d="M 0 60 Q 75 0 150 60 L 150 200 L 0 200 Z" fill="#99BDD6" stroke="#5A4739" strokeWidth="5" />
-            {/* Outside morning meadow */}
-            <path d="M 0 160 Q 75 140 150 160 L 150 200 L 0 200 Z" fill="#7E9A82" />
+        {/* 3. SIR CLACK (On Workbench beside his Scrapbook) */}
+        <div
+          className="stage-actor-anchor epilogue-clack-anchor"
+          style={{
+            position: 'absolute',
+            left: '31%',
+            bottom: '22%',
+            width: '100px',
+            height: '115px',
+            cursor: 'pointer',
+            zIndex: 4,
+          }}
+          onClick={() => handleCharacterClick('clack')}
+          title="Sir Clack · Click to hear grumpy mentor praise"
+        >
+          <StopMotionActor
+            character="clack"
+            state="happy"
+            isSpeaking={activeSpeech === 'clack'}
+            alt="Sir Clack the sentient mahogany toolbox with polished brass latches and a warm smile"
+            fallbackSvg={<SirClack />}
+          />
+          {activeSpeech === 'clack' && (
+            <div className="character-speech-bubble bubble-clack" role="tooltip">
+              <strong>Sir Clack</strong>
+              <p>“I suppose... it is not entirely catastrophic. Do not make me say it twice.”</p>
+            </div>
+          )}
+        </div>
 
-            {/* DUCK SLEEPING UNDER THE IMPOSSIBLE TREE SHADOW (Outside in the garden!) */}
-            <g transform="translate(65, 140)">
-              {/* Tree shadow spreading across grass */}
-              <path d="M 25 35 Q 20 15 15 -10 Q -5 -25 0 -45 Q 25 -65 50 -45 Q 65 -25 40 -10 Q 30 15 25 35 Z" fill="#2F3F34" opacity="0.65" />
-              {/* Sleeping cream felt Duck */}
-              <ellipse cx="25" cy="35" rx="14" ry="10" fill="#FFF8F1" stroke="#392F3B" strokeWidth="1.5" />
-              <circle cx="34" cy="30" r="7" fill="#FFF8F1" stroke="#392F3B" strokeWidth="1.5" />
-              <path d="M 40 31 L 46 33 L 40 35 Z" fill="#E8C878" stroke="#392F3B" strokeWidth="1" />
-              {/* Sage scarf */}
-              <rect x="29" y="32" width="5" height="10" rx="1" fill="#88A991" />
-              <line x1="32" y1="28" x2="36" y2="28" stroke="#392F3B" strokeWidth="1" strokeLinecap="round" />
-            </g>
+        {/* 4. THE UNFINISHED ONE (Right-Center Workbench - Proud with Golden Knot) */}
+        <div
+          className="stage-actor-anchor epilogue-unfinished-anchor"
+          style={{
+            position: 'absolute',
+            left: '64%',
+            bottom: '22%',
+            width: '110px',
+            height: '145px',
+            cursor: 'pointer',
+            zIndex: 5,
+          }}
+          onClick={() => handleCharacterClick('unfinished')}
+          title="The Unfinished One · Click to hear Morrow's first friend"
+        >
+          <StopMotionActor
+            character="unfinished"
+            state="happy"
+            isSpeaking={activeSpeech === 'unfinished'}
+            alt="The Unfinished One: navy patchwork felt companion with shining crooked golden chest knot, smiling warmly"
+            fallbackSvg={
+              <svg viewBox="0 0 120 150" width="100%" height="100%">
+                <ellipse cx="60" cy="140" rx="42" ry="8" fill="#161220" opacity="0.4" />
+                <path
+                  d="M 40 70 Q 20 110 44 130 Q 75 145 90 120 Q 100 85 76 68 Q 55 58 40 70 Z"
+                  fill="#25324A"
+                  stroke="#161220"
+                  strokeWidth="3"
+                />
+                <circle cx="50" cy="80" r="4.5" fill="#F7D560" />
+                <circle cx="70" cy="80" r="4.5" fill="#F7D560" />
+                <path d="M 54 94 Q 60 102 66 94" fill="none" stroke="#F7D560" strokeWidth="2.5" strokeLinecap="round" />
+                {/* Golden crooked chest knot */}
+                <circle cx="58" cy="108" r="4" fill="#F7D560" stroke="#FFF8F1" strokeWidth="1" />
+              </svg>
+            }
+          />
+          {activeSpeech === 'unfinished' && (
+            <div className="character-speech-bubble bubble-unfinished" role="tooltip">
+              <strong>The Unfinished One</strong>
+              <p>“You never forgot me. Look at what we stitched together.”</p>
+            </div>
+          )}
+        </div>
 
-            {/* Window pane mullions */}
-            <line x1="75" y1="20" x2="75" y2="200" stroke="#5A4739" strokeWidth="3" />
-            <line x1="0" y1="120" x2="150" y2="120" stroke="#5A4739" strokeWidth="3" />
-          </g>
+        {/* 5. MORROW (Right Workbench - Holding Hot Teacup & Brass Needle) */}
+        <div
+          className="stage-actor-anchor epilogue-morrow-anchor"
+          style={{
+            position: 'absolute',
+            left: '78%',
+            bottom: '22%',
+            width: '120px',
+            height: '150px',
+            cursor: 'pointer',
+            zIndex: 5,
+          }}
+          onClick={() => handleCharacterClick('morrow')}
+          title="Morrow · Click to hear Morrow's words"
+        >
+          <StopMotionActor
+            character="morrow"
+            state="happy"
+            isSpeaking={activeSpeech === 'morrow'}
+            alt="Morrow the Stitchling apprentice smiling happily in his plum scarf with spool tail and mitten paws"
+            fallbackSvg={<Morrow small expression="happy" />}
+          />
+          {activeSpeech === 'morrow' && (
+            <div className="character-speech-bubble bubble-morrow" role="tooltip">
+              <strong>Morrow</strong>
+              <p>“We make wonderful mistakes. Tomorrow will be almost right, too.”</p>
+            </div>
+          )}
+        </div>
 
-          {/* OAK WORKBENCH COUNTERTOP */}
-          <path d="M -20 230 L 620 230 L 620 380 L -20 380 Z" fill="url(#workbench-wood)" filter="url(#morning-glow)" />
-          <line x1="-20" y1="230" x2="620" y2="230" stroke="#DDB095" strokeWidth="3" opacity="0.4" />
-
-          {/* SIR CLACK'S OPEN SCRAPBOOK (Center of workbench) */}
-          <g className="open-scrapbook" transform="translate(130, 215)">
-            <ellipse cx="75" cy="80" rx="90" ry="15" fill="#392F3B" opacity="0.3" />
-            {/* Open leather binding */}
-            <path d="M 0 55 Q 75 62 150 55 L 155 75 Q 75 82 -5 75 Z" fill="#63392A" stroke="#252030" strokeWidth="2" />
-            {/* Left page (Cream handmade paper) */}
-            <path d="M 10 50 Q 75 42 75 50 L 75 110 Q 10 115 10 110 Z" fill="#FFF8F1" stroke="#392F3B" strokeWidth="1.5" />
-            {/* Right page */}
-            <path d="M 75 50 Q 75 42 140 50 L 140 110 Q 75 115 75 110 Z" fill="#FFF8F1" stroke="#392F3B" strokeWidth="1.5" />
-            {/* Pinned polaroid sketch 1: Duck with Tree Shadow */}
-            <rect x="20" y="58" width="22" height="26" fill="#F8F6F4" stroke="#392F3B" strokeWidth="1" transform="rotate(-6 31 71)" />
-            <ellipse cx="30" cy="73" rx="5" ry="4" fill="#E8C878" transform="rotate(-6 31 71)" />
-            {/* Pinned polaroid sketch 2: Inverted Umbrella with Flowers */}
-            <rect x="46" y="62" width="22" height="26" fill="#F8F6F4" stroke="#392F3B" strokeWidth="1" transform="rotate(4 57 75)" />
-            <path d="M 50 78 Q 57 84 64 78" fill="none" stroke="#88A991" strokeWidth="2" transform="rotate(4 57 75)" />
-            {/* Pinned polaroid sketch 3: Clock Ticking 4:03 */}
-            <rect x="85" y="60" width="22" height="26" fill="#F8F6F4" stroke="#392F3B" strokeWidth="1" transform="rotate(-4 96 73)" />
-            <circle cx="96" cy="73" r="6" fill="none" stroke="#D4A853" strokeWidth="1.2" transform="rotate(-4 96 73)" />
-            {/* Official Purple Stamp: "SOMEHOW LOVELY" */}
-            <rect x="88" y="90" width="46" height="15" fill="none" stroke="#A34063" strokeWidth="1.5" strokeDasharray="2,2" transform="rotate(-5 111 97)" />
-            <text x="111" y="101" fill="#A34063" fontSize="6" fontWeight="bold" textAnchor="middle" transform="rotate(-5 111 97)">
-              SOMEHOW LOVELY
-            </text>
-            {/* Sir Clack's Brass Counter Bell on the side */}
-            <ellipse cx="170" cy="75" rx="10" ry="3" fill="#392F3B" opacity="0.3" />
-            <path d="M 162 74 Q 170 58 178 74 Z" fill="#E8C878" stroke="#392F3B" strokeWidth="1.5" />
-            <rect x="169" y="55" width="2" height="4" fill="#C98F70" />
-            <circle cx="170" cy="55" r="2" fill="#E8C878" />
-          </g>
-
-          {/* PIPKIN (Perched on the window sill holding the Special Celebration Edition) */}
-          <g className="pipkin-epilogue" transform="translate(190, 130)">
-            <ellipse cx="18" cy="42" rx="14" ry="12" fill="#88A991" stroke="#392F3B" strokeWidth="2" />
-            <circle cx="24" cy="38" r="9" fill="#FFF8F1" stroke="#392F3B" strokeWidth="1.2" />
-            <circle cx="28" cy="28" r="8" fill="#88A991" stroke="#392F3B" strokeWidth="1.8" />
-            <circle cx="30" cy="27" r="3" fill="#392F3B" />
-            <path d="M 34 28 L 44 31 L 34 34 Z" fill="#E8C878" stroke="#392F3B" strokeWidth="1.2" />
-            {/* Miniature Newspaper */}
-            <rect x="8" y="24" width="20" height="24" fill="#FFF8F1" stroke="#392F3B" strokeWidth="1.2" transform="rotate(8 18 36)" />
-            <text x="18" y="32" fill="#A34063" fontSize="3.5" fontWeight="bold" textAnchor="middle" transform="rotate(8 18 36)">
-              SPECIAL EDITION
-            </text>
-            <text x="18" y="38" fill="#25324A" fontSize="2.8" textAnchor="middle" transform="rotate(8 18 36)">
-              WORLD SAVED!
-            </text>
-          </g>
-
-          {/* SIR CLACK (On the counter beside his scrapbook) */}
-          <g className="clack-epilogue" transform="translate(270, 160)">
-            <ellipse cx="30" cy="72" rx="28" ry="6" fill="#392F3B" opacity="0.3" />
-            <rect x="5" y="28" width="50" height="42" rx="4" fill="#8F5D48" stroke="#252030" strokeWidth="2.5" />
-            <rect x="12" y="30" width="6" height="8" rx="1" fill="#E8C878" stroke="#252030" strokeWidth="1" />
-            <rect x="42" y="30" width="6" height="8" rx="1" fill="#E8C878" stroke="#252030" strokeWidth="1" />
-            <path d="M 18 28 L 18 12 Q 30 6 42 12 L 42 28" fill="none" stroke="#63392A" strokeWidth="4" strokeLinecap="round" />
-            {/* Proud, subtle little smile! */}
-            <ellipse cx="20" cy="44" rx="3.5" ry="4" fill="#252030" />
-            <ellipse cx="40" cy="44" rx="3.5" ry="4" fill="#252030" />
-            {/* Softened eyebrows */}
-            <line x1="16" y1="38" x2="24" y2="39" stroke="#252030" strokeWidth="2" strokeLinecap="round" />
-            <line x1="44" y1="38" x2="36" y2="39" stroke="#252030" strokeWidth="2" strokeLinecap="round" />
-            {/* Keyhole slot with gold ribbon */}
-            <rect x="28" y="52" width="4" height="6" rx="1" fill="#E8C878" stroke="#252030" strokeWidth="1" />
-            <path d="M 28 58 Q 30 66 35 68" fill="none" stroke="#E8C878" strokeWidth="1.5" />
-          </g>
-
-          {/* MORROW & THE UNFINISHED ONE (Right side of counter - happily together!) */}
-          {/* The Unfinished One */}
-          <g className="unfinished-epilogue" transform="translate(325, 140)">
-            <ellipse cx="35" cy="88" rx="26" ry="6" fill="#392F3B" opacity="0.25" />
-            <path
-              d="M 25 45 Q 12 70 28 85 Q 48 95 58 80 Q 65 58 50 44 Q 36 36 25 45 Z"
-              fill="#25324A"
-              stroke="#1B1726"
-              strokeWidth="2.2"
-            />
-            {/* Asymmetric ears */}
-            <path d="M 28 42 Q 20 18 28 14 Q 34 22 34 40 Z" fill="#25324A" stroke="#1B1726" strokeWidth="1.8" />
-            <path d="M 44 40 Q 55 20 62 26 Q 55 40 48 40 Z" fill="#25324A" stroke="#1B1726" strokeWidth="1.8" />
-            {/* Glowing friendly eyes */}
-            <circle cx="34" cy="52" r="3.5" fill="#E8C878" />
-            <circle cx="48" cy="52" r="3.5" fill="#E8C878" />
-            {/* Golden crooked knot */}
-            <circle cx="40" cy="65" r="2.5" fill="#E8C878" />
-          </g>
-
-          {/* Morrow */}
-          <g className="morrow-epilogue" transform="translate(365, 125)">
-            <ellipse cx="45" cy="105" rx="32" ry="7" fill="#392F3B" opacity="0.25" />
-            {/* Spool Tail wagging happily! */}
-            <g transform="translate(62, 75) rotate(22)">
-              <rect x="0" y="0" width="8" height="11" rx="2" fill="#8F5D48" stroke="#1B1726" strokeWidth="1.5" />
-              <rect x="2" y="2" width="4" height="7" fill="#E8C878" />
-              <path d="M 4 11 Q 8 20 16 22" fill="none" stroke="#E8C878" strokeWidth="2.5" strokeLinecap="round" />
-            </g>
-            {/* Pear Body */}
-            <path
-              d="M 30 50 C 14 74 18 98 44 100 C 70 98 74 74 60 50 C 55 40 35 40 30 50 Z"
-              fill="#C98F70"
-              stroke="#1B1726"
-              strokeWidth="2.4"
-            />
-            {/* Asymmetric ears */}
-            <path d="M 32 40 Q 22 14 34 10 Q 40 22 38 38 Z" fill="#C98F70" stroke="#1B1726" strokeWidth="2" />
-            <path d="M 52 40 Q 68 20 75 28 Q 68 42 58 42 Z" fill="#C98F70" stroke="#1B1726" strokeWidth="2" />
-            {/* Forehead gold diamond */}
-            <path d="M 44 34 L 46.5 37 L 44 40 L 41.5 37 Z" fill="#E8C878" stroke="#1B1726" strokeWidth="0.8" />
-            {/* Button eyes */}
-            <circle cx="38" cy="48" r="3.5" fill="#1B1726" />
-            <circle cx="39" cy="47" r="1" fill="#FFF8F1" />
-            <circle cx="52" cy="48" r="3.5" fill="#1B1726" />
-            <circle cx="53" cy="47" r="1" fill="#FFF8F1" />
-            {/* Happy open smile */}
-            <path d="M 41 55 Q 45 60 49 55" fill="none" stroke="#1B1726" strokeWidth="1.8" strokeLinecap="round" />
-            {/* Plum Scarf */}
-            <path d="M 26 56 Q 44 62 62 56 Q 64 64 44 68 Q 24 64 26 56 Z" fill="#A34063" stroke="#1B1726" strokeWidth="2" />
-            <path d="M 34 62 L 32 78 L 40 76 Z" fill="#A34063" stroke="#1B1726" strokeWidth="1.2" />
-            {/* Mitten paws holding a tiny steaming teacup */}
-            <ellipse cx="44" cy="74" rx="7" ry="5" fill="#FFF8F1" stroke="#392F3B" strokeWidth="1.5" />
-            <path d="M 44 66 Q 42 61 44 58" fill="none" stroke="#E8C878" strokeWidth="1.2" strokeLinecap="round" opacity="0.75" />
-          </g>
-        </svg>
-      </div>
-
-      <div className="storybook-scene-bottom">
-        <span>Home, but different</span>
-        <span>✦</span>
+        {/* Bottom Epilogue Atmosphere Ribbon */}
+        <div className="storybook-scene-bottom">
+          <span style={{ background: 'rgba(58, 38, 26, 0.85)', padding: '3px 10px', borderRadius: '8px', color: '#FFF8F1', font: "700 0.72rem 'Space Mono', monospace" }}>
+            The Almost-Right Repair Shop · Open For All Imperfect Things
+          </span>
+          <span style={{ background: 'rgba(58, 38, 26, 0.85)', padding: '3px 8px', borderRadius: '8px', color: '#F7D560' }}>✳</span>
+        </div>
       </div>
     </section>
   );

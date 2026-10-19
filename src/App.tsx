@@ -261,6 +261,8 @@ export default function App() {
               onPuzzleSuccess={() => setPuzzleDone(true)}
               onNextChapter={nextChapter}
               playChime={() => play('stitch')}
+              isMuted={save.muted}
+              onToggleMute={toggleGlobalMute}
             />
           ) : chapter.id === 'weather' ? (
             <WeatherStage
@@ -269,6 +271,8 @@ export default function App() {
               onPuzzleSuccess={() => setPuzzleDone(true)}
               onNextChapter={nextChapter}
               playChime={() => play('stitch')}
+              isMuted={save.muted}
+              onToggleMute={toggleGlobalMute}
             />
           ) : (
             <>

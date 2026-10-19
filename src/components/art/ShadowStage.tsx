@@ -12,6 +12,8 @@ export interface ShadowStageProps {
   onPuzzleSuccess?: () => void;
   onNextChapter?: () => void;
   playChime?: () => void;
+  isMuted?: boolean;
+  onToggleMute?: () => void;
 }
 
 interface DialogueBeat {
@@ -112,6 +114,8 @@ export const ShadowStage: React.FC<ShadowStageProps> = ({
   onPuzzleSuccess,
   onNextChapter,
   playChime = () => {},
+  isMuted = true,
+  onToggleMute,
 }) => {
   // Current beat: 0..3 = dialogue, 4 = tactile stitching, 5 = celebration
   const [currentBeat, setCurrentBeat] = useState<number>(() => (puzzleDone ? 5 : Math.min(dialog, 3)));
@@ -478,6 +482,8 @@ export const ShadowStage: React.FC<ShadowStageProps> = ({
               caption="“My shadow has been confiscated. Apparently I am too duck-shaped.”"
               onEnded={() => setShowCinematic(false)}
               ariaLabel="Duck stop-motion reveal video"
+              isMuted={isMuted}
+              onToggleMute={onToggleMute}
             />
             <button
               type="button"

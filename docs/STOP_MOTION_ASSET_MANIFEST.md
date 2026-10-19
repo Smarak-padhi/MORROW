@@ -1,6 +1,6 @@
 # MORROW — Stop-Motion Asset Manifest & Production Inventory
 
-**Document Version:** 1.0.0 (Loop 12.7)  
+**Document Version:** 1.4.0 (Sprint 04: The Almost-Right Repair Shop & Visual Continuity)  
 **Standard:** Handcrafted Miniature Stop-Motion & 2.5D Puppet Rigging  
 **Artistic Baseline:** 7 Approved Google Flow Character Designs (`production-references/ensemble-approved.png`)
 
@@ -108,7 +108,52 @@ All cinematic video slots are 16:9 full-frame stop-motion clips generated via Go
 
 ---
 
-## 6. Zero-Fabrication Integrity Statement
+## 6. Sprint 04 Environmental Sets & Tactile Keepsake Systems
+
+### A. The Almost-Right Repair Shop (`src/components/art/EpilogueStage.tsx`)
+- Handcrafted sun-drenched miniature artisan workshop plate (960×540 SVG stage).
+- Full ensemble stop-motion actors mounted via responsive percentage anchors (`.stage-actor-anchor`):
+  - **Morrow**: standing at the workbench with mitten paws, warm teacup, and brass needle (`state="happy"`).
+  - **The Unfinished One**: standing side-by-side with Morrow, radiant golden chest knot (`state="happy"`).
+  - **Sir Clack**: open beside his scrapbook, brass latches polished, soft mentor smile (`state="happy"`).
+  - **Pipkin**: perched on the sunny window sill with "SPECIAL EDITION: WORLD SAVED!" (`state="happy"`).
+  - **Professor Primrose Perfect**: observing with an approving nod in lilac silk (`state="happy"`).
+  - **Duck**: resting peacefully in the meadow garden outside the window under the 200-year oak tree shadow.
+- Workshop details: timber rafters with dried lavender, brass gear windchime, shelves of spools, glass button jars, handwritten labels ("TO BE LOVED"), open leather scrapbook, and brass counter bell.
+- Natural volumetric morning sunbeam and floating dust motes with reduced-motion fallback.
+
+### B. Tactile Keepsake Scrapbook Album (`src/components/CharacterScrapbook.tsx`)
+- Replaces simple cards with a dual-mode keepsake album:
+  - **Mode 1: 5 Milestone Journey Memories**:
+    1. *The Workshop*: Morrow waking up, brass bell, first loose stitch (`"WONDERFUL BEGINNING"`).
+    2. *Shadow Village*: 200-year oak tree shadow stitched to Duck's feet (`"IMPOSSIBLE SILHOUETTE"`).
+    3. *Upside-Down Forest*: Inverted umbrella bucket, blooming lilies, Frog Mayor (`"SOMEHOW DELIGHTFUL"`).
+    4. *Tomorrow Town*: Physical impossible clock repaired, 4:03 golden moment (`"TIME MADE SWEET"`).
+    5. *Clock Tower Cathedral*: Morrow and The Unfinished One hold hands over the crooked knot (`"IMPERFECT · APPROVED"`).
+  - Pinned polaroid photos with brass pushpins, washi tape, chapter dates, and Sir Clack's private disaster log annotations.
+  - **Mode 2: The Almost-Right Friends**: Roster of 7 character portfolios.
+
+### C. Weather Forest Floor & Terrain Continuity (`src/components/art/WeatherStage.tsx`)
+- Replaced flat moss polygon with multi-layered handcrafted forest floor:
+  - Deep rich loam foundation underbed (`url(#loam-ground-grad)`).
+  - Undulating needle-felted moss cushions with organic contour lines.
+  - Gnarled tree root buttresses weaving across the loam past Clack, under Frog Mayor, and up toward Morrow.
+  - Grounded contact shadow pools anchored to terrain under each character.
+  - Lichen specks, textured acorn caps, and fly agaric toadstools with stitched French knots.
+  - Mobile header relief styling preventing text crowding.
+
+### D. Cathedral Material Realism (`src/components/art/FinaleStage.tsx`)
+- Deep Gothic arcade stone courses, masonry mortar lines, and pointed arch cutouts.
+- Directional light shafts slanting from the stained-glass rose window down to character platforms.
+- Smooth moonlight-to-golden-dawn radiance transition.
+- Soft elliptical character contact shadows grounded to catwalk planks.
+
+### E. Authoritative Global Mute Architecture
+- Global mute state (`save.muted`, `toggleGlobalMute`) authoritatively piped from `App.tsx` into `ShadowStage`, `WeatherStage`, `ClockStage`, and `FinaleStage`.
+
+---
+
+## 7. Zero-Fabrication Integrity Statement
 
 In strict accordance with project non-negotiables:
 - No placeholder assets or mismatched web clipart are ever disguised as finished stop-motion art.

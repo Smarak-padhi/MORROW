@@ -165,13 +165,73 @@ export const FinaleStage: React.FC<Props> = ({
                 <stop offset="60%" stopColor="#E8C878" stopOpacity="0.15" />
                 <stop offset="100%" stopColor="#1B1726" stopOpacity="0" />
               </radialGradient>
+              <linearGradient id="cathedral-stone" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#2D243A" />
+                <stop offset="50%" stopColor="#1E1728" />
+                <stop offset="100%" stopColor="#120D1A" />
+              </linearGradient>
+              <linearGradient id="cathedral-stone-dark" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#140E1C" />
+                <stop offset="100%" stopColor="#251C30" />
+              </linearGradient>
+              <linearGradient id="cathedral-light-shaft-left" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={isDawn ? "#F7D560" : "#99BDD6"} stopOpacity={isDawn ? "0.35" : "0.22"} />
+                <stop offset="60%" stopColor={isDawn ? "#E8C878" : "#5A738E"} stopOpacity={isDawn ? "0.18" : "0.1"} />
+                <stop offset="100%" stopColor={isDawn ? "#D4A853" : "#2B3548"} stopOpacity="0" />
+              </linearGradient>
+              <linearGradient id="cathedral-light-shaft-right" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={isDawn ? "#F7D560" : "#99BDD6"} stopOpacity={isDawn ? "0.35" : "0.22"} />
+                <stop offset="60%" stopColor={isDawn ? "#E8C878" : "#5A738E"} stopOpacity={isDawn ? "0.18" : "0.1"} />
+                <stop offset="100%" stopColor={isDawn ? "#D4A853" : "#2B3548"} stopOpacity="0" />
+              </linearGradient>
               <filter id="cathedral-gold-glow">
                 <feDropShadow dx="0" dy="0" stdDeviation="6" floodColor="#F7D560" floodOpacity="0.8" />
               </filter>
             </defs>
 
+            {/* GOTHIC STONE ARCADE WALLS & ARCHITECTURAL FLANKING PILASTERS */}
+            <g className="cathedral-stone-arcades">
+              {/* Left Stone Arcade (Behind Unfinished One) */}
+              <path
+                d="M 0 0 L 140 0 L 140 380 Q 70 320 0 380 Z"
+                fill="url(#cathedral-stone)"
+                stroke="#120D1A"
+                strokeWidth="2.5"
+              />
+              {/* Left Pointed Arch Cutout & Secondary Bay */}
+              <path
+                d="M 25 120 Q 70 50 115 120 L 115 340 L 25 340 Z"
+                fill="#0F0A16"
+                stroke="#2B2138"
+                strokeWidth="1.8"
+              />
+              {/* Stone Course Masonry Lines (Left) */}
+              {[40, 90, 160, 220, 280, 340].map((y) => (
+                <line key={`left-stone-${y}`} x1="0" y1={y} x2="140" y2={y} stroke="#171120" strokeWidth="1.5" />
+              ))}
+
+              {/* Right Stone Arcade (Behind Morrow) */}
+              <path
+                d="M 960 0 L 820 0 L 820 380 Q 890 320 960 380 Z"
+                fill="url(#cathedral-stone)"
+                stroke="#120D1A"
+                strokeWidth="2.5"
+              />
+              {/* Right Pointed Arch Cutout & Secondary Bay */}
+              <path
+                d="M 845 120 Q 890 50 935 120 L 935 340 L 845 340 Z"
+                fill="#0F0A16"
+                stroke="#2B2138"
+                strokeWidth="1.8"
+              />
+              {/* Stone Course Masonry Lines (Right) */}
+              {[40, 90, 160, 220, 280, 340].map((y) => (
+                <line key={`right-stone-${y}`} x1="820" y1={y} x2="960" y2={y} stroke="#171120" strokeWidth="1.5" />
+              ))}
+            </g>
+
             {/* VAST MOONLIT CLOCK FACE & STAINED-GLASS ROSE WINDOW (Center Background) */}
-            <g transform="translate(480, 180)" className="cathedral-clock-face" opacity={isDawn ? 0.9 : 0.65}>
+            <g transform="translate(480, 180)" className="cathedral-clock-face" opacity={isDawn ? 0.95 : 0.7}>
               <circle cx="0" cy="0" r="160" fill="url(#cathedral-moon-glow)" />
               <circle cx="0" cy="0" r="148" fill="none" stroke="url(#cathedral-brass)" strokeWidth="6" />
               <circle cx="0" cy="0" r="132" fill="none" stroke="#2B2238" strokeWidth="2" strokeDasharray="6,4" />
@@ -197,6 +257,20 @@ export const FinaleStage: React.FC<Props> = ({
               <circle cx="0" cy="0" r="22" fill="#2D233E" stroke="#E8C878" strokeWidth="1.5" />
             </g>
 
+            {/* DIRECTIONAL LIGHT SHAFTS (Slanting from Rose Window down to Platforms) */}
+            <g className="cathedral-light-shafts" style={{ mixBlendMode: 'screen', pointerEvents: 'none' }}>
+              {/* Left Shaft Illuminating The Unfinished One */}
+              <polygon
+                points="420,160 480,160 260,490 120,490"
+                fill="url(#cathedral-light-shaft-left)"
+              />
+              {/* Right Shaft Illuminating Morrow */}
+              <polygon
+                points="480,160 540,160 840,490 700,490"
+                fill="url(#cathedral-light-shaft-right)"
+              />
+            </g>
+
             {/* HANGING ROPES & SUSPENDED EMBROIDERY THREAD STRANDS */}
             <g className="hanging-ropes" stroke="#4A3F58" strokeWidth="1.8" opacity="0.6">
               <line x1="160" y1="0" x2="160" y2="340" strokeDasharray="8,3" />
@@ -208,7 +282,7 @@ export const FinaleStage: React.FC<Props> = ({
               <path d="M 680 170 Q 620 230 580 210" fill="none" stroke="#E8C878" strokeWidth="1.5" opacity="0.5" />
             </g>
 
-            {/* GIGANTIC CENTRAL ESCAPEMENT GEAR IN CHASM (480, 380) */}
+            {/* GIGANTIC CENTRAL ESCAPEMENT GEAR IN CHASM (480, 420) */}
             <g
               transform="translate(480, 420)"
               className={effectiveStage >= 4 ? 'cathedral-gear-spin-slow' : 'cathedral-gear-spin'}
@@ -224,18 +298,22 @@ export const FinaleStage: React.FC<Props> = ({
             <g className="cathedral-platform-left" transform="translate(190, 440)">
               <ellipse cx="0" cy="0" rx="150" ry="40" fill="#2d243a" stroke="url(#cathedral-brass)" strokeWidth="10" strokeDasharray="16,10" />
               <ellipse cx="0" cy="0" rx="115" ry="28" fill="#1e1828" stroke="#120c18" strokeWidth="2" />
-              {/* Wooden Catwalk Plank Texture */}
+              {/* Catwalk Plank Texture */}
               <line x1="-90" y1="-5" x2="90" y2="-5" stroke="#3d324c" strokeWidth="2" />
               <line x1="-80" y1="5" x2="80" y2="5" stroke="#3d324c" strokeWidth="2" />
+              {/* Soft character contact shadow */}
+              <ellipse cx="0" cy="2" rx="46" ry="12" fill="#0D0914" opacity="0.75" />
             </g>
 
             {/* RIGHT GEAR PLATFORM (Where Morrow stands) */}
             <g className="cathedral-platform-right" transform="translate(770, 440)">
               <ellipse cx="0" cy="0" rx="150" ry="40" fill="#2d243a" stroke="url(#cathedral-brass)" strokeWidth="10" strokeDasharray="16,10" />
               <ellipse cx="0" cy="0" rx="115" ry="28" fill="#1e1828" stroke="#120c18" strokeWidth="2" />
-              {/* Wooden Catwalk Plank Texture */}
+              {/* Catwalk Plank Texture */}
               <line x1="-90" y1="-5" x2="90" y2="-5" stroke="#3d324c" strokeWidth="2" />
               <line x1="-80" y1="5" x2="80" y2="5" stroke="#3d324c" strokeWidth="2" />
+              {/* Soft character contact shadow */}
+              <ellipse cx="0" cy="2" rx="46" ry="12" fill="#0D0914" opacity="0.75" />
             </g>
 
             {/* HIGH OBSERVATION BALCONY FOR PROFESSOR PERFECT (480, 115) */}
