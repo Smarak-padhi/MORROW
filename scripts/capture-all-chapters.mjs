@@ -135,9 +135,11 @@ try {
     await snap('06_epilogue_scrapbook_morrow_390px.png');
     // Click Sir Clack tab
     await page.getByRole('tab', { name: /Sir Clack/i }).click();
+    await page.waitForTimeout(250);
     await snap('06_epilogue_scrapbook_clack_390px.png');
     // Click The Unfinished One tab
     await page.getByRole('tab', { name: /The Unfinished One/i }).click();
+    await page.waitForTimeout(250);
     await snap('06_epilogue_scrapbook_unfinished_390px.png');
   }
 

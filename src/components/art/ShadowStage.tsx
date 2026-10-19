@@ -64,24 +64,25 @@ export const ShadowStage: React.FC<Props> = ({ dialog: _dialog }) => {
             className="shadow-duck-video"
           />
 
-          {/* THE MANDATORY IMPOSSIBLE TREE SHADOW: Anchored to Duck's feet */}
+          {/* THE MANDATORY IMPOSSIBLE TREE SHADOW: Anchored to Duck's feet and projected across the cobblestones */}
           <div className="impossible-tree-shadow" aria-hidden="true">
-            <svg viewBox="0 0 240 300" className="tree-shadow-svg">
+            <svg viewBox="0 0 240 280" className="tree-shadow-svg">
               <defs>
                 <linearGradient id="tree-shadow-grad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#1a1420" stopOpacity="0.88" />
-                  <stop offset="60%" stopColor="#1a1420" stopOpacity="0.75" />
-                  <stop offset="100%" stopColor="#1a1420" stopOpacity="0.5" />
+                  <stop offset="0%" stopColor="#1a1420" stopOpacity="0.92" />
+                  <stop offset="45%" stopColor="#1a1420" stopOpacity="0.84" />
+                  <stop offset="100%" stopColor="#1a1420" stopOpacity="0.60" />
                 </linearGradient>
               </defs>
-              {/* Massive Gnarled Oak Tree Silhouette projecting from Duck's feet */}
+              {/* Massive Gnarled Oak Tree Silhouette projecting from Duck's feet across the stones */}
               <path
-                d="M 120 290 Q 115 230 110 180 Q 80 150 40 160 Q 20 120 50 90 Q 30 50 70 30 Q 120 10 170 30 Q 210 50 190 90 Q 220 120 200 160 Q 160 150 130 180 Q 125 230 120 290 Z"
+                d="M 116 8 L 126 8 Q 124 45 135 68 Q 170 58 196 82 Q 228 105 224 142 Q 234 186 200 216 Q 162 246 120 240 Q 78 246 40 216 Q 6 186 16 142 Q 12 105 44 82 Q 70 58 105 68 Q 116 45 116 8 Z"
                 fill="url(#tree-shadow-grad)"
               />
-              {/* Tree branches spreading across the cobblestones */}
-              <path d="M 112 210 Q 75 180 55 130" stroke="#1a1420" strokeWidth="8" strokeLinecap="round" fill="none" opacity="0.8" />
-              <path d="M 128 200 Q 165 170 185 130" stroke="#1a1420" strokeWidth="8" strokeLinecap="round" fill="none" opacity="0.8" />
+              {/* Spreading shadow branches along the cobblestone perspective */}
+              <path d="M 120 68 Q 155 98 185 138" stroke="#1a1420" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.75" />
+              <path d="M 120 68 Q 85 98 55 138" stroke="#1a1420" strokeWidth="6" strokeLinecap="round" fill="none" opacity="0.75" />
+              <path d="M 120 105 Q 120 155 120 205" stroke="#1a1420" strokeWidth="7" strokeLinecap="round" fill="none" opacity="0.75" />
             </svg>
           </div>
 

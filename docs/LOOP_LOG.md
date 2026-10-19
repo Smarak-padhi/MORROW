@@ -16,8 +16,8 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 | **L07: Epilogue & Persistence** | **COMPLETE** | Defensive `localStorage` ('morrow-v1' / 'morrow-v2'), reset dialog, unlock states preserved, portfolio moved to epilogue only. | Storage persistence & recovery verified. |
 | **L08: Optional Spline 3D Scene** | **DEFERRED / OPTIONAL** | Spline evaluated as strictly optional; 2D SVG fallback always authoritative. | Maintain optionality. |
 | **L09: Mobile & Keyboard QA (G4)** | **COMPLETE** | Full keyboard-only and mobile viewport verification (320px, 375px, 430px, 768px, 1280px, 1440px) executed with Playwright. 0 console errors, 0 layout overflows, full adventure verified. | Ready for deployment. |
-| **Motion Pass & Storybook Feel** | **COMPLETE** | Perspective page-turns, Morrow squash/tilt reactions, atmospheric particles, scroll reveals, and golden puzzle completion pulses verified under both normal and reduced motion. | Proceed to Comic Rebuild. |
-| **Master Build Directive (L01–L08)** | **COMPLETE** | Full stop-motion comic rebuild across all 6 chapters: 9-panel workshop comic with inline video/SVGs, single duck tree shadow, tactile puzzles, bespoke stages for all chapters, epilogue character scrapbook, and 19 Playwright verification screenshots. | Ship & Deploy. |
+| **Master Build Directive (L01–L08)** | **COMPLETE** | Full stop-motion comic rebuild across all 6 chapters: 9-panel workshop comic with inline video/SVGs, single duck tree shadow, tactile puzzles, bespoke stages for all chapters, epilogue character scrapbook, and 19 Playwright verification screenshots. | Proceed to Loop 09. |
+| **Loop 09: Release Hardening & Polish** | **COMPLETE** | Ground-projected tree shadow anchored to Duck's feet, scene bottom text breathing room, high-contrast scrapbook tabs, 0 horizontal overflow across 320–1440px, full Playwright verification. | Release Candidate Ready. |
 
 ---
 
@@ -184,4 +184,34 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
     - `scripts/viewport_audit.mjs`: PASSED across 320px, 375px, 430px, 768px, 1280px, 1440px for all 6 chapters (ZERO horizontal overflow).
     - Captured 19 Playwright verification screenshots into `qa/screenshots/loop07/` and mirrored to artifact storage:
       - `00_opening_390px.png`, `01_workshop_comic_390px.png`, `02_shadows_stage_390px.png`, `02_shadows_puzzle_solved_390px.png`, `03_weather_stage_390px.png`, `03_weather_puzzle_solved_390px.png`, `04_clock_stage_390px.png`, `04_clock_puzzle_solved_390px.png`, `05_finale_stage_390px.png`, `05_finale_puzzle_solved_390px.png`, `06_epilogue_stage_390px.png`, `06_epilogue_scrapbook_morrow_390px.png`, `06_epilogue_scrapbook_clack_390px.png`, `06_epilogue_scrapbook_unfinished_390px.png`, `07_chapter_map_390px.png`, `desktop_map_1280px.png`, `desktop_weather_1280px.png`, `desktop_finale_1280px.png`, `desktop_epilogue_1280px.png`.
+
+---
+
+### [2026-10-19] Loop 09 — Release Hardening & Visual Polish (Phases 1–6)
+- **Phase 1 (Synchronize and Audit):**
+  - Confirmed local tree cleanliness and checked upstream `origin/feat/skills-discovery-and-bootstrap`.
+  - Pushed missing production commits (`cb85046`, `135e64f`, `5ddedaf`, `308f929`) safely to GitHub remote. Verified 0 diverged commits.
+- **Phase 2 (Visual QA Inspection & Fixes):**
+  - *Duck Tree Shadow Geometry Refinement:* Visual analysis of `02_shadows_stage_390px.png` revealed the previous shadow coordinate (`top: 52%`) rested over Duck's lower belly. Repositioned trunk anchor precisely to Duck's planted feet on the cobblestone street (`top: 74%, left: 45%`) with 3D ground perspective (`perspective(260px) rotateX(45deg) rotate(25deg)`). Duck's body, face, knitted stitches, and mint scarf are 100% visible, with the impossible oak tree shadow authentically cast across the cobblestone pavement.
+  - *Scene Bottom Clearance:* In all storybook stages (`WeatherStage`, `ClockStage`, `FinaleStage`, `EpilogueStage`), adjusted `.storybook-scene-bottom` from `bottom: 25px` to `bottom: clamp(42px, 6svh, 52px)` to prevent text clipping behind the negative top margin (`-25px`) and curved border-radius of `.storybook-reading`.
+  - *Scene Label Contrast:* Added subtle text shadows (`text-shadow: 0 1px 2px rgba(255,248,241,0.6)` in daylight, `rgba(10,8,14,0.7)` in finale) ensuring crisp legibility over dark backgrounds.
+- **Phase 3 (Real Mobile Readiness):**
+  - Tested viewports: 320px, 375px, 390px, 430px, 768px, 1280px, 1440px.
+  - 0 horizontal overflow across all chapters; min 44px touch targets preserved.
+  - Sticky controls, browser back navigation, scroll behavior, and safe-area insets validated.
+  - Audio remains user-gesture gated (default muted).
+  - Reduced-motion instantaneous transitions verified with `transition-duration: 0.01ms !important`.
+- **Phase 4 (Scrapbook Contrast & Transition Polish):**
+  - Upgraded `.scrapbook-tab` styling with high-contrast text (`#392F3B` on `#ffffff` in light mode, `#fff8f1` on `#25324A` in dark mode).
+  - Explicit active state pill: background `var(--berry)` (`#A34063`), white text, elevation shadow.
+  - Added 250ms settle buffer to automated tab screenshot captures.
+- **Phase 5 (Verification Suite Pass):**
+  - `npm run build`: PASSED in 3.07s (0 errors).
+  - `scripts/comic-visual-qa.mjs`: PASSED (9/9 panels, 0 overflow, 0 collision at 320–768px).
+  - `scripts/mobile-qa.mjs`: PASSED (full 6-chapter walkthrough, 4 puzzles, epilogue, reload).
+  - `scripts/viewport_audit.mjs`: PASSED across 320px, 375px, 430px, 768px, 1280px, 1440px (ZERO overflow).
+  - `scripts/capture-all-chapters.mjs`: Captured and verified all 19 screenshots in `qa/screenshots/loop07/`.
+- **Phase 6 (Release Candidate Baseline):**
+  - Ready for final review. No merge or deployment initiated without user authorization.
+
 

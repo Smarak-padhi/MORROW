@@ -1034,9 +1034,9 @@ footer button {
 .storybook-landscape span { position:absolute; left:-15%; right:-15%; bottom:-17%; height:43%; border-radius:50% 50% 0 0; background:#78998d; transform:rotate(-4deg); }
 .storybook-landscape span:nth-child(2) { left:30%; right:-40%; bottom:-23%; height:48%; background:#a6b69a; transform:rotate(8deg); }
 .storybook-landscape span:nth-child(3) { left:-20%; right:45%; bottom:-26%; height:40%; background:#cfad92; transform:rotate(-10deg); }
-.storybook-scene-label,.storybook-scene-bottom { position:absolute; z-index:5; display:flex; justify-content:space-between; left:clamp(18px,5vw,70px); right:clamp(18px,5vw,70px); font:700 .7rem 'Space Mono',monospace; letter-spacing:.08em; color:#392F3B; }
-.storybook-scene-label { top:95px; } .storybook-scene-bottom { bottom:25px; }
-.chapter-finale .storybook-scene-label,.chapter-finale .storybook-scene-bottom { color:#fff8f1; }
+.storybook-scene-label,.storybook-scene-bottom { position:absolute; z-index:5; display:flex; justify-content:space-between; left:clamp(18px,5vw,70px); right:clamp(18px,5vw,70px); font:700 .7rem 'Space Mono',monospace; letter-spacing:.08em; color:#392F3B; text-shadow:0 1px 2px rgba(255,248,241,0.6); }
+.storybook-scene-label { top:clamp(74px, 10svh, 92px); } .storybook-scene-bottom { bottom:clamp(42px, 6svh, 52px); }
+.chapter-finale .storybook-scene-label,.chapter-finale .storybook-scene-bottom { color:#fff8f1; text-shadow:0 1px 3px rgba(10,8,14,0.7); }
 .storybook-character { position:absolute; z-index:3; bottom:7%; left:50%; transform:translateX(-50%); width:min(48vw,450px); display:grid; place-items:center; animation:story-rise .8s both; }
 .storybook-character .morrow { width:100%; max-height:65vh; animation:storybook-float 5s ease-in-out infinite; }
 .storybook-companion { position:absolute; z-index:4; bottom:10%; width:clamp(85px,12vw,170px); height:auto; max-height:180px; filter:drop-shadow(0 12px 10px rgba(0,0,0,.18)); }
@@ -1084,7 +1084,8 @@ footer button {
   .storybook-stage { height:66svh; min-height:390px; }
   .storybook-character { width:min(67vw,310px); bottom:11%; }
   .storybook-companion { bottom:13%; width:85px; }.companion-left { left:3%; }.companion-right { right:3%; }
-  .storybook-scene-label { top:80px; }
+  .storybook-scene-label { top:76px; }
+  .storybook-scene-bottom { bottom:42px; }
   .storybook-reading { margin-top:-25px; padding:30px 20px 45px; }
   .storybook-dialogue { min-height:110px; }
   .storybook-map-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
@@ -1443,25 +1444,27 @@ img,svg,video,canvas { max-width:100%; }
   object-fit: cover;
 }
 
-/* The Impossible Tree Shadow anchored directly at Duck's feet */
+/* The Impossible Tree Shadow anchored directly at Duck's feet and projected across the cobblestones */
 .impossible-tree-shadow {
   position: absolute;
-  left: 38%;
-  bottom: 12%;
-  width: clamp(140px, 32vw, 240px);
+  left: 45%;
+  top: 74%;
+  width: clamp(140px, 36vw, 190px);
   pointer-events: none;
   z-index: 3;
-  transform-origin: bottom center;
-  transform: rotate(-18deg) skewX(-15deg);
-  filter: drop-shadow(0 2px 8px rgba(10, 8, 14, 0.7));
+  transform-origin: top left;
+  transform: perspective(260px) rotateX(45deg) rotate(25deg);
+  filter: blur(1px) drop-shadow(0 3px 8px rgba(10, 8, 14, 0.6));
   mix-blend-mode: multiply;
-  opacity: 0.92;
+  opacity: 0.90;
 }
 
 .impossible-tree-shadow.static {
   position: absolute;
-  left: 20%;
-  bottom: 0;
+  left: 10%;
+  top: 60%;
+  transform-origin: top center;
+  transform: perspective(300px) rotateX(46deg) skewX(-14deg) scale(0.9, 0.85);
 }
 
 .tree-shadow-svg {
@@ -1956,23 +1959,39 @@ img,svg,video,canvas { max-width:100%; }
 
 .scrapbook-tab {
   flex-shrink: 0;
-  padding: 8px 14px;
-  border: 1.5px solid var(--line);
+  padding: 8px 16px;
+  border: 1.5px solid rgba(57, 47, 59, 0.25);
   border-radius: 20px;
-  background: var(--surface);
-  color: var(--ink);
-  font-size: 0.85rem;
+  background: #ffffff;
+  color: #392F3B;
+  font-size: 0.88rem;
   font-weight: 700;
   cursor: pointer;
   min-height: 44px;
   transition: all 0.2s ease;
 }
 
+.scrapbook-tab:hover {
+  border-color: var(--berry);
+  background: rgba(163, 64, 99, 0.06);
+}
+
 .scrapbook-tab.is-active {
   border-color: var(--berry);
-  background: var(--berry);
+  background: var(--berry) !important;
+  color: #fff8f1 !important;
+  box-shadow: 0 3px 10px rgba(163, 64, 99, 0.25);
+}
+
+.dark .scrapbook-tab {
+  background: #25324A;
   color: #fff8f1;
-  box-shadow: 0 2px 8px rgba(163, 64, 99, 0.2);
+  border-color: rgba(255, 248, 241, 0.2);
+}
+
+.dark .scrapbook-tab.is-active {
+  background: var(--berry) !important;
+  color: #fff8f1 !important;
 }
 
 .scrapbook-card {
