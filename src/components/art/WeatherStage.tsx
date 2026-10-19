@@ -10,6 +10,8 @@ export interface WeatherStageProps {
   onPuzzleSuccess?: () => void;
   onNextChapter?: () => void;
   playChime?: () => void;
+  isMuted?: boolean;
+  onToggleMute?: () => void;
 }
 
 interface DialogueBeat {
@@ -238,6 +240,8 @@ export interface CinematicWeatherRevealProps {
   title?: string;
   speaker?: string;
   caption?: string;
+  isMuted?: boolean;
+  onToggleMute?: () => void;
 }
 
 export const CinematicWeatherReveal: React.FC<CinematicWeatherRevealProps> = ({
@@ -246,11 +250,21 @@ export const CinematicWeatherReveal: React.FC<CinematicWeatherRevealProps> = ({
   title = 'UPSIDE-DOWN FOREST DISASTER',
   speaker = 'FROG MAYOR',
   caption = '“The rain is falling UP. My umbrella is now a bucket.”',
+  isMuted = true,
+  onToggleMute,
 }) => {
   const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
+  const [internalMuted, setInternalMuted] = useState(isMuted);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const activeMuted = onToggleMute ? isMuted : internalMuted;
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = activeMuted;
+    }
+  }, [activeMuted]);
 
   const togglePlay = () => {
     setIsPlaying((prev) => {
@@ -264,13 +278,17 @@ export const CinematicWeatherReveal: React.FC<CinematicWeatherRevealProps> = ({
   };
 
   const toggleMute = () => {
-    setIsMuted((prev) => {
-      const next = !prev;
-      if (videoRef.current) {
-        videoRef.current.muted = next;
-      }
-      return next;
-    });
+    if (onToggleMute) {
+      onToggleMute();
+    } else {
+      setInternalMuted((prev) => {
+        const next = !prev;
+        if (videoRef.current) {
+          videoRef.current.muted = next;
+        }
+        return next;
+      });
+    }
   };
 
   return (
@@ -397,6 +415,8 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
   onPuzzleSuccess,
   onNextChapter,
   playChime = () => {},
+  isMuted = true,
+  onToggleMute,
 }) => {
   const [currentBeat, setCurrentBeat] = useState<number>(() => (puzzleDone ? 5 : Math.min(dialog, 3)));
   const [showCinematic, setShowCinematic] = useState<boolean>(false);
@@ -694,9 +714,26 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
                 <stop offset="60%" stopColor="#2F4234" />
                 <stop offset="100%" stopColor="#1C281F" />
               </linearGradient>
+              <linearGradient id="loam-ground-grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#32241C" />
+                <stop offset="50%" stopColor="#221812" />
+                <stop offset="100%" stopColor="#120D0A" />
+              </linearGradient>
+              <linearGradient id="root-wood-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#5D4330" />
+                <stop offset="40%" stopColor="#453123" />
+                <stop offset="100%" stopColor="#2A1C13" />
+              </linearGradient>
+              <linearGradient id="root-highlight-grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#7B5B44" />
+                <stop offset="100%" stopColor="#453123" />
+              </linearGradient>
               <filter id="loom-glow" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur stdDeviation="4" result="blur" />
                 <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+              <filter id="ground-contact-blur" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="4" />
               </filter>
             </defs>
 
@@ -730,29 +767,155 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
               </g>
             </g>
 
-            {/* MOSS GROUND LAYER */}
+            {/* =========================================================================
+                HANDCRAFTED STOP-MOTION FOREST FLOOR (Loam, Gnarled Roots & Contact Shadows)
+               ========================================================================= */}
+            {/* Deep rich loam base foundation */}
             <path
-              d="M 0 410 Q 150 380 300 395 T 600 390 L 600 520 L 0 520 Z"
-              fill="url(#moss-ground-grad)"
-              stroke="#1C281F"
-              strokeWidth="2"
+              d="M 0 430 L 600 430 L 600 520 L 0 520 Z"
+              fill="url(#loam-ground-grad)"
             />
-            {/* Soft ground mounds */}
-            <ellipse cx="140" cy="450" rx="70" ry="18" fill="#4E6B53" opacity="0.6" />
-            <ellipse cx="460" cy="460" rx="85" ry="20" fill="#4E6B53" opacity="0.6" />
 
-            {/* Decorative Fly Agaric Toadstools */}
-            <g transform="translate(195, 455)">
-              <rect x="-2" y="4" width="4" height="12" fill="#FFF8F1" stroke="#392F3B" strokeWidth="1" />
-              <path d="M -9 5 Q 0 -6 9 5 Z" fill="#A34063" stroke="#392F3B" strokeWidth="1.2" />
-              <circle cx="-3" cy="2" r="1.2" fill="#FFF8F1" />
-              <circle cx="3" cy="1" r="1.2" fill="#FFF8F1" />
+            {/* Main undulating moss cushions and needle-felted terrain contours */}
+            <path
+              d="M 0 396 C 60 382, 120 406, 185 392 C 265 375, 345 402, 420 384 C 495 368, 550 394, 600 388 L 600 520 L 0 520 Z"
+              fill="url(#moss-ground-grad)"
+              stroke="#162319"
+              strokeWidth="2.2"
+            />
+
+            {/* Secondary foreground moss ridge providing tactile multiplane depth */}
+            <path
+              d="M -10 442 C 90 428, 180 448, 290 436 C 400 424, 490 444, 610 432 L 610 520 L -10 520 Z"
+              fill="#223326"
+              opacity="0.85"
+            />
+
+            {/* GNARLED MINIATURE TREE ROOTS WEAVING THROUGH THE TERRAIN */}
+            <g className="forest-gnarled-roots" stroke="#162319" strokeWidth="1.6" strokeLinejoin="round">
+              {/* Massive Left Buttress Root (Extending past Clack toward the Loom) */}
+              <path
+                d="M -20 410 Q 40 405 85 432 Q 130 458 175 448 Q 210 440 230 455"
+                fill="none"
+                stroke="url(#root-wood-grad)"
+                strokeWidth="14"
+                strokeLinecap="round"
+              />
+              <path
+                d="M -20 408 Q 40 403 85 430 Q 130 456 175 446 Q 210 438 230 453"
+                fill="none"
+                stroke="url(#root-highlight-grad)"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                opacity="0.75"
+              />
+
+              {/* Taproot Spreading into Foreground Loam */}
+              <path
+                d="M 75 432 Q 105 470 145 488"
+                fill="none"
+                stroke="url(#root-wood-grad)"
+                strokeWidth="7"
+                strokeLinecap="round"
+              />
+
+              {/* Central Anchor Root Buttress Cradling the Frog Mayor's Platform */}
+              <path
+                d="M 220 455 Q 260 440 310 448 Q 360 456 395 442"
+                fill="none"
+                stroke="url(#root-wood-grad)"
+                strokeWidth="11"
+                strokeLinecap="round"
+              />
+              <path
+                d="M 220 453 Q 260 438 310 446 Q 360 454 395 440"
+                fill="none"
+                stroke="url(#root-highlight-grad)"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                opacity="0.7"
+              />
+
+              {/* Right Root Arm Curling Up Toward Morrow and Windmill */}
+              <path
+                d="M 620 405 Q 560 412 505 440 Q 455 464 410 456"
+                fill="none"
+                stroke="url(#root-wood-grad)"
+                strokeWidth="13"
+                strokeLinecap="round"
+              />
+              <path
+                d="M 620 403 Q 560 410 505 438 Q 455 462 410 454"
+                fill="none"
+                stroke="url(#root-highlight-grad)"
+                strokeWidth="3.2"
+                strokeLinecap="round"
+                opacity="0.75"
+              />
+              <path
+                d="M 515 445 Q 480 478 440 495"
+                fill="none"
+                stroke="url(#root-wood-grad)"
+                strokeWidth="6"
+                strokeLinecap="round"
+              />
             </g>
-            <g transform="translate(370, 460)">
-              <rect x="-2.5" y="5" width="5" height="14" fill="#FFF8F1" stroke="#392F3B" strokeWidth="1" />
-              <path d="M -11 6 Q 0 -8 11 6 Z" fill="#A34063" stroke="#392F3B" strokeWidth="1.2" />
-              <circle cx="-4" cy="2" r="1.5" fill="#FFF8F1" />
-              <circle cx="4" cy="1" r="1.5" fill="#FFF8F1" />
+
+            {/* SOFT GROUND CONTACT SHADOWS ANCHORED UNDER EACH CHARACTER */}
+            <g className="character-contact-shadows" filter="url(#ground-contact-blur)" aria-hidden="true">
+              {/* Sir Clack contact shadow (Left, bottom: ~11%, left: 4%, x ≈ 85) */}
+              <ellipse cx="88" cy="446" rx="38" ry="12" fill="#0A120D" opacity="0.8" />
+              {/* Pipkin contact shadow (Mid-left, bottom: ~16%, left: 22%, x ≈ 155) */}
+              <ellipse cx="156" cy="442" rx="24" ry="8" fill="#0A120D" opacity="0.65" />
+              {/* Frog Mayor moss log & contact shadow (Center, bottom: ~9%, left: 37%, x ≈ 285) */}
+              <ellipse cx="285" cy="452" rx="72" ry="16" fill="#070E09" opacity="0.85" />
+              {/* Morrow contact shadow (Right, bottom: ~10%, right: 2%, x ≈ 505) */}
+              <ellipse cx="505" cy="450" rx="42" ry="13" fill="#0A120D" opacity="0.8" />
+            </g>
+
+            {/* WOODLAND DETAILS (Needle-Felted Lichen, Acorn Caps & Toadstools) */}
+            {/* Lichen specks on moss cushions */}
+            <g className="moss-lichen-specks" opacity="0.85">
+              <circle cx="50" cy="420" r="1.5" fill="#A8D68A" />
+              <circle cx="56" cy="423" r="1.2" fill="#F7D560" />
+              <circle cx="165" cy="415" r="1.8" fill="#A8D68A" />
+              <circle cx="172" cy="418" r="1.3" fill="#E8C878" />
+              <circle cx="340" cy="412" r="1.6" fill="#A8D68A" />
+              <circle cx="450" cy="408" r="1.4" fill="#F7D560" />
+              <circle cx="458" cy="412" r="1.8" fill="#A8D68A" />
+              <circle cx="560" cy="415" r="1.5" fill="#E8C878" />
+            </g>
+
+            {/* Acorn Caps with Wooden Hatching */}
+            <g transform="translate(112, 462)">
+              <ellipse cx="0" cy="0" rx="5" ry="3" fill="#523927" stroke="#221812" strokeWidth="1" />
+              <ellipse cx="0" cy="-2" rx="3.5" ry="1.5" fill="#3D2B1F" />
+            </g>
+            <g transform="translate(425, 470)">
+              <ellipse cx="0" cy="0" rx="5.5" ry="3.2" fill="#523927" stroke="#221812" strokeWidth="1" />
+              <ellipse cx="0" cy="-2.2" rx="4" ry="1.6" fill="#3D2B1F" />
+            </g>
+
+            {/* Decorative Fly Agaric Toadstools Clustered Beside Roots */}
+            <g transform="translate(195, 452)">
+              <rect x="-2" y="4" width="4.2" height="13" rx="1" fill="#FFF8F1" stroke="#392F3B" strokeWidth="1" />
+              <path d="M -10 5 Q 0 -8 10 5 Z" fill="#A34063" stroke="#392F3B" strokeWidth="1.2" />
+              <circle cx="-4" cy="1" r="1.3" fill="#FFF8F1" />
+              <circle cx="3" cy="0" r="1.4" fill="#FFF8F1" />
+              <circle cx="0" cy="-3" r="1.1" fill="#FFF8F1" />
+            </g>
+            <g transform="translate(206, 458) scale(0.65)">
+              <rect x="-2" y="4" width="4.2" height="12" rx="1" fill="#FFF8F1" stroke="#392F3B" strokeWidth="1" />
+              <path d="M -9 5 Q 0 -7 9 5 Z" fill="#A34063" stroke="#392F3B" strokeWidth="1.2" />
+              <circle cx="-3" cy="1" r="1.2" fill="#FFF8F1" />
+              <circle cx="3" cy="0" r="1.2" fill="#FFF8F1" />
+            </g>
+            <g transform="translate(372, 458)">
+              <rect x="-2.5" y="5" width="5" height="15" rx="1" fill="#FFF8F1" stroke="#392F3B" strokeWidth="1" />
+              <path d="M -12 6 Q 0 -9 12 6 Z" fill="#A34063" stroke="#392F3B" strokeWidth="1.2" />
+              <circle cx="-5" cy="2" r="1.6" fill="#FFF8F1" />
+              <circle cx="4" cy="1" r="1.6" fill="#FFF8F1" />
+              <circle cx="0" cy="-3" r="1.3" fill="#FFF8F1" />
             </g>
 
             {/* Practical Miniature Lights & Forest Motes (Handcrafted Stop-Motion Atmosphere) */}
@@ -1260,6 +1423,8 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
         {showCinematic && (
           <CinematicWeatherReveal
             onReturn={() => setShowCinematic(false)}
+            isMuted={isMuted}
+            onToggleMute={onToggleMute}
             videoSrc={
               isCelebrating
                 ? '/cinematics/weather-05-bloom.mp4'

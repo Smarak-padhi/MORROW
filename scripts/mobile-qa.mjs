@@ -67,16 +67,52 @@ try {
   await page.screenshot({ path: `${out}/weather-complete.png`, fullPage: true });
   await page.getByRole('button', { name: /step into the next chapter/i }).click();
   await advanceDialogue();
-  for (const gear of ['Shadow Cog','Weather Spring','Crooked Heart Key']) {
-    await page.getByRole('button', { name: new RegExp(gear,'i') }).click();
+  const cogGroup = page.locator('.draggable-gear-group');
+  if (await cogGroup.count() && await cogGroup.isVisible()) {
+    await cogGroup.focus();
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(300);
+    const dialZone = page.locator('.weather-vane-zone');
+    await dialZone.focus();
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(300);
+    const heartGroup = page.locator('.draggable-heart-group');
+    await heartGroup.focus();
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(600);
+  } else {
+    await page.locator('.accessible-clock-drawer').evaluate(el => el.open = true);
+    await page.waitForTimeout(300);
+    const cogBtn = page.locator('.accessible-clock-btn:has-text("1. Fit Brass Cog")');
+    if (await cogBtn.isVisible()) {
+      await cogBtn.click();
+      await page.waitForTimeout(300);
+    }
+    const dialBtn = page.locator('button[aria-label="Align Weather Spring"]');
+    if (await dialBtn.isVisible()) {
+      await dialBtn.click();
+      await page.waitForTimeout(300);
+    }
+    const springBtn = page.locator('.accessible-clock-btn:has-text("3. Seat Crooked Heart Spring")');
+    if (await springBtn.isVisible()) {
+      await springBtn.click();
+      await page.waitForTimeout(500);
+    }
   }
+  await page.waitForTimeout(6000);
   check(await page.getByRole('button', { name: /step into the next chapter/i }).isVisible(), 'Impossible Clock cannot complete');
   await page.screenshot({ path: `${out}/clock-complete.png`, fullPage: true });
   await page.getByRole('button', { name: /step into the next chapter/i }).click();
   await advanceDialogue();
-  for (const step of ['Reach toward your friend','Listen to the crooked thread','Tie a wonderfully uneven knot']) {
-    await page.getByRole('button', { name: new RegExp(step,'i') }).click();
+
+  await page.locator('.accessible-stitch-drawer').evaluate(el => el.open = true);
+  await page.waitForTimeout(300);
+  const stitchBtn = page.locator('.accessible-stitch-btn:has-text("Cinch Crooked Knot")');
+  if (await stitchBtn.isVisible()) {
+    await stitchBtn.click();
+    await page.waitForTimeout(5500);
   }
+  check(await page.getByRole('button', { name: /step into the next chapter/i }).isVisible(), 'Finale Stitch cannot complete');
   await page.getByRole('button', { name: /step into the next chapter/i }).click();
   await advanceDialogue();
   check((await chapter()).toLowerCase().includes('epilogue') || await page.locator('.storybook-ending').count() > 0, 'Epilogue not reached');

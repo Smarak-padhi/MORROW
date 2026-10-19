@@ -1046,6 +1046,60 @@ footer button {
 .storybook-dialogue { min-height:130px; display:grid; place-items:center; padding:10px 0 25px; animation:story-rise .35s both; }
 .storybook-dialogue p { margin:0; font:600 clamp(1.25rem,2.5vw,1.85rem)/1.6 'Nunito',sans-serif; }
 .storybook-page-number { display:block; font:.72rem 'Space Mono',monospace; opacity:.65; margin-top:26px; }
+
+/* STORY DIRECTOR PACING & AUTOPLAY CONTROLS */
+.story-director-controls {
+  max-width: 480px;
+  margin: 16px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.story-director-progress-track {
+  width: 100%;
+  max-width: 260px;
+  height: 4px;
+  border-radius: 99px;
+  background: rgba(57, 47, 59, 0.14);
+  overflow: hidden;
+}
+
+.story-director-progress-bar {
+  height: 100%;
+  background: var(--berry);
+  transition: width 0.1s linear;
+}
+
+.story-director-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.story-director-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 16px;
+  font: 700 0.72rem 'Space Mono', monospace;
+  background: rgba(255, 248, 241, 0.95);
+  color: var(--ink);
+  border: 1.5px solid var(--line);
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.story-director-toggle-btn:hover {
+  background: #FFF8F1;
+  border-color: var(--berry);
+}
+
 .storybook-interaction { max-width:800px; margin:0 auto; padding:0 22px 70px; text-align:center; }
 .storybook-interaction .game-container { text-align:left; background:var(--surface); border:1px solid var(--line); box-shadow:0 12px 40px rgba(57,47,59,.08); }
 .storybook-interaction .chapter-continue { margin:25px auto; }
@@ -3268,5 +3322,808 @@ img,svg,video,canvas { max-width:100%; }
   outline: 2px solid var(--berry);
   outline-offset: 2px;
   border-radius: 6px;
+}
+
+/* =========================================================================
+   SPRINT 02: Tomorrow Town — Living 2.5D Miniature Tabletop Stage
+   ========================================================================= */
+
+.clock-stage-bespoke {
+  position: relative;
+  width: min(100%, 960px);
+  margin: 10px auto 0;
+  height: auto;
+  overflow: visible;
+}
+
+.tomorrow-town-theatre-plate {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: clamp(240px, 48vw, 540px);
+  border-radius: var(--radius-lg, 18px);
+  background: #171220;
+  border: 2px solid var(--line);
+  box-shadow: 0 14px 40px rgba(18, 14, 24, 0.45);
+}
+
+.clock-stage-bespoke .stage-svg-wrap {
+  background: transparent !important;
+}
+
+.chapter-clock {
+  padding-top: max(74px, env(safe-area-inset-top));
+}
+
+.chapter-clock .storybook-reading {
+  margin: 16px auto 0;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(57, 47, 59, 0.08);
+}
+
+.tomorrow-town-bg-plate {
+  pointer-events: none;
+  user-select: none;
+}
+
+.clock-stage-restored .tomorrow-town-bg-plate {
+  filter: brightness(1.08) saturate(1.2) !important;
+}
+
+/* Gear Rotations */
+@keyframes gear-spin-cw {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes gear-spin-ccw {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+
+.clock-gear-spin {
+  transform-origin: center;
+  animation: gear-spin-cw 8s linear infinite;
+}
+
+.clock-gear-spin-fast {
+  transform-origin: center;
+  animation: gear-spin-cw 2.5s linear infinite;
+}
+
+.clock-gear-spin-reverse {
+  transform-origin: center;
+  animation: gear-spin-ccw 3s linear infinite;
+}
+
+/* Clock Hand Sweeping Animation */
+@keyframes hand-sweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.clock-hand-sweeping {
+  transform-origin: 0px 0px;
+  animation: hand-sweep 12s linear infinite;
+}
+
+/* Bakery Chimney Steam */
+@keyframes chimney-steam-rise {
+  0% {
+    transform: translateY(0) scale(0.9);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-8px) scale(1.15);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-16px) scale(1.3);
+    opacity: 0.4;
+  }
+}
+
+.chimney-steam-rising {
+  animation: chimney-steam-rise 2.4s ease-in-out infinite alternate;
+}
+
+/* Speech bubbles anchored to actors */
+.character-speech-bubble {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  background: var(--paper, #FFF8F1);
+  border: 2px solid var(--ink, #252030);
+  border-radius: 12px;
+  padding: 6px 10px;
+  min-width: 130px;
+  max-width: 200px;
+  box-shadow: 0 4px 14px rgba(18, 14, 24, 0.35);
+  z-index: 10;
+  pointer-events: none;
+  animation: story-rise 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.character-speech-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: var(--paper, #FFF8F1) transparent transparent transparent;
+}
+
+.character-speech-bubble strong {
+  display: block;
+  font: 800 0.65rem 'Space Mono', monospace;
+  color: var(--berry, #A34063);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.character-speech-bubble p {
+  margin: 0;
+  font: 600 0.72rem 'Nunito', sans-serif;
+  color: var(--ink, #252030);
+  line-height: 1.25;
+}
+
+/* Mobile Scaling for Tomorrow Town */
+@media (max-width: 600px) {
+  .stage-actor-anchor {
+    transform: scale(0.85);
+    transform-origin: bottom center;
+  }
+  .character-speech-bubble {
+    font-size: 0.68rem;
+    max-width: 160px;
+  }
+}
+
+@keyframes heart-glow-pulse {
+  0% { transform: scale(1); filter: drop-shadow(0 0 4px #F7D560); }
+  50% { transform: scale(1.08); filter: drop-shadow(0 0 14px #F7D560) drop-shadow(0 0 8px #A34063); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 4px #F7D560); }
+}
+
+.heart-glow-pulsing {
+  transform-origin: 0 0;
+  animation: heart-glow-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes gear-wobble {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(12deg); }
+  50% { transform: rotate(-8deg); }
+  75% { transform: rotate(4deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.clock-gear-wobble {
+  transform-origin: center;
+  animation: gear-wobble 0.6s ease-out;
+}
+
+/* Accessible Clock Drawer & Workbench */
+.tomorrow-town-clock-workbench {
+  width: 100%;
+  border-radius: 18px;
+  background: var(--surface, #FFFDF9);
+  padding: 12px;
+  border: 1px solid var(--line, #E8DEC8);
+  box-shadow: 0 4px 20px rgba(37, 32, 48, 0.08);
+}
+
+.accessible-clock-drawer {
+  background: rgba(232, 222, 200, 0.25);
+  border: 1px solid var(--line, #E8DEC8);
+  border-radius: 12px;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+}
+
+.accessible-clock-drawer summary {
+  user-select: none;
+}
+
+.accessible-clock-drawer summary:focus-visible {
+  outline: 2px solid var(--gold, #E8C878);
+  outline-offset: 2px;
+}
+
+.accessible-clock-btn:hover:not(:disabled) {
+  border-color: var(--gold, #E8C878) !important;
+  transform: translateY(-1px);
+}
+
+.accessible-clock-btn:focus-visible {
+  outline: 2px solid var(--gold, #E8C878);
+  outline-offset: 2px;
+}
+
+.bubble-professor-reaction {
+  border-color: var(--sage, #88A991) !important;
+  box-shadow: 0 0 12px rgba(136, 169, 145, 0.45) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clock-gear-spin,
+  .clock-gear-spin-fast,
+  .clock-gear-spin-reverse,
+  .clock-hand-sweeping,
+  .chimney-steam-rising,
+  .heart-glow-pulsing,
+  .clock-gear-wobble {
+    animation: none !important;
+  }
+}
+
+/* =========================================================================
+   SPRINT 03: CLOCK TOWER CATHEDRAL & THE FINAL STITCH
+   ========================================================================= */
+
+.finale-stage-bespoke {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.finale-cathedral-theatre-plate,
+.cathedral-theatre-plate {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #140e1c;
+  box-shadow: 0 12px 36px rgba(18, 12, 28, 0.45), 0 2px 6px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--line, #E8DEC8);
+}
+
+@keyframes cathedral-gear-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes cathedral-gear-reverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+.cathedral-gear-spin {
+  animation: cathedral-gear-rotate 22s linear infinite;
+}
+
+.cathedral-gear-spin-slow {
+  animation: cathedral-gear-rotate 48s linear infinite;
+}
+
+.cathedral-gear-spin-reverse {
+  animation: cathedral-gear-reverse 34s linear infinite;
+}
+
+@keyframes dust-float {
+  0% { transform: translateY(0px) translateX(0px); opacity: 0.25; }
+  50% { transform: translateY(-16px) translateX(8px); opacity: 0.7; }
+  100% { transform: translateY(0px) translateX(0px); opacity: 0.25; }
+}
+
+.cathedral-dust-particles circle {
+  animation: dust-float 6s ease-in-out infinite;
+}
+
+.cathedral-dust-particles circle:nth-child(2) {
+  animation-duration: 8.5s;
+  animation-delay: -2s;
+}
+
+.cathedral-dust-particles circle:nth-child(3) {
+  animation-duration: 5.2s;
+  animation-delay: -3.5s;
+}
+
+.cathedral-dust-particles circle:nth-child(4) {
+  animation-duration: 7.1s;
+  animation-delay: -1.2s;
+}
+
+@keyframes companion-heart-pulse {
+  0% { transform: scale(1); filter: drop-shadow(0 0 6px #F7D560); }
+  50% { transform: scale(1.15); filter: drop-shadow(0 0 18px #F7D560) drop-shadow(0 0 10px #A34063); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 6px #F7D560); }
+}
+
+.companion-heart-awakening {
+  animation: companion-heart-pulse 1.6s ease-in-out infinite;
+}
+
+.character-speech-bubble-cathedral {
+  background: var(--cream, #FFF8F1);
+  border: 1.5px solid var(--line, #E7D4D4);
+  border-radius: 12px;
+  padding: 8px 12px;
+  box-shadow: 0 4px 14px rgba(22, 16, 32, 0.35);
+  pointer-events: none;
+}
+
+/* Finale Stitch Workbench */
+.finale-stitch-workbench {
+  width: 100%;
+  border-radius: 18px;
+  background: var(--surface, #FFFDF9);
+  padding: 12px;
+  border: 1px solid var(--line, #E8DEC8);
+  box-shadow: 0 4px 20px rgba(37, 32, 48, 0.08);
+}
+
+.finale-stitch-interactive {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tactile-crooked-stitch {
+  width: 100%;
+  border-radius: 14px;
+  background: #181220;
+  border: 1.5px solid #2a2034;
+  overflow: hidden;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes knot-cinch-glow {
+  0% { filter: drop-shadow(0 0 4px #F7D560); }
+  50% { filter: drop-shadow(0 0 16px #F7D560) drop-shadow(0 0 8px #FFF8F1); }
+  100% { filter: drop-shadow(0 0 8px #F7D560); }
+}
+
+.crooked-knot-cinch {
+  animation: knot-cinch-glow 2s ease-in-out infinite;
+}
+
+.accessible-stitch-drawer {
+  background: rgba(232, 222, 200, 0.25);
+  border: 1px solid var(--line, #E8DEC8);
+  border-radius: 12px;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+}
+
+.accessible-stitch-drawer summary {
+  user-select: none;
+}
+
+.accessible-stitch-drawer summary:focus-visible {
+  outline: 2px solid var(--gold, #E8C878);
+  outline-offset: 2px;
+}
+
+.accessible-stitch-btn:hover:not(:disabled) {
+  border-color: var(--gold, #E8C878) !important;
+  transform: translateY(-1px);
+}
+
+.accessible-stitch-btn:focus-visible {
+  outline: 2px solid var(--gold, #E8C878);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cathedral-gear-spin,
+  .cathedral-gear-spin-slow,
+  .cathedral-gear-spin-reverse,
+  .cathedral-dust-particles circle,
+  .companion-heart-awakening,
+  .crooked-knot-cinch,
+  .epilogue-dust-motes span {
+    animation: none !important;
+  }
+}
+
+/* =========================================================================
+   SPRINT 04: THE ALMOST-RIGHT REPAIR SHOP & KEEPSAKE SCRAPBOOK
+   ========================================================================= */
+
+/* Mobile header relief for WeatherStage */
+@media (max-width: 600px) {
+  .living-weather-forest-container .storybook-reading {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 2px 10px 6px;
+  }
+}
+
+/* Epilogue Stage Container & Stop-Motion Plate */
+.epilogue-stage-bespoke {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.epilogue-theatre-plate {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #251810;
+  box-shadow: 0 12px 36px rgba(35, 20, 10, 0.4), 0 2px 6px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--line, #E8DEC8);
+}
+
+.epilogue-sunlit-sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.epilogue-warm-sun-wash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 40% 30%, rgba(255, 248, 241, 0.4) 0%, rgba(247, 213, 96, 0.18) 50%, rgba(226, 193, 148, 0.05) 100%);
+  pointer-events: none;
+}
+
+@keyframes epilogue-mote-float {
+  0% { transform: translateY(0px) translateX(0px); opacity: 0.35; }
+  50% { transform: translateY(-12px) translateX(6px); opacity: 0.85; }
+  100% { transform: translateY(0px) translateX(0px); opacity: 0.35; }
+}
+
+.epilogue-dust-motes span {
+  animation: epilogue-mote-float 5s ease-in-out infinite;
+}
+
+.epilogue-dust-motes span:nth-child(2) {
+  animation-duration: 7s;
+  animation-delay: -1.5s;
+}
+
+.epilogue-dust-motes span:nth-child(3) {
+  animation-duration: 4.8s;
+  animation-delay: -3s;
+}
+
+.epilogue-dust-motes span:nth-child(4) {
+  animation-duration: 6.4s;
+  animation-delay: -0.8s;
+}
+
+/* Epilogue Speech Bubbles */
+.bubble-professor {
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 240px;
+  background: var(--cream, #FFF8F1);
+  border: 1.5px solid var(--lilac, #B298DC);
+  box-shadow: 0 4px 16px rgba(70, 40, 90, 0.25);
+  border-radius: 12px;
+  padding: 8px 12px;
+  z-index: 10;
+  animation: payoff-fade-in 0.25s ease-out;
+}
+
+.bubble-unfinished {
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 240px;
+  background: var(--cream, #FFF8F1);
+  border: 1.5px solid var(--gold, #E8C878);
+  box-shadow: 0 4px 16px rgba(40, 20, 60, 0.25);
+  border-radius: 12px;
+  padding: 8px 12px;
+  z-index: 10;
+  animation: payoff-fade-in 0.25s ease-out;
+}
+
+/* =========================================================================
+   TACTILE KEEPSAKE ALBUM & 5 MILESTONE MEMORIES
+   ========================================================================= */
+
+.tactile-keepsake-album {
+  width: 100%;
+  max-width: 840px;
+  margin: 24px auto;
+  background: var(--surface, #FFFDF9);
+  border: 1px solid var(--line, #E8DEC8);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 28px rgba(45, 30, 20, 0.08);
+}
+
+.scrapbook-mode-switcher {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 16px 0 8px;
+  flex-wrap: wrap;
+}
+
+.scrapbook-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line, #E8DEC8);
+  background: var(--surface, #FFFDF9);
+  color: var(--ink, #392F3B);
+  font: 700 0.82rem 'Space Mono', monospace;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.scrapbook-mode-btn:hover {
+  border-color: var(--gold, #E8C878);
+  transform: translateY(-1px);
+}
+
+.scrapbook-mode-btn:focus-visible {
+  outline: 2px solid var(--gold, #E8C878);
+  outline-offset: 2px;
+}
+
+.scrapbook-mode-btn.is-active {
+  background: var(--berry, #8E2D4E);
+  color: #FFF8F1;
+  border-color: var(--berry, #8E2D4E);
+  box-shadow: 0 4px 12px rgba(142, 45, 78, 0.25);
+}
+
+.memories-tab-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 4px 14px;
+  scrollbar-width: thin;
+}
+
+.memories-tab-strip .scrapbook-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 110px;
+  min-height: 52px;
+  padding: 8px 12px;
+}
+
+.tab-chapter-number {
+  font: 800 0.65rem 'Space Mono', monospace;
+  color: var(--berry, #8E2D4E);
+  opacity: 0.85;
+}
+
+.scrapbook-tab.is-active .tab-chapter-number {
+  color: #FFF8F1;
+}
+
+.tab-chapter-tag {
+  font: 700 0.75rem 'Nunito', sans-serif;
+  white-space: nowrap;
+}
+
+/* Milestone Pressed Page Card */
+.milestone-memory-page {
+  position: relative;
+  background: #FFFDF9;
+  border: 1px solid #E8DEC8;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 16px rgba(50, 35, 25, 0.06);
+  margin-top: 6px;
+}
+
+.washi-tape-accent {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 90px;
+  height: 20px;
+  background: rgba(232, 200, 120, 0.65);
+  border: 1px dashed rgba(163, 64, 99, 0.4);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.milestone-content-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 700px) {
+  .milestone-content-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* Polaroid Photo Frame */
+.polaroid-frame {
+  position: relative;
+  background: #FAF6EE;
+  border: 1px solid #E0D6C3;
+  border-radius: 4px;
+  padding: 12px 12px 18px;
+  box-shadow: 0 6px 18px rgba(45, 30, 20, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);
+  transform: rotate(-2deg);
+  transition: transform 0.25s ease;
+}
+
+.polaroid-frame:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+.polaroid-pushpin {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  background: radial-gradient(circle at 35% 35%, #F7D560, #8C6527);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  z-index: 2;
+}
+
+.polaroid-photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.4);
+}
+
+.polaroid-symbol {
+  font-size: 3rem;
+  color: #FFF8F1;
+  opacity: 0.9;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+}
+
+.polaroid-photo-overlay {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+}
+
+.polaroid-date-badge {
+  font: 700 0.62rem 'Space Mono', monospace;
+  background: rgba(22, 16, 26, 0.75);
+  color: #FFF8F1;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.polaroid-caption {
+  margin: 10px 0 0;
+  font: 600 0.76rem/1.35 'Nunito', sans-serif;
+  color: #4A3A42;
+  text-align: center;
+}
+
+/* Narrative Story Entry */
+.milestone-narrative {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tactile-ink-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 2px dashed currentColor;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font: 800 0.68rem 'Space Mono', monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transform: rotate(-3deg);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.memory-excerpt {
+  margin: 0;
+  font: italic 500 0.92rem/1.55 'Fraunces', serif;
+  color: var(--ink, #392F3B);
+  background: rgba(247, 243, 235, 0.7);
+  border-left: 3px solid var(--berry, #8E2D4E);
+  padding: 10px 14px;
+  border-radius: 0 10px 10px 0;
+}
+
+/* Sir Clack's Disaster Log Note */
+.clack-log-annotation {
+  background: #F5EFEB;
+  border: 1px solid #DFD5CD;
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.clack-log-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: 800 0.65rem 'Space Mono', monospace;
+  color: #7E3E2B;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.clack-log-annotation p {
+  margin: 0;
+  font: 600 0.8rem/1.45 'Nunito', sans-serif;
+  color: #3D2D35;
+}
+
+/* Character Friends Portfolio Layout */
+.character-portfolio-layout {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 22px;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .character-portfolio-layout {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    text-align: center;
+  }
+}
+
+.character-portrait-frame {
+  width: 140px;
+  height: 160px;
+  margin: 0 auto;
+  background: radial-gradient(circle at 50% 50%, rgba(232, 200, 120, 0.25) 0%, rgba(37, 27, 43, 0.08) 100%);
+  border-radius: 14px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px dashed var(--line, #E8DEC8);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.character-portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+  transition: transform 0.25s ease;
+}
+
+.character-portrait-frame:hover .character-portrait-img {
+  transform: scale(1.05);
+}
+
+.character-portfolio-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 

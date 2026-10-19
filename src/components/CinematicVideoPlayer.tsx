@@ -12,6 +12,8 @@ export interface CinematicVideoPlayerProps {
   ariaLabel: string;
   onEnded?: () => void;
   className?: string;
+  isMuted?: boolean;
+  onToggleMute?: () => void;
 }
 
 export const CinematicVideoPlayer: React.FC<CinematicVideoPlayerProps> = ({
@@ -25,12 +27,16 @@ export const CinematicVideoPlayer: React.FC<CinematicVideoPlayerProps> = ({
   ariaLabel,
   onEnded,
   className = '',
+  isMuted: propMuted,
+  onToggleMute,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
+  const [localMuted, setLocalMuted] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [isReducedMotion, setIsReducedMotion] = useState(false);
+
+  const effectiveMuted = propMuted !== undefined ? propMuted : localMuted;
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -39,6 +45,12 @@ export const CinematicVideoPlayer: React.FC<CinematicVideoPlayerProps> = ({
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = effectiveMuted;
+    }
+  }, [effectiveMuted]);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
@@ -62,12 +74,15 @@ export const CinematicVideoPlayer: React.FC<CinematicVideoPlayerProps> = ({
       .catch(() => setHasError(true));
   };
 
-  const toggleMute = (e: React.MouseEvent) => {
+  const handleToggleMute = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!videoRef.current) return;
-    const nextMuted = !isMuted;
-    videoRef.current.muted = nextMuted;
-    setIsMuted(nextMuted);
+    if (onToggleMute) {
+      onToggleMute();
+    } else {
+      const next = !localMuted;
+      if (videoRef.current) videoRef.current.muted = next;
+      setLocalMuted(next);
+    }
   };
 
   if (hasError || isReducedMotion) {
@@ -93,7 +108,7 @@ export const CinematicVideoPlayer: React.FC<CinematicVideoPlayerProps> = ({
         src={src}
         poster={poster}
         playsInline
-        muted={isMuted}
+        muted={effectiveMuted}
         preload="metadata"
         onEnded={() => {
           setIsPlaying(false);
@@ -142,10 +157,10 @@ export const CinematicVideoPlayer: React.FC<CinematicVideoPlayerProps> = ({
         <button
           type="button"
           className="comic-video-btn"
-          onClick={toggleMute}
-          aria-label={isMuted ? 'Unmute video audio' : 'Mute video audio'}
+          onClick={handleToggleMute}
+          aria-label={effectiveMuted ? 'Unmute video audio' : 'Mute video audio'}
         >
-          {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+          {effectiveMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
         </button>
       </div>
 

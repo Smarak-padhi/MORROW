@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { ArrowRight, Bell } from 'lucide-react';
 import { ComicVideoPanel } from './ComicVideoPanel';
 import {
@@ -18,6 +18,8 @@ type Props = {
   awake: boolean;
   onBell: () => void;
   onNext: () => void;
+  isMuted?: boolean;
+  onToggleMute?: () => void;
 };
 
 const beats = [
@@ -113,9 +115,21 @@ function Balloon({ speaker, words, side = 'left' }: { speaker: string; words: st
   );
 }
 
-export function WorkshopComic({ beat, awake, onBell, onNext }: Props) {
+export function WorkshopComic({ beat, awake, onBell, onNext, isMuted, onToggleMute }: Props) {
   const newest = useRef<HTMLElement | null>(null);
   const autoAdvanceTimer = useRef<number | null>(null);
+  const lastAdvancedBeat = useRef<number>(-1);
+
+  // Safe advancement wrapper to prevent race conditions or duplicate step triggers
+  const safeAdvance = useCallback(() => {
+    if (autoAdvanceTimer.current) {
+      window.clearTimeout(autoAdvanceTimer.current);
+      autoAdvanceTimer.current = null;
+    }
+    if (lastAdvancedBeat.current === beat) return;
+    lastAdvancedBeat.current = beat;
+    onNext();
+  }, [beat, onNext]);
 
   useEffect(() => {
     if (beat > 0 && newest.current && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -130,20 +144,16 @@ export function WorkshopComic({ beat, awake, onBell, onNext }: Props) {
     };
   }, []);
 
-  // Automatic transition with 0.8s comedic pause between Sir Clack's line (panel index 4)
-  // ("That is a visitor, you walnut.") and Morrow's greeting (panel index 5)
-  // ("HELLO, POTENTIALLY POLITE GIANT!")
+  // For reduced-motion fallback where video is skipped or disabled:
   useEffect(() => {
     if (!awake) return;
-
-    // Panel 4 corresponds to beat === 3 (awake displays beats.slice(0, beat + 2) => 5 panels: 0,1,2,3,4)
-    if (beat === 3) {
+    if (beat === 3 && typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       if (autoAdvanceTimer.current) window.clearTimeout(autoAdvanceTimer.current);
       autoAdvanceTimer.current = window.setTimeout(() => {
-        onNext();
-      }, 800); // 0.8-second comedic pause
+        safeAdvance();
+      }, 2500);
     }
-  }, [beat, awake, onNext]);
+  }, [beat, awake, safeAdvance]);
 
   return (
     <div className="comic-workshop">
@@ -173,11 +183,20 @@ export function WorkshopComic({ beat, awake, onBell, onNext }: Props) {
                   poster={panel.posterSrc}
                   ariaLabel={panel.title}
                   autoPlay={current}
+                  isMuted={isMuted}
+                  onToggleMute={onToggleMute}
                   onEnded={() => {
-                    // For panel 4 ("clack"), let the 0.8s timer trigger automatically.
-                    // For other video panels, automatically advance to the next beat once completed!
-                    if (current && i < beats.length - 1 && beat !== 3) {
-                      onNext();
+                    if (!current) return;
+                    if (panel.shot === 'clack') {
+                      // Sir Clack's cinematic panel (prologue-03-clack-visitor.mp4) finishes playing FIRST,
+                      // followed by the 800 ms comedic pause, followed by Morrow's response.
+                      if (autoAdvanceTimer.current) window.clearTimeout(autoAdvanceTimer.current);
+                      autoAdvanceTimer.current = window.setTimeout(() => {
+                        safeAdvance();
+                      }, 800); // 0.8-second comedic pause
+                    } else if (i < beats.length - 1) {
+                      // For other video panels, automatically advance once the clip finishes playing
+                      safeAdvance();
                     }
                   }}
                   fallbackArt={
@@ -243,7 +262,12 @@ export function WorkshopComic({ beat, awake, onBell, onNext }: Props) {
             Ring the bell to wake the workshop <Bell size={20} />
           </button>
         ) : beat < 7 ? (
-          <button className="storybook-action" type="button" onClick={onNext}>
+          <button
+            className="storybook-action"
+            type="button"
+            onClick={safeAdvance}
+            aria-label="Turn the page · Continue story"
+          >
             {beat === 3 ? 'Awaiting response…' : 'Continue story'} <ArrowRight size={18} />
           </button>
         ) : null}
