@@ -23,6 +23,7 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 | **Loop 12: The Sky is Broken** | **COMPLETE** | Living 2.5D forest weather adventure: inverted canopy, sequential dialogue, tactile weather loom, rising rain, environmental transformations. | Proceed to Loop 12.5. |
 | **Loop 12.5: Immersion Overhaul** | **COMPLETE** | Mobile game-first layout (>75% first viewport, compact header), in-world carved brass loom directly inside shared SVG stage, unified 600x520 aspect ratio without letterboxing, 1:1 proportional character coordinates, full-frame stop-motion reveal modal, persistent environmental transformations. Verified across 320–1440px with 0 overflow and full Playwright test suite pass. | Proceed to Loop 12.7. |
 | **Loop 12.7: The Real Stop-Motion World** | **COMPLETE** | Reusable image-based `StopMotionActor` system with stepped tactile breathing/talking/action keyframes, complete stop-motion asset manifest (`docs/STOP_MOTION_ASSET_MANIFEST.md`), public directories (`environments/`, `props/`), real MP4 video playback hook in reveal modal with stop-motion fallback, practical miniature lights/glowing motes in Weather Forest, and low-profile accessible drawer. Verified across 320–1440px with 0 overflow. | Asset Generation Integration Ready. |
+| **Master RC: Autonomous Production Rescue** | **COMPLETE** | Full asset extraction and installation of approved Google Flow MP4s (`weather-02-umbrella`, `weather-04-loom`, `weather-05-bloom`, `clock-01-freeze`, `finale-01-knot`); documented ungenerated `clock-02-restart.mp4` with authoritative procedural in-engine fallback; unapproved variant quarantined in `review-only/`; automated 6-viewport master test suite pass; visual review of 25 screenshots via `view_file`; 0 horizontal overflow. | **MORROW — VERIFIED RELEASE CANDIDATE** |
 
 ---
 
@@ -393,8 +394,37 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
     - `loop12_08_celebration_payoff_390px.png`: Persistent environmental transformations and accessible drawer.
     - `loop12_09_desktop_stage_1280px.png`: Balanced 1280px desktop view with stop-motion miniature staging and zero character collision.
 
+---
 
-
-
-
-
+### [2026-10-19] Master RC — Autonomous Production Rescue & Release Candidate Certification
+- **Requirement:**
+  - Execute autonomous multi-agent production loops for release candidate readiness under the Master Autonomous Execution Directive.
+  - Ingest user-uploaded cinematic ZIP packages safely (`media_1792399735731_717ba73c.zip` and `media_1792399735754_de29a1a3.zip`).
+  - Extract and verify approved 1280x720 Google Flow MP4s into `public/cinematics/`: `weather-02-umbrella.mp4`, `weather-04-loom.mp4`, `weather-05-bloom.mp4`, `clock-01-freeze.mp4`, `finale-01-knot.mp4`.
+  - Quarantine unverified variant `clock-variant-not-restart.mp4` in `review-only/` with strict zero-substitution adherence.
+  - Authoritative in-engine procedural clock restart fallback retained for missing `clock-02-restart.mp4`.
+  - Wire video modals into `WeatherStage.tsx`, `ClockStage.tsx`, and `FinaleStage.tsx`.
+  - Refine opening vignette framing in `src/styles.css` to prevent vertical empty space on wide desktop displays.
+  - Execute multi-viewport automated test suite across 6 viewports (360x800, 390x844, 430x932, 768x1024, 1280x800, 1440x900).
+  - Inspect 25 screenshots via `view_file` to verify character authenticity, zero collision, and WCAG AA contrast.
+  - Produce governance documents: `docs/MASTER_EXECUTION_PLAN.md`, `docs/PRODUCTION_AUDIT.md`, `docs/QA_MATRIX.md`, `docs/VISUAL_REVIEW.md`, `docs/RELEASE_READINESS.md`.
+- **Affected Files:**
+  - `public/cinematics/` (`weather-02-umbrella.mp4`, `weather-04-loom.mp4`, `weather-05-bloom.mp4`, `clock-01-freeze.mp4`, `finale-01-knot.mp4`)
+  - `review-only/` (`clock-variant-not-restart.mp4`)
+  - `src/components/art/ClockStage.tsx`
+  - `src/components/art/FinaleStage.tsx`
+  - `src/styles.css`
+  - `scripts/master_rc_audit.mjs`
+  - `docs/MASTER_EXECUTION_PLAN.md`
+  - `docs/PRODUCTION_AUDIT.md`
+  - `docs/QA_MATRIX.md`
+  - `docs/VISUAL_REVIEW.md`
+  - `docs/RELEASE_READINESS.md`
+  - `docs/LOOP_LOG.md`
+- **Verification Evidence:**
+  - `npm run build`: PASSED (0 errors, 1,598 modules transformed in 2.76s).
+  - `scripts/viewport_audit.mjs`: PASSED across 6 viewports with 0 horizontal overflow.
+  - `scripts/comic-visual-qa.mjs`: PASSED.
+  - `scripts/mobile-qa.mjs`: PASSED.
+  - `scripts/master_rc_audit.mjs`: PASSED across 6 viewports, all video modals verified, player journey completed, reload persistence verified.
+  - Status: **MORROW — VERIFIED RELEASE CANDIDATE**.

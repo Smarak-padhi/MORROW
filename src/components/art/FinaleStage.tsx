@@ -1,10 +1,37 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import { Film, Volume2, VolumeX } from 'lucide-react';
 
 interface Props {
   dialog?: number;
 }
 
 export const FinaleStage: React.FC<Props> = ({ dialog: _dialog }) => {
+  const [showCinematic, setShowCinematic] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const togglePlay = () => {
+    setIsPlaying((prev) => {
+      const next = !prev;
+      if (videoRef.current) {
+        if (next) videoRef.current.play().catch(() => {});
+        else videoRef.current.pause();
+      }
+      return next;
+    });
+  };
+
+  const toggleMute = () => {
+    setIsMuted((prev) => {
+      const next = !prev;
+      if (videoRef.current) {
+        videoRef.current.muted = next;
+      }
+      return next;
+    });
+  };
+
   return (
     <section className="storybook-stage finale-stage-bespoke" aria-label="Inside the Clock Tower mechanism with Morrow, The Unfinished One, and Professor Perfect">
       {/* Background Clockwork Cathedral Atmosphere */}
@@ -13,8 +40,16 @@ export const FinaleStage: React.FC<Props> = ({ dialog: _dialog }) => {
       </div>
 
       <div className="storybook-scene-label">
-        <span>FINALE</span>
-        <span>05 / 06</span>
+        <span>FINALE · 05 / 06</span>
+        <button
+          type="button"
+          className="balloon-action-btn balloon-video-btn"
+          style={{ marginLeft: 'auto', padding: '3px 10px', fontSize: '0.72rem' }}
+          onClick={() => setShowCinematic(true)}
+          aria-label="Watch Finale Crooked Knot reveal film"
+        >
+          <Film size={13} /> Reveal Film
+        </button>
       </div>
 
       {/* Main Stop-Motion SVG Finale Stage */}
@@ -211,6 +246,60 @@ export const FinaleStage: React.FC<Props> = ({ dialog: _dialog }) => {
         <span>The First Unfinished Thing</span>
         <span>✦</span>
       </div>
+
+      {showCinematic && (
+        <div
+          className="living-cinematic-bridge-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Finale Crooked Knot Reveal"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 12,
+            background: '#1a1420',
+          }}
+        >
+          <div className="cinematic-reveal-stage" style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <video
+              ref={videoRef}
+              src="/cinematics/finale-01-knot.mp4"
+              className="cinematic-media-video"
+              playsInline
+              autoPlay
+              muted={isMuted}
+              loop
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
+            <div className="comic-video-controls" role="toolbar" aria-label="Cinematic video controls" style={{ position: 'absolute', bottom: '16px', left: '16px', right: '16px', display: 'flex', gap: '8px', zIndex: 10, background: 'rgba(26,20,32,0.85)', padding: '8px 12px', borderRadius: '12px' }}>
+              <button
+                type="button"
+                className="comic-video-btn"
+                onClick={togglePlay}
+                aria-label={isPlaying ? 'Pause cinematic' : 'Play cinematic'}
+              >
+                {isPlaying ? '⏸ Pause' : '▶ Play scene'}
+              </button>
+              <button
+                type="button"
+                className="comic-video-btn"
+                onClick={toggleMute}
+                aria-label={isMuted ? 'Unmute video audio' : 'Mute video audio'}
+              >
+                {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+              </button>
+              <button
+                type="button"
+                className="balloon-action-btn balloon-next-btn"
+                onClick={() => setShowCinematic(false)}
+                style={{ marginLeft: 'auto' }}
+              >
+                Return to Scene ✕
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
