@@ -1,15 +1,41 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Film, Volume2, VolumeX } from 'lucide-react';
+import { StopMotionActor } from './StopMotionActor';
+import { Morrow } from './Morrow';
+import { FinaleStitch } from '../inventions/FinaleStitch';
 
 interface Props {
   dialog?: number;
+  puzzleDone?: boolean;
+  onPuzzleSuccess?: () => void;
+  onNextChapter?: () => void;
+  playChime?: () => void;
+  isMuted?: boolean;
+  onToggleMute?: () => void;
 }
 
-export const FinaleStage: React.FC<Props> = ({ dialog: _dialog }) => {
+export const FinaleStage: React.FC<Props> = ({
+  dialog = 0,
+  puzzleDone = false,
+  onPuzzleSuccess,
+  playChime = () => {},
+  isMuted = true,
+  onToggleMute,
+}) => {
   const [showCinematic, setShowCinematic] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Climax stage progression: 0=idle, 1=knot_glow, 2=seams_close, 3=heart_glow, 4=gears_slow, 5=paws_meet, 6=dawn_wash, 7=complete
+  const [climaxStage, setClimaxStage] = useState<number>(puzzleDone ? 7 : 0);
+  const effectiveStage = puzzleDone ? 7 : climaxStage;
+
+  // Synchronize video muted state with global sound
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
 
   const togglePlay = () => {
     setIsPlaying((prev) => {
@@ -22,242 +48,430 @@ export const FinaleStage: React.FC<Props> = ({ dialog: _dialog }) => {
     });
   };
 
-  const toggleMute = () => {
-    setIsMuted((prev) => {
-      const next = !prev;
-      if (videoRef.current) {
-        videoRef.current.muted = next;
-      }
-      return next;
-    });
+  const handleToggleMute = () => {
+    if (onToggleMute) {
+      onToggleMute();
+    } else if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+    }
   };
 
+  const isDawn = effectiveStage >= 6;
+
+  // Emotional poses for The Unfinished One
+  let unfinishedPose: 'idle' | 'worried' | 'action' | 'happy' | 'talking' = 'worried';
+  if (effectiveStage >= 5) {
+    unfinishedPose = 'happy';
+  } else if (dialog === 2 || dialog === 4 || dialog === 7) {
+    unfinishedPose = 'talking';
+  } else if (dialog >= 5) {
+    unfinishedPose = 'action';
+  } else if (dialog >= 3) {
+    unfinishedPose = 'idle';
+  } else {
+    unfinishedPose = 'worried';
+  }
+
+  // Emotional poses for Morrow
+  let morrowPose: 'idle' | 'action' | 'talking' | 'happy' = 'action';
+  if (effectiveStage >= 5) {
+    morrowPose = 'happy';
+  } else if (dialog === 1 || dialog === 3 || dialog === 6) {
+    morrowPose = 'talking';
+  } else {
+    morrowPose = 'action';
+  }
+
+  // Emotional poses for Professor Perfect
+  let professorPose: 'idle' | 'talking' | 'happy' = 'idle';
+  if (effectiveStage >= 6) {
+    professorPose = 'happy';
+  } else if (dialog === 0 || dialog === 5) {
+    professorPose = 'talking';
+  } else {
+    professorPose = 'idle';
+  }
+
   return (
-    <section className="storybook-stage finale-stage-bespoke" aria-label="Inside the Clock Tower mechanism with Morrow, The Unfinished One, and Professor Perfect">
-      {/* Background Clockwork Cathedral Atmosphere */}
-      <div className="storybook-sky finale-cathedral-sky" aria-hidden="true">
-        <span className="tower-window-glow" />
-      </div>
+    <section
+      className={`finale-stage-bespoke ${isDawn ? 'finale-stage-restored' : 'finale-stage-shadowed'}`}
+      aria-label="Inside the Clock Tower Cathedral mechanism with Morrow, The Unfinished One, and Professor Primrose Perfect"
+    >
+      {/* 2.5D Living Photographic Stop-Motion Theater Plate */}
+      <div className="finale-cathedral-theatre-plate storybook-stage">
+        {/* Deep Gothic Midnight Atmosphere & Moonlit Sky */}
+        <div className="storybook-sky cathedral-sky" aria-hidden="true">
+          {/* Dynamic Cathedral Lighting Wash (Cross-fades to warm golden dawn in Stage 6+) */}
+          <div
+            className="cathedral-lighting-overlay"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: isDawn
+                ? 'radial-gradient(ellipse at 50% 30%, rgba(247, 213, 96, 0.35) 0%, rgba(232, 200, 120, 0.22) 50%, rgba(30, 24, 40, 0.25) 100%)'
+                : 'radial-gradient(ellipse at 50% 35%, rgba(65, 57, 82, 0.4) 0%, rgba(22, 18, 32, 0.85) 100%)',
+              transition: 'background 2.5s cubic-bezier(0.16, 1, 0.3, 1)',
+              pointerEvents: 'none',
+              zIndex: 1,
+            }}
+          />
 
-      <div className="storybook-scene-label">
-        <span>FINALE · 05 / 06</span>
-        <button
-          type="button"
-          className="balloon-action-btn balloon-video-btn"
-          style={{ marginLeft: 'auto', padding: '3px 10px', fontSize: '0.72rem' }}
-          onClick={() => setShowCinematic(true)}
-          aria-label="Watch Finale Crooked Knot reveal film"
-        >
-          <Film size={13} /> Reveal Film
-        </button>
-      </div>
+          {/* Golden dust particles floating in the cathedral light */}
+          <div className="cathedral-dust-particles" aria-hidden="true">
+            <span style={{ position: 'absolute', top: '22%', left: '28%', color: '#F7D560', fontSize: '10px', opacity: 0.6 }}>✧</span>
+            <span style={{ position: 'absolute', top: '35%', left: '52%', color: '#FFF8F1', fontSize: '12px', opacity: 0.7 }}>✦</span>
+            <span style={{ position: 'absolute', top: '18%', left: '74%', color: '#F7D560', fontSize: '9px', opacity: 0.5 }}>✧</span>
+            <span style={{ position: 'absolute', top: '55%', left: '38%', color: '#FFF8F1', fontSize: '8px', opacity: 0.6 }}>✦</span>
+            <span style={{ position: 'absolute', top: '48%', left: '68%', color: '#F7D560', fontSize: '11px', opacity: 0.7 }}>✧</span>
+          </div>
+        </div>
 
-      {/* Main Stop-Motion SVG Finale Stage */}
-      <div className="stage-svg-wrap">
-        <svg
-          viewBox="0 0 600 380"
-          preserveAspectRatio="xMidYMid slice"
-          className="stage-svg-art"
-          role="img"
-          aria-label="Handcrafted stop-motion scene of the Clock Tower mechanism where Morrow and The Unfinished One connect across the gear chasm with golden thread"
-        >
-          <defs>
-            <linearGradient id="tower-night-grad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#1B1726" />
-              <stop offset="60%" stopColor="#2E253E" />
-              <stop offset="100%" stopColor="#4A3B5F" />
-            </linearGradient>
-            <linearGradient id="bronze-gear" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#F5D78E" />
-              <stop offset="50%" stopColor="#C49A45" />
-              <stop offset="100%" stopColor="#75501B" />
-            </linearGradient>
-            <linearGradient id="navy-companion" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#2E3C56" />
-              <stop offset="100%" stopColor="#1A2234" />
-            </linearGradient>
-            <radialGradient id="thread-warmth" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#E8C878" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="#E8C878" stopOpacity="0" />
-            </radialGradient>
-            <filter id="golden-pulse" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
-          </defs>
+        <div className="storybook-scene-label">
+          <span>FINALE · 05 / 06</span>
+          <button
+            type="button"
+            className="balloon-action-btn balloon-video-btn"
+            style={{ marginLeft: 'auto', padding: '3px 10px', fontSize: '0.72rem' }}
+            onClick={() => setShowCinematic(true)}
+            aria-label="Watch Finale Crooked Knot reveal film"
+          >
+            <Film size={13} /> Reveal Film
+          </button>
+        </div>
 
-          {/* Moody night background */}
-          <rect width="600" height="380" fill="url(#tower-night-grad)" />
+        {/* =========================================================================
+            CLOCK TOWER CATHEDRAL ARCHITECTURE (SVG multiplane depth stage)
+           ========================================================================= */}
+        <div className="stage-svg-wrap">
+          <svg
+            viewBox="0 0 960 540"
+            preserveAspectRatio="xMidYMid slice"
+            className="stage-svg-art cathedral-architecture-svg"
+            role="img"
+            aria-label="Clock Tower Cathedral interior with stained-glass rose window, monumental brass gears, suspended wooden catwalks, and character platforms"
+          >
+            <defs>
+              <linearGradient id="cathedral-brass" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#F5DF9E" />
+                <stop offset="50%" stopColor="#D4A853" />
+                <stop offset="100%" stopColor="#8C6527" />
+              </linearGradient>
+              <linearGradient id="cathedral-copper" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#E29272" />
+                <stop offset="100%" stopColor="#8B4A34" />
+              </linearGradient>
+              <radialGradient id="cathedral-moon-glow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#FFF8F1" stopOpacity="0.4" />
+                <stop offset="60%" stopColor="#E8C878" stopOpacity="0.15" />
+                <stop offset="100%" stopColor="#1B1726" stopOpacity="0" />
+              </radialGradient>
+              <filter id="cathedral-gold-glow">
+                <feDropShadow dx="0" dy="0" stdDeviation="6" floodColor="#F7D560" floodOpacity="0.8" />
+              </filter>
+            </defs>
 
-          {/* Stained-glass Rose Window in background */}
-          <g opacity="0.25" transform="translate(300, 110)">
-            <circle cx="0" cy="0" r="85" fill="none" stroke="#E8C878" strokeWidth="4" />
-            <circle cx="0" cy="0" r="55" fill="none" stroke="#FFF8F1" strokeWidth="2" strokeDasharray="6,4" />
-            {[0, 45, 90, 135, 180, 225, 270, 315].map(deg => (
-              <line
-                key={deg}
-                x1="0"
-                y1="0"
-                x2={85 * Math.cos((deg * Math.PI) / 180)}
-                y2={85 * Math.sin((deg * Math.PI) / 180)}
-                stroke="#E8C878"
-                strokeWidth="2"
-              />
-            ))}
-          </g>
+            {/* VAST MOONLIT CLOCK FACE & STAINED-GLASS ROSE WINDOW (Center Background) */}
+            <g transform="translate(480, 180)" className="cathedral-clock-face" opacity={isDawn ? 0.9 : 0.65}>
+              <circle cx="0" cy="0" r="160" fill="url(#cathedral-moon-glow)" />
+              <circle cx="0" cy="0" r="148" fill="none" stroke="url(#cathedral-brass)" strokeWidth="6" />
+              <circle cx="0" cy="0" r="132" fill="none" stroke="#2B2238" strokeWidth="2" strokeDasharray="6,4" />
 
-          {/* GIGANTIC CLOCKWORK GEAR PLATFORMS */}
-          {/* Left Gear Platform (Where The Unfinished One stands) */}
-          <g className="gear-platform-left" transform="translate(130, 330)">
-            <ellipse cx="0" cy="0" rx="140" ry="45" fill="#3A3245" stroke="url(#bronze-gear)" strokeWidth="12" strokeDasharray="18,12" />
-            <ellipse cx="0" cy="0" rx="100" ry="32" fill="#262030" stroke="#E8C878" strokeWidth="3" />
-          </g>
-
-          {/* Right Gear Platform (Where Morrow stands) */}
-          <g className="gear-platform-right" transform="translate(470, 330)">
-            <ellipse cx="0" cy="0" rx="140" ry="45" fill="#3A3245" stroke="url(#bronze-gear)" strokeWidth="12" strokeDasharray="18,12" />
-            <ellipse cx="0" cy="0" rx="100" ry="32" fill="#262030" stroke="#E8C878" strokeWidth="3" />
-          </g>
-
-          {/* Central Escapement Wheel & Pendulum in the chasm below */}
-          <g className="central-chasm" transform="translate(300, 260)">
-            <circle cx="0" cy="0" r="160" fill="url(#thread-warmth)" />
-            {/* Escapement wheel */}
-            <circle cx="0" cy="40" r="75" fill="none" stroke="url(#bronze-gear)" strokeWidth="10" strokeDasharray="14,10" opacity="0.6" />
-            <circle cx="0" cy="40" r="25" fill="#1B1726" stroke="#E8C878" strokeWidth="3" />
-          </g>
-
-          {/* PROFESSOR PRIMROSE PERFECT (Center balcony / observation ledge) */}
-          <g className="professor-finale" transform="translate(265, 80)">
-            {/* Ledge */}
-            <rect x="0" y="70" width="70" height="12" rx="2" fill="#4A3F58" stroke="#1B1726" strokeWidth="2" />
-            <rect x="5" y="60" width="60" height="10" fill="none" stroke="#E8C878" strokeWidth="1.5" strokeDasharray="3,3" />
-
-            {/* Professor silhouette with visible porcelain hairline crack */}
-            {/* Dress */}
-            <path d="M 24 70 L 28 35 L 42 35 L 46 70 Z" fill="#8E79A8" stroke="#1B1726" strokeWidth="2" />
-            <path d="M 28 35 Q 35 42 42 35 Z" fill="#FFF8F1" stroke="#1B1726" strokeWidth="1.2" />
-            {/* Porcelain Head */}
-            <ellipse cx="35" cy="22" rx="10" ry="12" fill="#F8F6F4" stroke="#1B1726" strokeWidth="1.8" />
-            {/* Delicate gold-repaired hairline crack glowing in the warm light */}
-            <path d="M 28 20 Q 32 23 30 28" fill="none" stroke="#E8C878" strokeWidth="1.5" strokeLinecap="round" />
-            {/* Hair Bun */}
-            <ellipse cx="35" cy="10" rx="7" ry="6" fill="#2E253E" stroke="#1B1726" strokeWidth="1.5" />
-            {/* Spectacles */}
-            <circle cx="32" cy="21" r="3" fill="none" stroke="#E8C878" strokeWidth="1.2" />
-            <circle cx="38" cy="21" r="3" fill="none" stroke="#E8C878" strokeWidth="1.2" />
-            {/* Stamp resting on ledge - no longer striking! */}
-            <rect x="50" y="62" width="6" height="8" rx="1" fill="#A34063" stroke="#1B1726" strokeWidth="1" />
-          </g>
-
-          {/* THE UNFINISHED ONE (Left - navy felt creature with crooked knot) */}
-          <g className="unfinished-one-character" transform="translate(145, 190)">
-            {/* Ground shadow */}
-            <ellipse cx="50" cy="115" rx="36" ry="8" fill="#1B1726" opacity="0.3" />
-            {/* Navy Felt Body */}
-            <path
-              d="M 35 60 Q 15 95 38 112 Q 65 125 78 105 Q 88 75 68 58 Q 50 48 35 60 Z"
-              fill="url(#navy-companion)"
-              stroke="#1B1726"
-              strokeWidth="2.8"
-            />
-            {/* Asymmetric Left Ear (Crooked / bent) */}
-            <path d="M 42 55 Q 30 25 40 18 Q 48 28 48 52 Z" fill="#25324A" stroke="#1B1726" strokeWidth="2.2" />
-            {/* Asymmetric Right Ear (Perked) */}
-            <path d="M 60 52 Q 74 28 82 36 Q 74 52 66 52 Z" fill="#25324A" stroke="#1B1726" strokeWidth="2.2" />
-            {/* Glowing Golden Eyes */}
-            <circle cx="48" cy="68" r="5" fill="#FFF8F1" stroke="#1B1726" strokeWidth="1.2" />
-            <circle cx="48" cy="68" r="3" fill="#E8C878" />
-            <circle cx="66" cy="68" r="5" fill="#FFF8F1" stroke="#1B1726" strokeWidth="1.2" />
-            <circle cx="66" cy="68" r="3" fill="#E8C878" />
-            {/* Gentle smile */}
-            <path d="M 52 78 Q 57 83 62 78" fill="none" stroke="#E8C878" strokeWidth="1.8" strokeLinecap="round" />
-            {/* Signature Crooked Knot on Chest */}
-            <g transform="translate(56, 88)">
-              <circle cx="0" cy="0" r="3.5" fill="#E8C878" />
-              <path d="M -5 3 Q 0 8 5 2" fill="none" stroke="#E8C878" strokeWidth="2" strokeLinecap="round" />
-              <circle cx="-3" cy="5" r="1.5" fill="#A34063" />
+              {/* Gothic Tracery & Radial Spokes */}
+              {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => {
+                const rad = (deg * Math.PI) / 180;
+                return (
+                  <line
+                    key={deg}
+                    x1={Math.sin(rad) * 45}
+                    y1={-Math.cos(rad) * 45}
+                    x2={Math.sin(rad) * 144}
+                    y2={-Math.cos(rad) * 144}
+                    stroke="url(#cathedral-brass)"
+                    strokeWidth={deg % 90 === 0 ? 3 : 1.2}
+                    opacity="0.65"
+                  />
+                );
+              })}
+              {/* Inner Rose Rosette */}
+              <circle cx="0" cy="0" r="45" fill="#20182C" stroke="url(#cathedral-brass)" strokeWidth="3" />
+              <circle cx="0" cy="0" r="22" fill="#2D233E" stroke="#E8C878" strokeWidth="1.5" />
             </g>
-            {/* Mitten paw reaching across the chasm */}
-            <path d="M 68 85 Q 88 88 108 85" fill="none" stroke="#25324A" strokeWidth="14" strokeLinecap="round" />
-            <circle cx="108" cy="85" r="7" fill="#25324A" stroke="#1B1726" strokeWidth="2" />
-          </g>
 
-          {/* MORROW (Right - peach felt, plum scarf, reaching across to his first friend) */}
-          <g className="morrow-finale-group" transform="translate(365, 190)">
-            {/* Ground shadow */}
-            <ellipse cx="50" cy="115" rx="36" ry="8" fill="#1B1726" opacity="0.3" />
-            {/* Spool Tail */}
-            <g transform="translate(70, 92) rotate(15)">
-              <rect x="0" y="0" width="9" height="12" rx="2" fill="#8F5D48" stroke="#1B1726" strokeWidth="1.5" />
-              <rect x="2" y="2" width="5" height="8" fill="#E8C878" />
-              <path d="M 4 12 Q 8 20 18 22" fill="none" stroke="#E8C878" strokeWidth="2.5" strokeLinecap="round" />
+            {/* HANGING ROPES & SUSPENDED EMBROIDERY THREAD STRANDS */}
+            <g className="hanging-ropes" stroke="#4A3F58" strokeWidth="1.8" opacity="0.6">
+              <line x1="160" y1="0" x2="160" y2="340" strokeDasharray="8,3" />
+              <line x1="800" y1="0" x2="800" y2="340" strokeDasharray="8,3" />
+              <line x1="280" y1="0" x2="280" y2="170" />
+              <line x1="680" y1="0" x2="680" y2="170" />
+              {/* Golden trailing thread strands from previous attempts */}
+              <path d="M 280 170 Q 340 230 380 200" fill="none" stroke="#E8C878" strokeWidth="1.5" opacity="0.5" />
+              <path d="M 680 170 Q 620 230 580 210" fill="none" stroke="#E8C878" strokeWidth="1.5" opacity="0.5" />
             </g>
-            {/* Pear Body */}
-            <path
-              d="M 32 60 C 15 88 20 115 50 118 C 80 115 85 88 68 60 C 62 48 38 48 32 60 Z"
-              fill="#C98F70"
-              stroke="#1B1726"
-              strokeWidth="2.8"
-            />
-            {/* Asymmetric Ears */}
-            <path d="M 35 48 Q 24 18 36 14 Q 44 26 42 46 Z" fill="#C98F70" stroke="#1B1726" strokeWidth="2.2" />
-            <path d="M 58 48 Q 75 26 84 36 Q 76 52 64 52 Z" fill="#C98F70" stroke="#1B1726" strokeWidth="2.2" />
-            {/* Forehead Gold Diamond */}
-            <path d="M 50 42 L 52.5 45.5 L 50 49 L 47.5 45.5 Z" fill="#E8C878" stroke="#1B1726" strokeWidth="1" />
-            {/* Button Eyes */}
-            <circle cx="42" cy="56" r="4" fill="#1B1726" />
-            <circle cx="43" cy="55" r="1.2" fill="#FFF8F1" />
-            <circle cx="58" cy="56" r="4" fill="#1B1726" />
-            <circle cx="59" cy="55" r="1.2" fill="#FFF8F1" />
-            {/* Tender open mouth */}
-            <ellipse cx="50" cy="65" rx="2.5" ry="3.5" fill="#1B1726" />
-            {/* Plum Scarf */}
-            <path d="M 28 68 Q 50 74 72 68 Q 74 76 50 80 Q 26 76 28 68 Z" fill="#A34063" stroke="#1B1726" strokeWidth="2.2" />
-            <path d="M 54 74 L 58 96 L 66 94 Z" fill="#A34063" stroke="#1B1726" strokeWidth="1.5" />
-            {/* Mitten paw reaching across the chasm */}
-            <path d="M 32 82 Q 10 85 -10 82" fill="none" stroke="#C98F70" strokeWidth="14" strokeLinecap="round" />
-            <circle cx="-10" cy="82" r="7" fill="#C98F70" stroke="#1B1726" strokeWidth="2" />
-          </g>
 
-          {/* THE GLOWING CROOKED GOLDEN THREAD BRIDGING THE GAP */}
-          <g className="golden-bridge" filter="url(#golden-pulse)">
-            {/* Waving crooked golden thread */}
-            <path
-              d="M 253 275 Q 285 252 304 268 T 355 272"
-              fill="none"
-              stroke="#E8C878"
-              strokeWidth="5"
-              strokeLinecap="round"
-            />
-            {/* Center signature crooked knot */}
-            <circle cx="304" cy="268" r="5" fill="#A34063" stroke="#FFF8F1" strokeWidth="1.5" />
-            <path d="M 299 262 Q 304 256 309 262 T 304 274" fill="none" stroke="#E8C878" strokeWidth="3" />
-            {/* Floating golden thread particles */}
-            <circle cx="270" cy="255" r="2.5" fill="#FFF8F1" />
-            <circle cx="290" cy="280" r="2" fill="#E8C878" />
-            <circle cx="320" cy="258" r="2.5" fill="#FFF8F1" />
-            <circle cx="340" cy="280" r="2" fill="#E8C878" />
-          </g>
-        </svg>
+            {/* GIGANTIC CENTRAL ESCAPEMENT GEAR IN CHASM (480, 380) */}
+            <g
+              transform="translate(480, 420)"
+              className={effectiveStage >= 4 ? 'cathedral-gear-spin-slow' : 'cathedral-gear-spin'}
+            >
+              <circle cx="0" cy="0" r="115" fill="none" stroke="url(#cathedral-brass)" strokeWidth="16" strokeDasharray="18,12" />
+              <circle cx="0" cy="0" r="88" fill="#1b1526" stroke="#120c18" strokeWidth="3" />
+              <line x1="-88" y1="0" x2="88" y2="0" stroke="url(#cathedral-brass)" strokeWidth="4" />
+              <line x1="0" y1="-88" x2="0" y2="88" stroke="url(#cathedral-brass)" strokeWidth="4" />
+              <circle cx="0" cy="0" r="24" fill="#2d223c" stroke="#E8C878" strokeWidth="2" />
+            </g>
+
+            {/* LEFT GEAR PLATFORM (Where The Unfinished One stands) */}
+            <g className="cathedral-platform-left" transform="translate(190, 440)">
+              <ellipse cx="0" cy="0" rx="150" ry="40" fill="#2d243a" stroke="url(#cathedral-brass)" strokeWidth="10" strokeDasharray="16,10" />
+              <ellipse cx="0" cy="0" rx="115" ry="28" fill="#1e1828" stroke="#120c18" strokeWidth="2" />
+              {/* Wooden Catwalk Plank Texture */}
+              <line x1="-90" y1="-5" x2="90" y2="-5" stroke="#3d324c" strokeWidth="2" />
+              <line x1="-80" y1="5" x2="80" y2="5" stroke="#3d324c" strokeWidth="2" />
+            </g>
+
+            {/* RIGHT GEAR PLATFORM (Where Morrow stands) */}
+            <g className="cathedral-platform-right" transform="translate(770, 440)">
+              <ellipse cx="0" cy="0" rx="150" ry="40" fill="#2d243a" stroke="url(#cathedral-brass)" strokeWidth="10" strokeDasharray="16,10" />
+              <ellipse cx="0" cy="0" rx="115" ry="28" fill="#1e1828" stroke="#120c18" strokeWidth="2" />
+              {/* Wooden Catwalk Plank Texture */}
+              <line x1="-90" y1="-5" x2="90" y2="-5" stroke="#3d324c" strokeWidth="2" />
+              <line x1="-80" y1="5" x2="80" y2="5" stroke="#3d324c" strokeWidth="2" />
+            </g>
+
+            {/* HIGH OBSERVATION BALCONY FOR PROFESSOR PERFECT (480, 115) */}
+            <g className="cathedral-balcony" transform="translate(480, 120)">
+              {/* Heavy brass corbels / support brackets */}
+              <path d="M -50 30 L -50 0 L -30 0 Z" fill="#8C6527" stroke="#120c18" strokeWidth="1.5" />
+              <path d="M 50 30 L 50 0 L 30 0 Z" fill="#8C6527" stroke="#120c18" strokeWidth="1.5" />
+              {/* Catwalk platform floor */}
+              <rect x="-65" y="0" width="130" height="14" rx="3" fill="#2d243a" stroke="url(#cathedral-brass)" strokeWidth="2" />
+              {/* Ornamental Gothic Railing */}
+              <rect x="-60" y="-22" width="120" height="22" fill="none" stroke="url(#cathedral-brass)" strokeWidth="1.8" />
+              {[-50, -30, -10, 10, 30, 50].map((x) => (
+                <line key={x} x1={x} y1="-22" x2={x} y2="0" stroke="url(#cathedral-brass)" strokeWidth="1.5" />
+              ))}
+              {/* Resting measuring ruler & stamp */}
+              <rect x="-45" y="-6" width="30" height="4" fill="#D4A853" stroke="#120c18" strokeWidth="0.8" />
+              <rect x="25" y="-12" width="8" height="12" rx="1" fill="#A34063" stroke="#120c18" strokeWidth="1" />
+            </g>
+
+            {/* BRIDGING THREAD BEAM (Illuminates in Stage 1+) */}
+            {effectiveStage >= 1 && (
+              <g className="cathedral-connecting-bridge" filter="url(#cathedral-gold-glow)">
+                <path
+                  d="M 230 420 Q 480 370 730 420"
+                  fill="none"
+                  stroke="#F7D560"
+                  strokeWidth="5"
+                  strokeLinecap="round"
+                />
+                <circle cx="480" cy="395" r="7" fill="#A34063" stroke="#FFF8F1" strokeWidth="2" />
+                <circle cx="480" cy="395" r="3" fill="#F7D560" />
+              </g>
+            )}
+          </svg>
+        </div>
+
+        {/* =========================================================================
+            STOP-MOTION CHARACTER ACTORS & ANCHORED DIALOGUE
+           ========================================================================= */}
+
+        {/* 1. THE UNFINISHED ONE (Left Platform) */}
+        <div
+          className="stage-actor-anchor unfinished-anchor"
+          style={{
+            position: 'absolute',
+            left: effectiveStage >= 5 ? '32%' : '14%',
+            bottom: '12%',
+            width: '120px',
+            height: '150px',
+            pointerEvents: 'auto',
+            zIndex: 4,
+            transition: 'all 2.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          }}
+        >
+          <StopMotionActor
+            character="unfinished"
+            state={unfinishedPose}
+            isSpeaking={dialog === 2 || dialog === 4 || dialog === 7}
+            alt="The Unfinished One: navy patchwork felt fantasy creature with signature crooked chest knot"
+            fallbackSvg={
+              <svg viewBox="0 0 120 150" width="100%" height="100%">
+                <ellipse cx="60" cy="140" rx="42" ry="8" fill="#161220" opacity="0.4" />
+                {/* Navy felt body */}
+                <path
+                  d="M 40 70 Q 20 110 44 130 Q 75 145 90 120 Q 100 85 76 68 Q 55 58 40 70 Z"
+                  fill="#25324A"
+                  stroke="#161220"
+                  strokeWidth="3"
+                />
+                {/* Asymmetric ears */}
+                <path d="M 46 65 Q 32 30 44 24 Q 54 36 54 62 Z" fill="#25324A" stroke="#161220" strokeWidth="2.5" />
+                <path d="M 68 62 Q 84 32 94 42 Q 84 62 76 62 Z" fill="#25324A" stroke="#161220" strokeWidth="2.5" />
+                {/* Golden eyes */}
+                <circle cx="54" cy="80" r="5" fill="#FFF8F1" stroke="#161220" strokeWidth="1.2" />
+                <circle cx="54" cy="80" r="3" fill="#E8C878" />
+                <circle cx="74" cy="80" r="5" fill="#FFF8F1" stroke="#161220" strokeWidth="1.2" />
+                <circle cx="74" cy="80" r="3" fill="#E8C878" />
+                {/* Crooked chest knot */}
+                <circle cx="64" cy="102" r="4" fill="#A34063" stroke="#FFF8F1" strokeWidth="1.5" />
+              </svg>
+            }
+          />
+
+          {(dialog === 2 || dialog === 4 || dialog === 7) && (
+            <div className="character-speech-bubble bubble-unfinished" role="tooltip" aria-live="polite">
+              <strong>The Unfinished One</strong>
+              <p>
+                {dialog === 2 && 'You left me when my stitches came out wrong.'}
+                {dialog === 4 && 'I kept the world together while you learned.'}
+                {dialog === 7 && 'Shall we make one wonderfully crooked stitch together?'}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* 2. MORROW (Right Platform) */}
+        <div
+          className="stage-actor-anchor morrow-finale-anchor"
+          style={{
+            position: 'absolute',
+            right: effectiveStage >= 5 ? '32%' : '14%',
+            bottom: '12%',
+            width: '115px',
+            height: '145px',
+            pointerEvents: 'auto',
+            zIndex: 4,
+            transition: 'all 2.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          }}
+        >
+          <StopMotionActor
+            character="morrow"
+            state={morrowPose}
+            isSpeaking={dialog === 1 || dialog === 3 || dialog === 6}
+            alt="Morrow the Stitchling apprentice with patchwork scarf and trailing golden thread"
+            fallbackSvg={<Morrow small expression={isDawn ? 'happy' : 'focused'} />}
+          />
+
+          {(dialog === 1 || dialog === 3 || dialog === 6) && (
+            <div className="character-speech-bubble bubble-morrow" role="tooltip" aria-live="polite">
+              <strong>Morrow</strong>
+              <p>
+                {dialog === 1 && 'I know that crooked knot. It was my first creation.'}
+                {dialog === 3 && 'I was scared. I am sorry I left you.'}
+                {dialog === 6 && 'You should never have been sent away. Neither should my friend.'}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* 3. PROFESSOR PRIMROSE PERFECT (High Observation Balcony) */}
+        <div
+          className="stage-actor-anchor professor-balcony-anchor"
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '7%',
+            transform: 'translateX(-50%)',
+            width: '85px',
+            height: '110px',
+            pointerEvents: 'auto',
+            zIndex: 5,
+          }}
+        >
+          <StopMotionActor
+            character="professor"
+            state={professorPose}
+            isSpeaking={dialog === 0 || dialog === 5}
+            alt="Professor Primrose Perfect in Victorian waistcoat with golden porcelain hairline crack"
+            fallbackSvg={
+              <svg viewBox="0 0 100 120" width="100%" height="100%">
+                <ellipse cx="50" cy="110" rx="30" ry="7" fill="#1e1828" opacity="0.3" />
+                <rect x="25" y="48" width="50" height="60" rx="6" fill="#FFF8F1" stroke="#252030" strokeWidth="2.5" />
+                <path d="M 40 48 Q 50 56 60 48" fill="#A34063" />
+                <circle cx="50" cy="38" r="22" fill="#E8DEC8" stroke="#252030" strokeWidth="2.5" />
+                <circle cx="43" cy="36" r="3" fill="#252030" />
+                <circle cx="57" cy="36" r="3" fill="#252030" />
+                {effectiveStage >= 6 ? (
+                  <path d="M 44 54 Q 50 62 56 54" fill="none" stroke="#252030" strokeWidth="2" strokeLinecap="round" />
+                ) : (
+                  <line x1="44" y1="55" x2="56" y2="55" stroke="#252030" strokeWidth="2" strokeLinecap="round" />
+                )}
+                {/* Hairline crack in porcelain */}
+                <path d="M 52 18 Q 50 26 53 32" fill="none" stroke="#E8C878" strokeWidth="1.5" strokeLinecap="round" />
+                <rect x="34" y="24" width="32" height="18" fill="#252030" rx="2" />
+                <ellipse cx="50" cy="40" rx="24" ry="4" fill="#252030" />
+                <rect x="34" y="34" width="32" height="4" fill="#A34063" />
+              </svg>
+            }
+          />
+
+          {(dialog === 0 || dialog === 5) && (
+            <div
+              className="character-speech-bubble bubble-professor-balcony"
+              role="tooltip"
+              aria-live="polite"
+              style={{
+                position: 'absolute',
+                top: '105%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: 'max-content',
+                maxWidth: '240px',
+              }}
+            >
+              <strong>Professor Perfect</strong>
+              <p>
+                {dialog === 0 && 'One perfect stitch, and the world will be approved.'}
+                {dialog === 5 && 'They sent me away when they saw my porcelain cracks. I thought perfection would keep everyone safe.'}
+              </p>
+            </div>
+          )}
+        </div>
+
+        <div className="storybook-scene-bottom">
+          <span style={{ background: 'rgba(22, 18, 32, 0.75)', padding: '2px 8px', borderRadius: '6px', backdropFilter: 'blur(4px)', color: '#FFF8F1', font: "700 0.68rem 'Space Mono', monospace" }}>
+            {isDawn ? '✦ A Wonderfully Crooked Knot · The World Approved ✦' : 'The First Unfinished Thing'}
+          </span>
+          <span style={{ background: 'rgba(22, 18, 32, 0.75)', padding: '2px 6px', borderRadius: '6px', backdropFilter: 'blur(4px)', color: '#F7D560' }}>✦</span>
+        </div>
       </div>
 
-      <div className="storybook-scene-bottom">
-        <span>The First Unfinished Thing</span>
-        <span>✦</span>
+      {/* =========================================================================
+          PHYSICAL FINAL STITCH WORKBENCH (Directly Playable Below Cathedral)
+         ========================================================================= */}
+      <div
+        className="finale-stitch-workbench"
+        style={{
+          width: '100%',
+          maxWidth: '820px',
+          margin: '14px auto 0',
+          position: 'relative',
+          zIndex: 6,
+        }}
+      >
+        <FinaleStitch
+          onSuccess={() => {
+            if (onPuzzleSuccess) onPuzzleSuccess();
+          }}
+          playChime={playChime}
+          onClimaxStageChange={setClimaxStage}
+          initialClimaxStage={puzzleDone ? 7 : 0}
+        />
       </div>
 
+      {/* Cinematic Reveal Modal */}
       {showCinematic && (
         <div
           className="living-cinematic-bridge-modal"
           role="dialog"
           aria-modal="true"
-          aria-label="Finale Crooked Knot Reveal"
+          aria-label="Finale Crooked Knot Reveal Film"
           style={{
             position: 'absolute',
             inset: 0,
             zIndex: 12,
-            background: '#1a1420',
+            background: '#161220',
           }}
         >
           <div className="cinematic-reveal-stage" style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
@@ -271,7 +485,7 @@ export const FinaleStage: React.FC<Props> = ({ dialog: _dialog }) => {
               loop
               style={{ width: '100%', height: '100%', objectFit: 'contain' }}
             />
-            <div className="comic-video-controls" role="toolbar" aria-label="Cinematic video controls" style={{ position: 'absolute', bottom: '16px', left: '16px', right: '16px', display: 'flex', gap: '8px', zIndex: 10, background: 'rgba(26,20,32,0.85)', padding: '8px 12px', borderRadius: '12px' }}>
+            <div className="comic-video-controls" role="toolbar" aria-label="Cinematic video controls" style={{ position: 'absolute', bottom: '16px', left: '16px', right: '16px', display: 'flex', gap: '8px', zIndex: 10, background: 'rgba(22,18,32,0.9)', padding: '8px 12px', borderRadius: '12px' }}>
               <button
                 type="button"
                 className="comic-video-btn"
@@ -283,7 +497,7 @@ export const FinaleStage: React.FC<Props> = ({ dialog: _dialog }) => {
               <button
                 type="button"
                 className="comic-video-btn"
-                onClick={toggleMute}
+                onClick={handleToggleMute}
                 aria-label={isMuted ? 'Unmute video audio' : 'Mute video audio'}
               >
                 {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
@@ -294,7 +508,7 @@ export const FinaleStage: React.FC<Props> = ({ dialog: _dialog }) => {
                 onClick={() => setShowCinematic(false)}
                 style={{ marginLeft: 'auto' }}
               >
-                Return to Scene ✕
+                Return to Cathedral ✕
               </button>
             </div>
           </div>

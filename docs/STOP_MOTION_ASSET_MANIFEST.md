@@ -49,7 +49,15 @@ Multiplane plates are split into Background (far horizon), Midground (walkable s
 | **Chapter 1** | `shadow-village` | Multiplane | Twilight village square with cobbled streets | `/environments/shadows-sky.webp` | In-Engine 2.5D Living Scene |
 | **Chapter 2** | `weather-forest` | Multiplane | Inverted forest canopy, rain, moss knolls | `/environments/forest-sky.webp` | In-Engine 2.5D Living Scene |
 | **Chapter 3** | `tomorrow-town` | Set Plate | Tabletop miniature Victorian clockwork city, giant brass gears, crooked shops | `/environments/tomorrow-town.webp` | **Active 1080p Film Set Plate** |
-| **Chapter 4** | `finale-chasm` | Abyss | Giant needle loom & cosmic thread expanse | `/environments/finale-nexus.webp` | In-Engine 2.5D Living Scene |
+| Chapter | Environment ID | Layer | Description | Path | Status |
+|---|---|---|---|---|---|
+| **Prologue** | `workshop-bench` | Far BG | Workbench wall with hanging tools, thread reels | `/environments/workshop-bg.webp` | Integrated in comic |
+| **Prologue** | `workshop-bench` | Mid | Wood-grain workbench table surface | `/environments/workshop-table.webp` | Integrated in comic |
+| **Prologue** | `workshop-bench` | FG | Brass lamp glow & scissor silhouette | `/environments/workshop-fg.webp` | Integrated in comic |
+| **Chapter 1** | `shadow-village` | Multiplane | Twilight village square with cobbled streets | `/environments/shadows-sky.webp` | In-Engine 2.5D Living Scene |
+| **Chapter 2** | `weather-forest` | Multiplane | Inverted forest canopy, rain, moss knolls | `/environments/forest-sky.webp` | In-Engine 2.5D Living Scene |
+| **Chapter 3** | `tomorrow-town` | Set Plate | Tabletop miniature Victorian clockwork city, giant brass gears, crooked shops | `/environments/tomorrow-town.webp` | **Active 1080p Film Set Plate** |
+| **Chapter 4** | `finale-cathedral` | Multiplane | Inside the monumental Clock Tower Cathedral mechanism with Gothic moonlit clock face, stained-glass rose window, rotating brass gears, hanging thread spools, floating dust particles, and dynamic golden dawn wash | Procedural In-Engine Stop-Motion Theatre Plate | **Active In-Engine Cathedral (Sprint 03)** |
 | **Epilogue** | `scrapbook-desk` | Surface | Handmade linen desk pad with stitched album | `/environments/scrapbook-desk.webp` | In-Engine 2.5D Living Scene |
 
 ---
@@ -68,6 +76,7 @@ Physical props engineered for tactile pointer/touch interactions:
 | `prop-thirsty-lilies` | Stone water basin with parched buds $\to$ blooming water lilies | Concentric blue ripple rings | `/props/thirsty-lilies.webp` | Procedural SVG In-Engine |
 | `prop-frozen-windmill` | Wooden sails on brass axletree | Static $\to$ rotating with wind | `/props/windmill-sails.webp` | Procedural SVG In-Engine |
 | `prop-impossible-clock` | Physical Miniature Impossible Clock | 3 direct physical manipulations: brass cog pointer drag & mesh, weather dial direct circular rotation with magnetic lock to 180° South, crooked heart mainspring elastic tension pull & escapement seating. 8-stage timed transformation sequence. Dual accessible drawer. | In-Engine Physical Mechanism | **Fully Playable In-Engine (Sprint 02.1)** |
+| `prop-final-stitch` | Tactile Final Stitch Mechanism | 1 coherent tactile pointer/touch drag mechanic: guiding golden needle across the chasm gap with catenary drape, companion reach, magnetic snap at uneven ends, cinching the signature crooked knot. 7-stage timed choreographed emotional climax. Dual-mode keyboard accessibility drawer. | In-Engine Tactile Canvas | **Fully Playable In-Engine (Sprint 03)** |
 | `prop-golden-needle` | Morrow's polished brass needle with trailing thread | Used as pointer drag cursor | `/props/brass-needle.webp` | Procedural SVG In-Engine |
 
 ---

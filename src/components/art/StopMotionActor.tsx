@@ -60,7 +60,11 @@ const CHARACTER_SPRITE_MAP: Record<ActorId, Partial<Record<ActorState, string>>>
   },
   unfinished: {
     idle: 'unfinished-idle.png',
+    talking: 'unfinished-action.png',
+    happy: 'unfinished-action.png',
     action: 'unfinished-action.png',
+    surprised: 'unfinished-idle.png',
+    worried: 'unfinished-idle.png',
   },
   // Baker is an authoritative illustrated stop-motion paper-craft fallback (no photographic intake exists)
   baker: {},

@@ -3563,5 +3563,167 @@ img,svg,video,canvas { max-width:100%; }
   }
 }
 
+/* =========================================================================
+   SPRINT 03: CLOCK TOWER CATHEDRAL & THE FINAL STITCH
+   ========================================================================= */
+
+.finale-stage-bespoke {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.finale-cathedral-theatre-plate,
+.cathedral-theatre-plate {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #140e1c;
+  box-shadow: 0 12px 36px rgba(18, 12, 28, 0.45), 0 2px 6px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--line, #E8DEC8);
+}
+
+@keyframes cathedral-gear-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes cathedral-gear-reverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+.cathedral-gear-spin {
+  animation: cathedral-gear-rotate 22s linear infinite;
+}
+
+.cathedral-gear-spin-slow {
+  animation: cathedral-gear-rotate 48s linear infinite;
+}
+
+.cathedral-gear-spin-reverse {
+  animation: cathedral-gear-reverse 34s linear infinite;
+}
+
+@keyframes dust-float {
+  0% { transform: translateY(0px) translateX(0px); opacity: 0.25; }
+  50% { transform: translateY(-16px) translateX(8px); opacity: 0.7; }
+  100% { transform: translateY(0px) translateX(0px); opacity: 0.25; }
+}
+
+.cathedral-dust-particles circle {
+  animation: dust-float 6s ease-in-out infinite;
+}
+
+.cathedral-dust-particles circle:nth-child(2) {
+  animation-duration: 8.5s;
+  animation-delay: -2s;
+}
+
+.cathedral-dust-particles circle:nth-child(3) {
+  animation-duration: 5.2s;
+  animation-delay: -3.5s;
+}
+
+.cathedral-dust-particles circle:nth-child(4) {
+  animation-duration: 7.1s;
+  animation-delay: -1.2s;
+}
+
+@keyframes companion-heart-pulse {
+  0% { transform: scale(1); filter: drop-shadow(0 0 6px #F7D560); }
+  50% { transform: scale(1.15); filter: drop-shadow(0 0 18px #F7D560) drop-shadow(0 0 10px #A34063); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 6px #F7D560); }
+}
+
+.companion-heart-awakening {
+  animation: companion-heart-pulse 1.6s ease-in-out infinite;
+}
+
+.character-speech-bubble-cathedral {
+  background: var(--cream, #FFF8F1);
+  border: 1.5px solid var(--line, #E7D4D4);
+  border-radius: 12px;
+  padding: 8px 12px;
+  box-shadow: 0 4px 14px rgba(22, 16, 32, 0.35);
+  pointer-events: none;
+}
+
+/* Finale Stitch Workbench */
+.finale-stitch-workbench {
+  width: 100%;
+  border-radius: 18px;
+  background: var(--surface, #FFFDF9);
+  padding: 12px;
+  border: 1px solid var(--line, #E8DEC8);
+  box-shadow: 0 4px 20px rgba(37, 32, 48, 0.08);
+}
+
+.finale-stitch-interactive {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tactile-crooked-stitch {
+  width: 100%;
+  border-radius: 14px;
+  background: #181220;
+  border: 1.5px solid #2a2034;
+  overflow: hidden;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes knot-cinch-glow {
+  0% { filter: drop-shadow(0 0 4px #F7D560); }
+  50% { filter: drop-shadow(0 0 16px #F7D560) drop-shadow(0 0 8px #FFF8F1); }
+  100% { filter: drop-shadow(0 0 8px #F7D560); }
+}
+
+.crooked-knot-cinch {
+  animation: knot-cinch-glow 2s ease-in-out infinite;
+}
+
+.accessible-stitch-drawer {
+  background: rgba(232, 222, 200, 0.25);
+  border: 1px solid var(--line, #E8DEC8);
+  border-radius: 12px;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+}
+
+.accessible-stitch-drawer summary {
+  user-select: none;
+}
+
+.accessible-stitch-drawer summary:focus-visible {
+  outline: 2px solid var(--gold, #E8C878);
+  outline-offset: 2px;
+}
+
+.accessible-stitch-btn:hover:not(:disabled) {
+  border-color: var(--gold, #E8C878) !important;
+  transform: translateY(-1px);
+}
+
+.accessible-stitch-btn:focus-visible {
+  outline: 2px solid var(--gold, #E8C878);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cathedral-gear-spin,
+  .cathedral-gear-spin-slow,
+  .cathedral-gear-spin-reverse,
+  .cathedral-dust-particles circle,
+  .companion-heart-awakening,
+  .crooked-knot-cinch {
+    animation: none !important;
+  }
+}
+
 
 

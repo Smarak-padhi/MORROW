@@ -262,10 +262,17 @@ export function ImpossibleClock({
 
   // =========================================================================
   // TIMED SUCCESS SEQUENCE ORCHESTRATION (8 Stages)
-  // Do not switch every visual state instantly when puzzleDone becomes true!
+  // Stabilized to run exactly once when heart is inserted.
   // =========================================================================
+  const sequenceStartedRef = useRef(initialRestartStage >= 8);
+  const playChimeRef = useRef(playChime);
   useEffect(() => {
-    if (!heartInserted || restartStage >= 8) return;
+    playChimeRef.current = playChime;
+  }, [playChime]);
+
+  useEffect(() => {
+    if (!heartInserted || sequenceStartedRef.current) return;
+    sequenceStartedRef.current = true;
 
     const isReduced =
       typeof window !== 'undefined' &&
@@ -276,12 +283,12 @@ export function ImpossibleClock({
 
     const t2 = setTimeout(() => {
       setRestartStage(2); // Stage 2 (500ms): Clock gears engage sequentially
-      playChime();
+      playChimeRef.current();
     }, 500 * factor);
 
     const t3 = setTimeout(() => {
       setRestartStage(3); // Stage 3 (1100ms): Clock hands start moving freely
-      playChime();
+      playChimeRef.current();
     }, 1100 * factor);
 
     const t4 = setTimeout(() => {
@@ -313,7 +320,7 @@ export function ImpossibleClock({
       clearTimeout(t7);
       clearTimeout(t8);
     };
-  }, [heartInserted, playChime, restartStage]);
+  }, [heartInserted]);
 
   // Derived proximity visual cues
   const gearNearSpindle =
