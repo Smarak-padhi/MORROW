@@ -7,6 +7,8 @@ interface ComicVideoPanelProps {
   fallbackArt: React.ReactNode;
   ariaLabel: string;
   captionTitle?: string;
+  autoPlay?: boolean;
+  onEnded?: () => void;
 }
 
 export const ComicVideoPanel: React.FC<ComicVideoPanelProps> = ({
@@ -14,6 +16,8 @@ export const ComicVideoPanel: React.FC<ComicVideoPanelProps> = ({
   poster,
   fallbackArt,
   ariaLabel,
+  autoPlay = false,
+  onEnded,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -28,6 +32,18 @@ export const ComicVideoPanel: React.FC<ComicVideoPanelProps> = ({
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
+
+  useEffect(() => {
+    if (autoPlay && videoRef.current && !isReducedMotion) {
+      videoRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => {
+          // Autoplay was prevented by browser policy; stay on poster ready to click
+          setIsPlaying(false);
+        });
+    }
+  }, [autoPlay, isReducedMotion, src]);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
@@ -66,7 +82,10 @@ export const ComicVideoPanel: React.FC<ComicVideoPanelProps> = ({
         playsInline
         muted={isMuted}
         preload="metadata"
-        onEnded={() => setIsPlaying(false)}
+        onEnded={() => {
+          setIsPlaying(false);
+          if (onEnded) onEnded();
+        }}
         onError={() => setHasError(true)}
         className="comic-panel-video"
       />

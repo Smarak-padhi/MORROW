@@ -20,9 +20,18 @@ class SoundEngine {
       }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
-      void this.ctx.resume();
+      void this.ctx.resume().catch(() => {});
     }
     return this.ctx;
+  }
+
+  public requestAudioActivation(): Promise<boolean> {
+    const ctx = this.getContext();
+    if (!ctx) return Promise.resolve(false);
+    if (ctx.state === 'suspended') {
+      return ctx.resume().then(() => ctx.state === 'running').catch(() => false);
+    }
+    return Promise.resolve(ctx.state === 'running');
   }
 
   public play(effect: AudioEffect, muted: boolean): void {

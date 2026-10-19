@@ -283,9 +283,9 @@ export const ShadowStage: React.FC<ShadowStageProps> = ({
                     type="button"
                     className="balloon-action-btn balloon-next-btn"
                     onClick={advanceBeat}
-                    aria-label={currentBeat < 3 ? 'Turn the page to next dialogue beat' : 'Turn the page to mend the seams'}
+                    aria-label={currentBeat < 3 ? 'Continue to next dialogue' : 'Begin mending the shadow'}
                   >
-                    {currentBeat < 3 ? 'Turn the page ▾' : 'Turn the page · Mend seams ➔'}
+                    {currentBeat < 3 ? 'Continue ▾' : 'Mend the shadow ➔'}
                   </button>
                   <button
                     type="button"
@@ -293,7 +293,7 @@ export const ShadowStage: React.FC<ShadowStageProps> = ({
                     onClick={() => setShowCinematic(true)}
                     aria-label="Watch Duck stop-motion reveal film"
                   >
-                    <Film size={14} /> Reveal Film
+                    <Film size={14} /> Film
                   </button>
                 </>
               ) : (
@@ -435,14 +435,18 @@ export const ShadowStage: React.FC<ShadowStageProps> = ({
         {/* TACTILE SHADOW STITCHER GAMEPLAY CANVAS (Active during Beat 4) */}
         {isStitching && (
           <div
-            className="living-scene-stitcher-overlay"
+            className="living-scene-stitcher-overlay direct-environmental-stitch-mode"
             style={{
               position: 'absolute',
               inset: 0,
               zIndex: 8,
-              background: 'rgba(32, 25, 46, 0.92)',
-              backdropFilter: 'blur(4px)',
-              padding: '16px 12px',
+              background: 'radial-gradient(circle at 50% 50%, rgba(26, 20, 32, 0.45) 0%, rgba(18, 14, 24, 0.8) 100%)',
+              backdropFilter: 'blur(2px)',
+              padding: '12px 10px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
               overflowY: 'auto',
             }}
           >

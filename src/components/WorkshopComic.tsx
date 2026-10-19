@@ -115,12 +115,35 @@ function Balloon({ speaker, words, side = 'left' }: { speaker: string; words: st
 
 export function WorkshopComic({ beat, awake, onBell, onNext }: Props) {
   const newest = useRef<HTMLElement | null>(null);
+  const autoAdvanceTimer = useRef<number | null>(null);
 
   useEffect(() => {
     if (beat > 0 && newest.current && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       newest.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [beat]);
+
+  // Clean up timers on unmount
+  useEffect(() => {
+    return () => {
+      if (autoAdvanceTimer.current) window.clearTimeout(autoAdvanceTimer.current);
+    };
+  }, []);
+
+  // Automatic transition with 0.8s comedic pause between Sir Clack's line (panel index 4)
+  // ("That is a visitor, you walnut.") and Morrow's greeting (panel index 5)
+  // ("HELLO, POTENTIALLY POLITE GIANT!")
+  useEffect(() => {
+    if (!awake) return;
+
+    // Panel 4 corresponds to beat === 3 (awake displays beats.slice(0, beat + 2) => 5 panels: 0,1,2,3,4)
+    if (beat === 3) {
+      if (autoAdvanceTimer.current) window.clearTimeout(autoAdvanceTimer.current);
+      autoAdvanceTimer.current = window.setTimeout(() => {
+        onNext();
+      }, 800); // 0.8-second comedic pause
+    }
+  }, [beat, awake, onNext]);
 
   return (
     <div className="comic-workshop">
@@ -149,6 +172,14 @@ export function WorkshopComic({ beat, awake, onBell, onNext }: Props) {
                   src={panel.videoSrc}
                   poster={panel.posterSrc}
                   ariaLabel={panel.title}
+                  autoPlay={current}
+                  onEnded={() => {
+                    // For panel 4 ("clack"), let the 0.8s timer trigger automatically.
+                    // For other video panels, automatically advance to the next beat once completed!
+                    if (current && i < beats.length - 1 && beat !== 3) {
+                      onNext();
+                    }
+                  }}
                   fallbackArt={
                     <>
                       {panel.shot === 'reaction' && <Panel3Reaction />}
@@ -213,7 +244,7 @@ export function WorkshopComic({ beat, awake, onBell, onNext }: Props) {
           </button>
         ) : beat < 7 ? (
           <button className="storybook-action" type="button" onClick={onNext}>
-            Turn the page <ArrowRight size={18} />
+            {beat === 3 ? 'Awaiting response…' : 'Continue story'} <ArrowRight size={18} />
           </button>
         ) : null}
         <span className="storybook-page-number">

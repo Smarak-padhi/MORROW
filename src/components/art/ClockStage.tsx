@@ -82,8 +82,44 @@ export const ClockStage: React.FC<Props> = ({ dialog: _dialog }) => {
             </filter>
           </defs>
 
-          {/* Indigo twilight sky */}
+          {/* Indigo & Plum twilight sky */}
           <rect width="600" height="380" fill="url(#clock-sky-grad)" />
+
+          {/* BACKGROUND CROOKED BUILDINGS & OVERLAPPING ROOFTOPS */}
+          <g className="tomorrow-town-architecture" opacity="0.85">
+            {/* Far Left Crooked Porcelain Tower with Brass Spire */}
+            <path d="M 0 320 L 0 110 L 25 70 L 50 110 L 55 320 Z" fill="#32283e" stroke="#1e1828" strokeWidth="2" />
+            <polygon points="25,70 20,25 30,25" fill="url(#brass-clock)" />
+            <rect x="15" y="130" width="16" height="24" rx="3" fill="#F7D560" opacity="0.85" />
+            <line x1="23" y1="130" x2="23" y2="154" stroke="#1e1828" strokeWidth="1.5" />
+            <rect x="15" y="180" width="16" height="24" rx="3" fill="#F7D560" opacity="0.65" />
+
+            {/* Overlapping Mid-Left Mansard Roof Building */}
+            <path d="M 45 320 L 45 140 L 115 100 L 175 130 L 175 320 Z" fill="#3d334c" stroke="#1e1828" strokeWidth="2.5" />
+            <path d="M 40 140 L 115 95 L 180 130 Z" fill="#6C5B7B" stroke="#1e1828" strokeWidth="2" />
+            {/* Warm illuminated attic dormer windows */}
+            <rect x="70" y="150" width="22" height="30" rx="3" fill="#F7D560" opacity="0.9" />
+            <line x1="81" y1="150" x2="81" y2="180" stroke="#1e1828" strokeWidth="1.5" />
+            <rect x="120" y="150" width="22" height="30" rx="3" fill="#F7D560" opacity="0.9" />
+            <line x1="131" y1="150" x2="131" y2="180" stroke="#1e1828" strokeWidth="1.5" />
+
+            {/* Overlapping Far-Right Stepped Gable Townhouse */}
+            <path d="M 420 320 L 420 130 L 460 130 L 460 90 L 500 90 L 500 50 L 540 50 L 540 90 L 570 90 L 570 320 Z" fill="#362d44" stroke="#1e1828" strokeWidth="2" />
+            <rect x="445" y="150" width="20" height="28" rx="3" fill="#F7D560" opacity="0.8" />
+            <rect x="495" y="150" width="20" height="28" rx="3" fill="#F7D560" opacity="0.8" />
+            <rect x="525" y="150" width="20" height="28" rx="3" fill="#F7D560" opacity="0.85" />
+            <rect x="485" y="105" width="18" height="22" rx="2" fill="#F7D560" opacity="0.75" />
+
+            {/* Suspended Frozen Clock Hands Floating in the town air */}
+            <g opacity="0.5" transform="translate(100, 60) rotate(-25)">
+              <line x1="0" y1="0" x2="0" y2="35" stroke="url(#brass-clock)" strokeWidth="3" strokeLinecap="round" />
+              <circle cx="0" cy="0" r="4" fill="#E8C878" />
+            </g>
+            <g opacity="0.5" transform="translate(520, 45) rotate(40)">
+              <line x1="0" y1="0" x2="0" y2="45" stroke="url(#brass-clock)" strokeWidth="3" strokeLinecap="round" />
+              <circle cx="0" cy="0" r="4" fill="#E8C878" />
+            </g>
+          </g>
 
           {/* GIGANTIC FROZEN CLOCK TOWER ARCHWAY (Center / Background) */}
           <g className="clocktower-arch" filter="url(#clock-shadow)">
