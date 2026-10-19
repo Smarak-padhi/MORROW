@@ -464,33 +464,22 @@ export const TactileShadowStitcher: React.FC<TactileShadowStitcherProps> = ({
               {/* Stitched golden brass eyelet & knot */}
               {isStitched ? (
                 <>
-                  <circle r="5" fill="#F7D560" stroke="#392F3B" strokeWidth="1.2" />
+                  <circle r="4.5" fill="#F7D560" stroke="#392F3B" strokeWidth="1.2" />
                   <circle r="1.5" fill="#FFF8F1" />
-                  <text
-                    x="0"
-                    y="3"
-                    textAnchor="middle"
-                    fontSize="7"
-                    fill="#392F3B"
-                    fontWeight="bold"
-                    aria-hidden="true"
-                  >
-                    ✓
-                  </text>
                 </>
               ) : (
-                /* Unstitched hole numbering guide */
-                <text
-                  x="0"
-                  y="3.5"
-                  textAnchor="middle"
-                  fontSize="8"
-                  fill={isNextTarget ? '#FFF8F1' : 'rgba(255, 248, 241, 0.65)'}
-                  fontWeight="bold"
-                  aria-hidden="true"
-                >
-                  {idx + 1}
-                </text>
+                /* Unstitched glowing thread eyelet notch along the torn seam */
+                <>
+                  <circle
+                    r={isNextTarget ? 5 : 3.5}
+                    fill={isNextTarget ? '#F7D560' : 'rgba(232, 200, 120, 0.65)'}
+                    stroke="#1a1420"
+                    strokeWidth="1.2"
+                  />
+                  {isNextTarget && (
+                    <circle r="2" fill="#FFF8F1" />
+                  )}
+                </>
               )}
             </g>
           );
@@ -507,98 +496,25 @@ export const TactileShadowStitcher: React.FC<TactileShadowStitcherProps> = ({
 
   return (
     <div
-      className={`game-container tactile-shadow-stitcher ${className}`}
+      className={`direct-environmental-stitcher ${className}`}
       role="application"
-      aria-label="Tactile shadow stitcher: guide thread through 3 seams"
+      aria-label="Direct environmental shadow stitcher: drag Morrow's glowing golden thread along the 3 torn shadow seams"
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
-      {/* Header */}
-      <div className="game-header">
-        <div className="game-badge">
-          <Scissors size={18} aria-hidden="true" />
-          <span>INVENTION 01 · TACTILE SHADOW STITCHER</span>
+      {/* Narrative In-Scene Guidance Banner */}
+      <div className="environmental-stitch-guidance" aria-live="polite">
+        <div className="guidance-seam-badge">
+          <Scissors size={15} aria-hidden="true" />
+          <span>SEAM {currentSeam.id + 1}/3: {currentSeam.shortName.toUpperCase()}</span>
         </div>
-        <h3>Mend Duck’s Impossible Oak Shadow</h3>
-        <p>
-          Professor Perfect’s shears frayed Duck’s giant tree shadow. Use Morrow’s needle to drag golden thread along all
-          three damaged seams.
+        <p className="guidance-instruction">
+          {allCompleted
+            ? 'All three torn seams have pulled together! Duck’s tree shadow rests peacefully.'
+            : isCurrentSeamDone
+            ? `${currentSeam.shortName} holds fast! Select the next damaged edge.`
+            : `Drag Morrow's golden thread along the glowing torn edge to pull the shadow together.`}
         </p>
-      </div>
-
-      {/* Seam Selector Tabs */}
-      <div className="seam-tabs-nav" role="tablist" aria-label="Tree shadow seams">
-        {SEAMS.map((s) => {
-          const isDone = repairedSeams.includes(s.id);
-          const isSelected = activeSeamIndex === s.id;
-
-          return (
-            <button
-              type="button"
-              role="tab"
-              key={s.id}
-              className={`seam-tab-btn ${isSelected ? 'active' : ''} ${isDone ? 'repaired' : ''}`}
-              aria-selected={isSelected}
-              aria-controls={`seam-panel-${s.id}`}
-              onClick={() => {
-                setActiveSeamIndex(s.id);
-                setActivePointProgress(isDone ? s.points.length : 0);
-                setIsDragging(false);
-                setPointerPos(null);
-                setFeedbackMessage(
-                  isDone
-                    ? `${s.name} is already soundly repaired.`
-                    : `${s.name}: ${s.description} Drag needle through holes 1 to ${s.points.length}.`
-                );
-              }}
-            >
-              <div className="seam-tab-header">
-                <span className="seam-number-badge">SEAM {s.id + 1}</span>
-                <span className="seam-status-badge">{isDone ? '✓ Repaired' : isSelected ? 'Stitching' : 'Needs Repair'}</span>
-              </div>
-              <strong>{s.shortName}</strong>
-              <small>{isDone ? 'Solidly anchored' : `${s.points.length} guide holes`}</small>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Accessible Resident Inspection Toolbar */}
-      <div className="tactile-resident-inspectors" role="group" aria-label="Inspect damaged shadow wishes">
-        {[
-          { id: 0, resident: 'Village Duck', shadow: 'Tree shadow', label: 'Trunk Anchor' },
-          { id: 1, resident: 'Little Lantern', shadow: 'Star shadow', label: 'Branch Fray' },
-          { id: 2, resident: 'Wandering Snail', shadow: 'Duck shadow', label: 'Canopy Crown' },
-        ].map((item) => {
-          const isDone = repairedSeams.includes(item.id);
-          return (
-            <div key={item.id} className="resident-inspect-pair">
-              <button
-                type="button"
-                className={`resident-inspect-btn ${activeSeamIndex === item.id ? 'active' : ''} ${isDone ? 'repaired' : ''}`}
-                onClick={() => {
-                  setActiveSeamIndex(item.id);
-                  setActivePointProgress(isDone ? SEAMS[item.id].points.length : 0);
-                  setIsDragging(false);
-                  setPointerPos(null);
-                }}
-              >
-                <span>{item.resident}</span>
-                <small>{isDone ? '✓ Anchored' : item.label}</small>
-              </button>
-              <button
-                type="button"
-                className={`shadow-inspect-btn ${activeSeamIndex === item.id ? 'active' : ''} ${isDone ? 'repaired' : ''}`}
-                onClick={() => {
-                  advanceStitchPoint(item.id, SEAMS[item.id].points.length);
-                }}
-              >
-                <span>{item.shadow}</span>
-                <small>{isDone ? '✓ Stitched' : 'Stitch Seam'}</small>
-              </button>
-            </div>
-          );
-        })}
       </div>
 
       {/* Interactive Sewing Stage */}
@@ -647,15 +563,17 @@ export const TactileShadowStitcher: React.FC<TactileShadowStitcherProps> = ({
             </filter>
           </defs>
 
-          {/* Workbench Stage Canvas */}
-          <rect width="400" height="460" rx="18" fill="url(#stage-paper-glow)" />
+          {/* Transparent Canvas blending directly into village cobblestone scene */}
+          <rect width="400" height="460" rx="18" fill="rgba(24, 19, 36, 0.45)" />
 
-          {/* Cobblestones street floor under Duck's feet */}
-          <g className="stage-cobblestones" opacity="0.45">
-            <ellipse cx="200" cy="430" rx="150" ry="22" fill="#392F3B" opacity="0.12" />
-            <ellipse cx="140" cy="435" rx="35" ry="9" fill="#2a2233" opacity="0.25" />
-            <ellipse cx="200" cy="438" rx="42" ry="10" fill="#2a2233" opacity="0.3" />
-            <ellipse cx="260" cy="434" rx="36" ry="8" fill="#2a2233" opacity="0.25" />
+          {/* Perspective Village Cobblestones under Duck's feet */}
+          <g className="stage-cobblestones" opacity="0.65">
+            <ellipse cx="200" cy="430" rx="160" ry="24" fill="#140f1c" opacity="0.45" />
+            <ellipse cx="140" cy="435" rx="40" ry="11" fill="#241b30" opacity="0.55" stroke="#3d2c52" strokeWidth="1" />
+            <ellipse cx="200" cy="438" rx="48" ry="12" fill="#241b30" opacity="0.6" stroke="#3d2c52" strokeWidth="1" />
+            <ellipse cx="260" cy="434" rx="42" ry="10" fill="#241b30" opacity="0.55" stroke="#3d2c52" strokeWidth="1" />
+            <ellipse cx="90" cy="425" rx="32" ry="8" fill="#1b1424" opacity="0.4" stroke="#342545" strokeWidth="0.8" />
+            <ellipse cx="310" cy="425" rx="34" ry="8" fill="#1b1424" opacity="0.4" stroke="#342545" strokeWidth="0.8" />
           </g>
 
           {/* Massive Gnarled Oak Tree Silhouette Shadow */}

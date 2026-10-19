@@ -132,8 +132,25 @@ export default function App() {
             <p className="opening-whisper">Once upon a nearly-perfect morning,</p>
             <h1>a very small mistake <em>woke up.</em></h1>
             <p>His name was Morrow. He could stitch almost anything together. Unfortunately, almost anything was currently falling apart.</p>
-            <button className="storybook-action" type="button" onClick={() => { play('chime'); if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) setSave(s => ({ ...s, started: true })); else setCinematic('waking'); }}>Open the story <ArrowRight size={20}/></button>
-            <span className="opening-hint">An interactive storybook • sound is off by default</span>
+            <button
+              className="storybook-action"
+              type="button"
+              onClick={async () => {
+                const canUnmute = await sound.requestAudioActivation();
+                if (canUnmute) {
+                  setSave(s => ({ ...s, muted: false }));
+                }
+                play('chime');
+                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                  setSave(s => ({ ...s, started: true }));
+                } else {
+                  setCinematic('waking');
+                }
+              }}
+            >
+              Open the story <ArrowRight size={20}/>
+            </button>
+            <span className="opening-hint">An interactive storybook • sound activates on start</span>
           </div>
         </main>
       ) : view === 'map' ? (
