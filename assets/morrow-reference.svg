@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 270" width="500" height="540">
+  <defs>
+    <linearGradient id="morrow-body-grad" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#E8B28C" />
+      <stop offset="100%" stop-color="#BA7D69" />
+    </linearGradient>
+
+    <linearGradient id="scarf-grad-1" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#8E79A8" />
+      <stop offset="100%" stop-color="#6C5B83" />
+    </linearGradient>
+
+    <linearGradient id="scarf-grad-2" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#A34063" />
+      <stop offset="100%" stop-color="#7E2945" />
+    </linearGradient>
+
+    <filter id="paper-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#392F3B" flood-opacity="0.18" />
+    </filter>
+  </defs>
+
+  <!-- Clean canvas background for reference extraction -->
+  <rect width="100%" height="100%" fill="#FFF8F1"/>
+
+  <!-- Ground contact shadow -->
+  <ellipse cx="125" cy="252" rx="64" ry="9" fill="#392F3B" opacity="0.15" />
+
+  <!-- Spool-tail with dangling loose thread -->
+  <g class="morrow-tail">
+    <path
+      d="M 160 215 Q 215 220 205 242 T 225 258"
+      fill="none"
+      stroke="#8E79A8"
+      stroke-width="6"
+      stroke-linecap="round"
+      stroke-dasharray="4 3"
+    />
+    <ellipse cx="225" cy="258" rx="8" ry="6" fill="#E8C878" stroke="#392F3B" stroke-width="2" />
+    <line x1="225" y1="252" x2="225" y2="264" stroke="#A34063" stroke-width="3" />
+    <path d="M 225 264 Q 235 268 240 264" fill="none" stroke="#E8C878" stroke-width="2" stroke-linecap="round" />
+  </g>
+
+  <!-- Asymmetric folded petal ears (behind head) -->
+  <g class="morrow-ears">
+    <!-- Left ear (perked, slight fold) -->
+    <path
+      d="M 81 125 Q 50 75 62 28 Q 86 42 105 85 Z"
+      fill="#C98F70"
+      stroke="#392F3B"
+      stroke-width="4"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M 76 85 Q 67 55 70 46 Q 86 62 93 92 Z"
+      fill="#E8C878"
+      stroke="#A34063"
+      stroke-width="1.5"
+      stroke-dasharray="3 2"
+    />
+
+    <!-- Right ear (asymmetric, tilted lower petal fold) -->
+    <path
+      d="M 148 90 Q 185 45 178 35 Q 165 75 145 118 Z"
+      fill="#C98F70"
+      stroke="#392F3B"
+      stroke-width="4"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M 152 82 Q 170 52 168 47 Q 159 72 150 94 Z"
+      fill="#E8C878"
+      stroke="#A34063"
+      stroke-width="1.5"
+      stroke-dasharray="3 2"
+    />
+  </g>
+
+  <!-- Pear-shaped tiny body -->
+  <path
+    d="M 80 155 Q 45 202 75 234 Q 118 264 172 233 Q 201 194 170 153 Z"
+    fill="url(#morrow-body-grad)"
+    stroke="#392F3B"
+    stroke-width="4"
+    stroke-linejoin="round"
+  />
+
+  <!-- Little feet / mitten paws -->
+  <g class="morrow-paws">
+    <path d="M 88 230 L 80 250 Q 86 254 94 250 L 98 232 Z" fill="#9A675E" stroke="#392F3B" stroke-width="2.5" />
+    <path d="M 152 232 L 156 250 Q 164 254 170 250 L 162 230 Z" fill="#9A675E" stroke="#392F3B" stroke-width="2.5" />
+
+    <path
+      d="M 76 188 Q 44 175 36 198 Q 30 216 56 220"
+      fill="none"
+      stroke="#C98F70"
+      stroke-width="16"
+      stroke-linecap="round"
+    />
+    <line x1="42" y1="202" x2="48" y2="204" stroke="#FFF8F1" stroke-width="2.5" />
+
+    <path
+      d="M 168 188 Q 202 180 206 198 Q 208 214 186 218"
+      fill="none"
+      stroke="#C98F70"
+      stroke-width="16"
+      stroke-linecap="round"
+    />
+    <line x1="198" y1="202" x2="192" y2="204" stroke="#FFF8F1" stroke-width="2.5" />
+  </g>
+
+  <!-- Round head -->
+  <ellipse
+    cx="125"
+    cy="135"
+    rx="68"
+    ry="62"
+    fill="url(#morrow-body-grad)"
+    stroke="#392F3B"
+    stroke-width="4"
+  />
+
+  <!-- Stitched diamond forehead mark -->
+  <g class="forehead-mark">
+    <path
+      d="M 125 102 L 132 109 L 125 116 L 118 109 Z"
+      fill="#E8C878"
+      stroke="#A34063"
+      stroke-width="2"
+    />
+    <circle cx="125" cy="109" r="1.5" fill="#392F3B" />
+  </g>
+
+  <!-- Facial Expressions: Eyes & Curious Mouth -->
+  <g class="morrow-face">
+    <ellipse cx="101" cy="136" rx="8" ry="10" fill="#392F3B" />
+    <circle cx="104" cy="132" r="2.5" fill="#FFF8F1" />
+    <line x1="98" y1="136" x2="104" y2="136" stroke="#FFF8F1" stroke-width="1.2" opacity="0.6" />
+
+    <ellipse cx="149" cy="136" rx="8" ry="10" fill="#392F3B" />
+    <circle cx="152" cy="132" r="2.5" fill="#FFF8F1" />
+    <line x1="146" y1="136" x2="152" y2="136" stroke="#FFF8F1" stroke-width="1.2" opacity="0.6" />
+
+    <ellipse cx="88" cy="146" rx="10" ry="6" fill="#A34063" opacity="0.25" />
+    <ellipse cx="162" cy="146" rx="10" ry="6" fill="#A34063" opacity="0.25" />
+
+    <path d="M 96 122 Q 102 120 108 123" fill="none" stroke="#392F3B" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M 142 121 Q 148 118 154 121" fill="none" stroke="#392F3B" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M 120 154 Q 126 161 133 154" fill="none" stroke="#392F3B" stroke-width="3" stroke-linecap="round" />
+  </g>
+
+  <!-- Oversized plum patchwork scarf -->
+  <g class="morrow-scarf" filter="url(#paper-shadow)">
+    <path
+      d="M 70 178 Q 124 168 180 178 Q 186 195 174 202 Q 124 190 68 200 Z"
+      fill="url(#scarf-grad-1)"
+      stroke="#392F3B"
+      stroke-width="3.5"
+    />
+    <line x1="85" y1="184" x2="95" y2="182" stroke="#E8C878" stroke-width="2" stroke-dasharray="3 2" />
+    <line x1="110" y1="181" x2="120" y2="181" stroke="#FFF8F1" stroke-width="2" stroke-dasharray="3 2" />
+    <line x1="135" y1="181" x2="145" y2="183" stroke="#E8C878" stroke-width="2" stroke-dasharray="3 2" />
+
+    <path
+      d="M 158 180 Q 186 192 184 224 Q 166 226 156 198 Z"
+      fill="url(#scarf-grad-2)"
+      stroke="#392F3B"
+      stroke-width="3"
+    />
+    <path d="M 172 204 L 178 214 M 178 204 L 172 214" stroke="#E8C878" stroke-width="2.5" />
+
+    <path
+      d="M 172 220 Q 202 232 195 246 Q 180 248 168 226 Z"
+      fill="#8E79A8"
+      stroke="#392F3B"
+      stroke-width="2.5"
+    />
+    <line x1="186" y1="244" x2="186" y2="250" stroke="#E8C878" stroke-width="2" />
+    <line x1="190" y1="244" x2="191" y2="251" stroke="#E8C878" stroke-width="2" />
+    <line x1="194" y1="243" x2="196" y2="249" stroke="#E8C878" stroke-width="2" />
+  </g>
+</svg>
