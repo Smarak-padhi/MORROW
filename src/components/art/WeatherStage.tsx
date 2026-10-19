@@ -629,7 +629,7 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
         {/* Parallax & Camera Attention Wrapper */}
         <div className={`living-scene-camera ${cameraClass}`} aria-hidden="true">
           {/* Layer 1: Forest Sky Background */}
-          <div className="living-forest-sky-layer">
+          <div className="living-forest-sky-layer" style={{ backgroundImage: 'url(/environments/forest-canopy.webp)', backgroundSize: 'cover', backgroundPosition: 'center top', opacity: 0.85 }}>
             <span className="forest-sun-orb" />
           </div>
 
@@ -1042,7 +1042,7 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
           >
             <StopMotionActor
               character="clack"
-              state={isCelebrating ? 'happy' : isWeaving ? 'idle' : 'worried'}
+              state={isCelebrating ? 'happy' : activeBeatData.speaker === 'clack' ? 'talking' : 'idle'}
               isSpeaking={!isWeaving && activeBeatData.speaker === 'clack'}
               fallbackSvg={<SirClack />}
               alt="Sir Clack the Antique Toolbox Mentor"

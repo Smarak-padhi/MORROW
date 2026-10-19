@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowRight, Sparkles, Film, RotateCcw } from 'lucide-react';
 import { Morrow } from './Morrow';
 import { SirClack, Pipkin } from './SupportingCast';
+import { StopMotionActor } from './StopMotionActor';
 import { TactileShadowStitcher } from '../inventions/TactileShadowStitcher';
 import { CinematicVideoPlayer } from '../CinematicVideoPlayer';
 
@@ -201,8 +202,8 @@ export const ShadowStage: React.FC<ShadowStageProps> = ({
           </div>
 
           {/* Layer 2: Medieval Timber Cottages */}
-          <div className="living-cottages-layer">
-            <svg viewBox="0 0 600 240" preserveAspectRatio="none" style={{ width: '100%', height: '100%' }}>
+          <div className="living-cottages-layer" style={{ backgroundImage: 'url(/environments/shadows-cottages.webp)', backgroundSize: 'cover', backgroundPosition: 'center bottom' }}>
+            <svg viewBox="0 0 600 240" preserveAspectRatio="none" style={{ width: '100%', height: '100%', opacity: 0.4 }}>
               <defs>
                 <linearGradient id="cottage-timber" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#2e213b" />
@@ -334,9 +335,21 @@ export const ShadowStage: React.FC<ShadowStageProps> = ({
                 transition: 'transform 0.3s ease',
               }}
             >
-              <Pipkin />
+              <StopMotionActor
+                character="pipkin"
+                state={isCelebrating ? 'happy' : 'surprised'}
+                isSpeaking={!isStitching && activeBeatData.speaker === 'pipkin'}
+                fallbackSvg={<Pipkin />}
+                alt="Pipkin the Delivery Bird"
+              />
             </div>
-            <SirClack />
+            <StopMotionActor
+              character="clack"
+              state={isCelebrating ? 'happy' : 'idle'}
+              isSpeaking={!isStitching && activeBeatData.speaker === 'clack'}
+              fallbackSvg={<SirClack />}
+              alt="Sir Clack the Antique Toolbox Mentor"
+            />
           </div>
 
           {/* Center-Left Character: Village Duck & His Gnarled Oak Shadow */}
@@ -348,9 +361,17 @@ export const ShadowStage: React.FC<ShadowStageProps> = ({
               if (currentBeat === 0) setShowCinematic(true);
             }}
           >
-            <SceneDuck
+            <StopMotionActor
+              character="duck"
+              state={isCelebrating ? 'happy' : 'talking'}
               isSpeaking={!isStitching && activeBeatData.speaker === 'duck'}
-              isCelebrating={isCelebrating}
+              fallbackSvg={
+                <SceneDuck
+                  isSpeaking={!isStitching && activeBeatData.speaker === 'duck'}
+                  isCelebrating={isCelebrating}
+                />
+              }
+              alt="Village Duck"
             />
 
             {/* THE PERSISTENT GHOST TREE SHADOW (Visible in Conversation & Celebration) */}
@@ -396,9 +417,17 @@ export const ShadowStage: React.FC<ShadowStageProps> = ({
               if (currentBeat < 3) setCurrentBeat(3);
             }}
           >
-            <Morrow
-              small
-              expression={isCelebrating ? 'happy' : isStitching ? 'focused' : 'curious'}
+            <StopMotionActor
+              character="morrow"
+              state={isCelebrating ? 'happy' : isStitching ? 'action' : 'idle'}
+              isSpeaking={!isStitching && activeBeatData.speaker === 'morrow'}
+              fallbackSvg={
+                <Morrow
+                  small
+                  expression={isCelebrating ? 'happy' : isStitching ? 'focused' : 'curious'}
+                />
+              }
+              alt="Morrow the Apprentice Stitchling"
             />
           </div>
         </div>

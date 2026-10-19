@@ -70,6 +70,8 @@ export const StopMotionActor: React.FC<StopMotionActorProps> = ({
     transform: [style.transform, orientationTransform].filter(Boolean).join(' ') || undefined,
   };
 
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   return (
     <div
       className={`stop-motion-actor actor-${character} actor-state-${effectiveState} ${
@@ -80,20 +82,23 @@ export const StopMotionActor: React.FC<StopMotionActorProps> = ({
       aria-label={alt || `${character} in ${effectiveState} state`}
     >
       {/* If a transparent sprite exists and hasn't errored, display the real sprite */}
-      {!imageError && character !== 'morrow' ? (
+      {!imageError ? (
         <img
           src={spriteSrc}
           alt={alt || `${character}`}
           className="stop-motion-sprite-img"
+          onLoad={() => setImageLoaded(true)}
           onError={() => setImageError(true)}
-          style={{ display: 'none' }} // Hidden until verified image asset exists
+          style={{ display: imageLoaded ? 'block' : 'none' }}
         />
       ) : null}
 
-      {/* Handcrafted Stop-Motion Visual (Authoritative Fallback & Current Renderer) */}
-      <div className="stop-motion-fallback-container">
-        {fallbackSvg}
-      </div>
+      {/* Handcrafted Stop-Motion Visual (Authoritative Fallback until image is loaded or if error) */}
+      {(!imageLoaded || imageError) && (
+        <div className="stop-motion-fallback-container">
+          {fallbackSvg}
+        </div>
+      )}
     </div>
   );
 };
