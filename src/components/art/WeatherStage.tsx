@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback, useId } from 'react';
 import { ArrowRight, Film, RotateCcw, Keyboard, Droplets, Wind, Sun, Volume2, VolumeX } from 'lucide-react';
 import { Morrow } from './Morrow';
 import { SirClack, Pipkin } from './SupportingCast';
+import { StopMotionActor } from './StopMotionActor';
 
 export interface WeatherStageProps {
   dialog?: number;
@@ -229,88 +230,127 @@ export const SceneFrogMayor: React.FC<{ isSpeaking?: boolean; isWarmed?: boolean
 
 /**
  * Full-Frame In-Engine Cinematic Reveal Modal (Frog Mayor's Umbrella Disaster)
+ * Plays real Google Flow MP4 when present; otherwise renders authoritative in-engine stop-motion sequence.
  */
 export const CinematicWeatherReveal: React.FC<{ onReturn: () => void }> = ({ onReturn }) => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const togglePlay = () => {
+    setIsPlaying((prev) => {
+      const next = !prev;
+      if (videoRef.current) {
+        if (next) videoRef.current.play().catch(() => {});
+        else videoRef.current.pause();
+      }
+      return next;
+    });
+  };
+
+  const toggleMute = () => {
+    setIsMuted((prev) => {
+      const next = !prev;
+      if (videoRef.current) {
+        videoRef.current.muted = next;
+      }
+      return next;
+    });
+  };
 
   return (
     <div className="living-cinematic-bridge-modal" role="dialog" aria-modal="true" aria-label="Frog Mayor Umbrella Disaster Reveal">
       <div className="cinematic-reveal-stage">
-        {/* 16:9 Full Frame Stop-Motion Animated Sequence */}
-        <svg viewBox="0 0 640 360" className="cinematic-reveal-svg" preserveAspectRatio="xMidYMid meet">
-          <defs>
-            <radialGradient id="cinematic-vignette" cx="50%" cy="50%" r="65%">
-              <stop offset="0%" stopColor="#2A4030" />
-              <stop offset="60%" stopColor="#18251B" />
-              <stop offset="100%" stopColor="#0B120D" />
-            </radialGradient>
-            <linearGradient id="cloud-grad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#314D38" />
-              <stop offset="100%" stopColor="#1C2E21" />
-            </linearGradient>
-          </defs>
+        {/* Real MP4 Video if available in public/cinematics/ */}
+        <video
+          ref={videoRef}
+          src="/cinematics/weather-02-umbrella.mp4"
+          className="cinematic-media-video"
+          playsInline
+          autoPlay
+          muted={isMuted}
+          loop
+          onLoadedData={() => setVideoLoaded(true)}
+          style={{ display: videoLoaded ? 'block' : 'none', width: '100%', height: '100%', objectFit: 'contain' }}
+        />
 
-          {/* Vignette Background */}
-          <rect width="640" height="360" fill="url(#cinematic-vignette)" />
+        {/* 16:9 Full Frame Stop-Motion Animated Sequence (Authoritative In-Engine Fallback) */}
+        {!videoLoaded && (
+          <svg viewBox="0 0 640 360" className="cinematic-reveal-svg" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <radialGradient id="cinematic-vignette" cx="50%" cy="50%" r="65%">
+                <stop offset="0%" stopColor="#2A4030" />
+                <stop offset="60%" stopColor="#18251B" />
+                <stop offset="100%" stopColor="#0B120D" />
+              </radialGradient>
+              <linearGradient id="cloud-grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#314D38" />
+                <stop offset="100%" stopColor="#1C2E21" />
+              </linearGradient>
+            </defs>
 
-          {/* Inverted Rain Cloud at Top */}
-          <g transform="translate(180, 20)">
-            <ellipse cx="140" cy="40" rx="120" ry="35" fill="url(#cloud-grad)" />
-            <circle cx="90" cy="45" r="30" fill="url(#cloud-grad)" />
-            <circle cx="190" cy="45" r="32" fill="url(#cloud-grad)" />
-            <path d="M 20 50 Q 140 75 260 50" stroke="#799F84" strokeWidth="2" fill="none" opacity="0.4" />
-          </g>
+            {/* Vignette Background */}
+            <rect width="640" height="360" fill="url(#cinematic-vignette)" />
 
-          {/* Rising Rain Beads (Traveling upward into cloud) */}
-          {isPlaying && (
-            <g className="cinematic-rising-rain">
-              {[
-                { x: 160, y: 310, d: '0s' },
-                { x: 230, y: 280, d: '0.4s' },
-                { x: 300, y: 320, d: '0.9s' },
-                { x: 370, y: 290, d: '0.2s' },
-                { x: 440, y: 315, d: '0.7s' },
-                { x: 500, y: 285, d: '1.1s' },
-              ].map((r, i) => (
-                <rect
-                  key={i}
-                  x={r.x}
-                  y={r.y}
-                  width="3"
-                  height="16"
-                  rx="1.5"
-                  fill="#B0D5EB"
-                  className="rising-raindrop"
-                  style={{ animationDelay: r.d }}
-                />
-              ))}
+            {/* Inverted Rain Cloud at Top */}
+            <g transform="translate(180, 20)">
+              <ellipse cx="140" cy="40" rx="120" ry="35" fill="url(#cloud-grad)" />
+              <circle cx="90" cy="45" r="30" fill="url(#cloud-grad)" />
+              <circle cx="190" cy="45" r="32" fill="url(#cloud-grad)" />
+              <path d="M 20 50 Q 140 75 260 50" stroke="#799F84" strokeWidth="2" fill="none" opacity="0.4" />
             </g>
-          )}
 
-          {/* Central Character: Large Frog Mayor with Overflowing Umbrella Bucket */}
-          <g transform="translate(235, 80)">
-            <SceneFrogMayor isSpeaking />
-          </g>
+            {/* Rising Rain Beads (Traveling upward into cloud) */}
+            {isPlaying && (
+              <g className="cinematic-rising-rain">
+                {[
+                  { x: 160, y: 310, d: '0s' },
+                  { x: 230, y: 280, d: '0.4s' },
+                  { x: 300, y: 320, d: '0.9s' },
+                  { x: 370, y: 290, d: '0.2s' },
+                  { x: 440, y: 315, d: '0.7s' },
+                  { x: 500, y: 285, d: '1.1s' },
+                ].map((r, i) => (
+                  <rect
+                    key={i}
+                    x={r.x}
+                    y={r.y}
+                    width="3"
+                    height="16"
+                    rx="1.5"
+                    fill="#B0D5EB"
+                    className="rising-raindrop"
+                    style={{ animationDelay: r.d }}
+                  />
+                ))}
+              </g>
+            )}
 
-          {/* Graphic Novel Subtitle Banner */}
-          <g transform="translate(60, 285)">
-            <rect width="520" height="55" rx="12" fill="#FFF8F1" stroke="#392F3B" strokeWidth="2.5" />
-            <text x="20" y="24" style={{ font: '800 11px Space Mono, monospace' }} fill="#A34063" letterSpacing="0.06em">
-              FROG MAYOR · UPSIDE-DOWN FOREST DISASTER
-            </text>
-            <text x="20" y="44" style={{ font: '600 15px Nunito, sans-serif' }} fill="#392F3B">
-              “The rain is falling UP. My umbrella is now a bucket.”
-            </text>
-          </g>
-        </svg>
+            {/* Central Character: Large Frog Mayor with Overflowing Umbrella Bucket */}
+            <g transform="translate(235, 80)">
+              <SceneFrogMayor isSpeaking />
+            </g>
+
+            {/* Graphic Novel Subtitle Banner */}
+            <g transform="translate(60, 285)">
+              <rect width="520" height="55" rx="12" fill="#FFF8F1" stroke="#392F3B" strokeWidth="2.5" />
+              <text x="20" y="24" style={{ font: '800 11px Space Mono, monospace' }} fill="#A34063" letterSpacing="0.06em">
+                FROG MAYOR · UPSIDE-DOWN FOREST DISASTER
+              </text>
+              <text x="20" y="44" style={{ font: '600 15px Nunito, sans-serif' }} fill="#392F3B">
+                “The rain is falling UP. My umbrella is now a bucket.”
+              </text>
+            </g>
+          </svg>
+        )}
 
         {/* Floating Player Controls Bar */}
         <div className="comic-video-controls" role="toolbar" aria-label="Cinematic video controls">
           <button
             type="button"
             className="comic-video-btn"
-            onClick={() => setIsPlaying((p) => !p)}
+            onClick={togglePlay}
             aria-label={isPlaying ? 'Pause cinematic' : 'Play cinematic'}
           >
             {isPlaying ? '⏸ Pause' : '▶ Play scene'}
@@ -318,7 +358,7 @@ export const CinematicWeatherReveal: React.FC<{ onReturn: () => void }> = ({ onR
           <button
             type="button"
             className="comic-video-btn"
-            onClick={() => setIsMuted((m) => !m)}
+            onClick={toggleMute}
             aria-label={isMuted ? 'Unmute video audio' : 'Mute video audio'}
           >
             {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
@@ -686,6 +726,33 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
               <circle cx="4" cy="1" r="1.5" fill="#FFF8F1" />
             </g>
 
+            {/* Practical Miniature Lights & Forest Motes (Handcrafted Stop-Motion Atmosphere) */}
+            <g className="forest-practical-lights" aria-hidden="true">
+              {/* Hanging amber lantern on Tree 1 branch */}
+              <g transform="translate(142, 204)" filter="url(#loom-glow)">
+                <line x1="0" y1="0" x2="0" y2="10" stroke="#E8C878" strokeWidth="1.2" />
+                <polygon points="-4,10 4,10 6,22 -6,22" fill="#3D2B1F" stroke="#E8C878" strokeWidth="1" />
+                <circle cx="0" cy="16" r="3.5" fill="#F7D560" opacity="0.9" />
+              </g>
+
+              {/* Hanging lantern on right tree */}
+              <g transform="translate(425, 210)" filter="url(#loom-glow)">
+                <line x1="0" y1="0" x2="0" y2="12" stroke="#E8C878" strokeWidth="1.2" />
+                <polygon points="-4,12 4,12 5,22 -5,22" fill="#3D2B1F" stroke="#E8C878" strokeWidth="1" />
+                <circle cx="0" cy="17" r="3.2" fill="#F7D560" opacity="0.85" />
+              </g>
+
+              {/* Bioluminescent moss lichen */}
+              <ellipse cx="280" cy="435" rx="14" ry="4" fill="#70967A" opacity="0.6" filter="url(#loom-glow)" />
+              <ellipse cx="330" cy="442" rx="12" ry="3.5" fill="#70967A" opacity="0.5" filter="url(#loom-glow)" />
+
+              {/* Ambient glowing spore motes */}
+              <circle cx="170" cy="320" r="1.8" fill="#F7D560" opacity="0.7" />
+              <circle cx="310" cy="250" r="1.5" fill="#FFF8F1" opacity="0.65" />
+              <circle cx="485" cy="305" r="2.0" fill="#F7D560" opacity="0.75" />
+              <circle cx="260" cy="450" r="1.6" fill="#B0D5EB" opacity="0.6" />
+            </g>
+
             {/* TARGET 2: FROZEN / SPINNING WINDMILL (Upper Right Canopy, x=475, y=85) */}
             <g className={`forest-target windmill-target ${isWindSolved ? 'is-spinning' : ''}`} transform="translate(475, 85)">
               {/* Wooden Inverted Mill Tower */}
@@ -955,7 +1022,7 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
           </svg>
         </div>
 
-        {/* CHARACTER LAYER OVERLAY (Exact Non-Overlapping Coordinates) */}
+        {/* CHARACTER LAYER OVERLAY (StopMotionActor System with Tactile Stepped Animations) */}
         <div className="living-characters-row" aria-hidden="true">
           {/* Sir Clack on left beside the loom */}
           <div
@@ -973,7 +1040,13 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
               zIndex: 4,
             }}
           >
-            <SirClack />
+            <StopMotionActor
+              character="clack"
+              state={isCelebrating ? 'happy' : isWeaving ? 'idle' : 'worried'}
+              isSpeaking={!isWeaving && activeBeatData.speaker === 'clack'}
+              fallbackSvg={<SirClack />}
+              alt="Sir Clack the Antique Toolbox Mentor"
+            />
           </div>
 
           {/* Pipkin perched upside-down above Sir Clack */}
@@ -994,7 +1067,13 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
               transition: 'transform 0.3s ease',
             }}
           >
-            <Pipkin />
+            <StopMotionActor
+              character="pipkin"
+              state={isCelebrating ? 'happy' : 'surprised'}
+              isSpeaking={!isWeaving && activeBeatData.speaker === 'pipkin'}
+              fallbackSvg={<Pipkin />}
+              alt="Pipkin the Delivery Bird"
+            />
           </div>
 
           {/* Frog Mayor on Moss Log in center */}
@@ -1013,9 +1092,17 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
               zIndex: 4,
             }}
           >
-            <SceneFrogMayor
+            <StopMotionActor
+              character="frog"
+              state={isCelebrating || isSunSolved ? 'happy' : 'talking'}
               isSpeaking={!isWeaving && activeBeatData.speaker === 'frog'}
-              isWarmed={isSunSolved}
+              fallbackSvg={
+                <SceneFrogMayor
+                  isSpeaking={!isWeaving && activeBeatData.speaker === 'frog'}
+                  isWarmed={isSunSolved}
+                />
+              }
+              alt="Frog Mayor of Upside-Down Forest"
             />
           </div>
 
@@ -1035,8 +1122,17 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
               zIndex: 4,
             }}
           >
-            <Morrow
-              expression={isCelebrating ? 'happy' : isWeaving ? 'focused' : 'curious'}
+            <StopMotionActor
+              character="morrow"
+              state={isCelebrating ? 'happy' : isWeaving ? 'action' : 'idle'}
+              isSpeaking={!isWeaving && activeBeatData.speaker === 'morrow'}
+              isAction={isDragging}
+              fallbackSvg={
+                <Morrow
+                  expression={isCelebrating ? 'happy' : isWeaving ? 'focused' : 'curious'}
+                />
+              }
+              alt="Morrow the Apprentice Stitchling"
             />
           </div>
         </div>
@@ -1130,65 +1226,76 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
         </div>
       )}
 
-      {/* ACCESSIBLE ALTERNATIVE WEAVING CONTROLS (Below stage for Keyboard & Screen Readers) */}
-      <div className="accessible-loom-controls" role="region" aria-label="Alternative accessible loom controls" id={liveRegionId}>
-        {/* Keyboard advance helper */}
-        <div className="accessible-keyboard-bar">
-          <button
-            type="button"
-            className="tactile-stitch-keyboard-btn"
-            onClick={handleKeyboardAdvance}
-            aria-label={`Advance thread with keyboard [Enter / Space]: Connect guide ${activePointProgress + 1} of 5 on ${currentSpool.shortName}`}
-          >
-            <Keyboard size={16} aria-hidden="true" />
-            <span>
-              Weave with Keyboard <strong>[Enter / Space]</strong>
-            </span>
-          </button>
+      {/* ACCESSIBLE ALTERNATIVE WEAVING DRAWER (Keyboard & Screen Readers) */}
+      <details className="accessible-loom-drawer" open role="region" aria-label="Alternative accessible loom controls" id={liveRegionId}>
+        <summary>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Keyboard size={15} aria-hidden="true" />
+            <span>Accessible Controls & Spool Selectors</span>
+          </span>
+          <span style={{ fontSize: '0.72rem', opacity: 0.8, fontFamily: 'Space Mono, monospace' }}>
+            [Enter / Space]
+          </span>
+        </summary>
+        <div className="accessible-loom-controls">
+          {/* Keyboard advance helper */}
+          <div className="accessible-keyboard-bar">
+            <button
+              type="button"
+              className="tactile-stitch-keyboard-btn"
+              onClick={handleKeyboardAdvance}
+              aria-label={`Advance thread with keyboard [Enter / Space]: Connect guide ${activePointProgress + 1} of 5 on ${currentSpool.shortName}`}
+            >
+              <Keyboard size={16} aria-hidden="true" />
+              <span>
+                Weave with Keyboard <strong>[Enter / Space]</strong>
+              </span>
+            </button>
+          </div>
+
+          {/* Accessible resident buttons for mobile-qa.mjs and assistive technology */}
+          <div className="tactile-resident-inspectors loom-resident-inspectors" role="group" aria-label="Select thread and target destination">
+            {WEATHER_SPOOLS.map((spool, idx) => {
+              const isDone = solvedTargets.includes(spool.targetId);
+              const isSelected = activeSpoolIndex === idx;
+
+              return (
+                <div key={spool.id} className="resident-inspect-pair">
+                  {/* Spool Button (/gentle downpour/i, /whistling breeze/i, /golden sunbeam/i) */}
+                  <button
+                    type="button"
+                    className={`resident-inspect-btn ${isSelected ? 'active' : ''} ${isDone ? 'repaired' : ''}`}
+                    onClick={() => {
+                      setActiveSpoolIndex(idx);
+                      setActivePointProgress(isDone ? spool.points.length : 0);
+                    }}
+                    aria-label={`${spool.name} thread spool`}
+                  >
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      {spool.id === 'rain' ? <Droplets size={12} /> : spool.id === 'wind' ? <Wind size={12} /> : <Sun size={12} />}
+                      {spool.name}
+                    </span>
+                    <small>{isDone ? '✓ Anchored' : spool.threadName}</small>
+                  </button>
+
+                  {/* Target Button (/thirsty lilies/i, /frozen windmill/i, /frog mayor/i) */}
+                  <button
+                    type="button"
+                    className={`shadow-inspect-btn ${isSelected ? 'active' : ''} ${isDone ? 'repaired' : ''}`}
+                    onClick={() => {
+                      advanceWeavePoint(idx, spool.points.length);
+                    }}
+                    aria-label={`${spool.targetName} target destination`}
+                  >
+                    <span>{spool.targetName}</span>
+                    <small>{isDone ? '✓ Weave Sealed' : 'Weave Target'}</small>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
         </div>
-
-        {/* Accessible resident buttons for mobile-qa.mjs and assistive technology */}
-        <div className="tactile-resident-inspectors loom-resident-inspectors" role="group" aria-label="Select thread and target destination">
-          {WEATHER_SPOOLS.map((spool, idx) => {
-            const isDone = solvedTargets.includes(spool.targetId);
-            const isSelected = activeSpoolIndex === idx;
-
-            return (
-              <div key={spool.id} className="resident-inspect-pair">
-                {/* Spool Button (/gentle downpour/i, /whistling breeze/i, /golden sunbeam/i) */}
-                <button
-                  type="button"
-                  className={`resident-inspect-btn ${isSelected ? 'active' : ''} ${isDone ? 'repaired' : ''}`}
-                  onClick={() => {
-                    setActiveSpoolIndex(idx);
-                    setActivePointProgress(isDone ? spool.points.length : 0);
-                  }}
-                  aria-label={`${spool.name} thread spool`}
-                >
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    {spool.id === 'rain' ? <Droplets size={12} /> : spool.id === 'wind' ? <Wind size={12} /> : <Sun size={12} />}
-                    {spool.name}
-                  </span>
-                  <small>{isDone ? '✓ Anchored' : spool.threadName}</small>
-                </button>
-
-                {/* Target Button (/thirsty lilies/i, /frozen windmill/i, /frog mayor/i) */}
-                <button
-                  type="button"
-                  className={`shadow-inspect-btn ${isSelected ? 'active' : ''} ${isDone ? 'repaired' : ''}`}
-                  onClick={() => {
-                    advanceWeavePoint(idx, spool.points.length);
-                  }}
-                  aria-label={`${spool.targetName} target destination`}
-                >
-                  <span>{spool.targetName}</span>
-                  <small>{isDone ? '✓ Weave Sealed' : 'Weave Target'}</small>
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      </details>
     </div>
   );
 };

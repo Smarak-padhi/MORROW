@@ -3100,3 +3100,125 @@ img,svg,video,canvas { max-width:100%; }
   color: var(--ink);
   margin: 8px 0 0;
 }
+
+/* ==========================================================================
+   Image-Based Stop-Motion Actor System (Loop 12.7)
+   ========================================================================== */
+.stop-motion-actor {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: bottom center;
+}
+
+.stop-motion-sprite-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 6px 12px rgba(16, 24, 18, 0.35));
+}
+
+.stop-motion-fallback-container {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Tactile Stop-Motion Stepped Keyframes (Simulating 12fps clay/felt animation) */
+@keyframes actor-breathe-stepped {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes actor-talk-bounce-stepped {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.02); }
+}
+
+@keyframes actor-startle-stepped {
+  0% { transform: translateY(0) scale(1); }
+  35% { transform: translateY(-6px) scale(1.05); }
+  100% { transform: translateY(-2px) scale(1.02); }
+}
+
+@keyframes actor-happy-hop-stepped {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-4px) rotate(-1.5deg); }
+  75% { transform: translateY(-2px) rotate(1.5deg); }
+}
+
+@keyframes actor-worried-quiver-stepped {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-1.5px); }
+  75% { transform: translateX(1.5px); }
+}
+
+@keyframes actor-action-lean-stepped {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-1.5px) rotate(-1.5deg); }
+}
+
+.actor-state-idle {
+  animation: actor-breathe-stepped 3.6s steps(4, jump-none) infinite;
+}
+
+.actor-state-talking,
+.stop-motion-actor.is-speaking {
+  animation: actor-talk-bounce-stepped 0.38s steps(2, jump-none) infinite !important;
+}
+
+.actor-state-surprised {
+  animation: actor-startle-stepped 0.45s steps(3, jump-none) both;
+}
+
+.actor-state-happy {
+  animation: actor-happy-hop-stepped 1.8s steps(4, jump-none) infinite;
+}
+
+.actor-state-worried {
+  animation: actor-worried-quiver-stepped 0.3s steps(2, jump-none) infinite;
+}
+
+.actor-state-action,
+.stop-motion-actor.is-action {
+  animation: actor-action-lean-stepped 0.5s steps(3, jump-none) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stop-motion-actor,
+  .stop-motion-actor * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Accessible Loom Controls (Refined low-profile drawer) */
+.accessible-loom-drawer {
+  margin: 10px auto 0;
+  max-width: 680px;
+  background: rgba(255, 248, 241, 0.95);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 8px 12px;
+  box-shadow: 0 4px 14px rgba(48, 38, 49, 0.06);
+}
+
+.accessible-loom-drawer summary {
+  font: 700 0.8rem 'Space Mono', monospace;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 6px;
+  user-select: none;
+}
+
+.accessible-loom-drawer summary:focus-visible {
+  outline: 2px solid var(--berry);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+

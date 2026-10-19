@@ -21,7 +21,8 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
 | **Loop 10: Cinematic Architecture** | **COMPLETE** | Inline 16:9 cinematic video player (`CinematicVideoPlayer`), stop-motion player fallback, Beat 06 payoff banner, and responsive verification. | Proceed to Loop 11. |
 | **Loop 11: The Living Scene** | **COMPLETE** | Uninterrupted 2.5D village sequence: in-scene character dialogue, inline cinematic bridge, tactile pointer drag-to-stitch tree shadow, blooming oak payoff. Verified across 320–1440px. | Ready for Loop 12. |
 | **Loop 12: The Sky is Broken** | **COMPLETE** | Living 2.5D forest weather adventure: inverted canopy, sequential dialogue, tactile weather loom, rising rain, environmental transformations. | Proceed to Loop 12.5. |
-| **Loop 12.5: Immersion Overhaul** | **COMPLETE** | Mobile game-first layout (>75% first viewport, compact header), in-world carved brass loom directly inside shared SVG stage, unified 600x520 aspect ratio without letterboxing, 1:1 proportional character coordinates, full-frame stop-motion reveal modal, persistent environmental transformations. Verified across 320–1440px with 0 overflow and full Playwright test suite pass. | RC Ready. |
+| **Loop 12.5: Immersion Overhaul** | **COMPLETE** | Mobile game-first layout (>75% first viewport, compact header), in-world carved brass loom directly inside shared SVG stage, unified 600x520 aspect ratio without letterboxing, 1:1 proportional character coordinates, full-frame stop-motion reveal modal, persistent environmental transformations. Verified across 320–1440px with 0 overflow and full Playwright test suite pass. | Proceed to Loop 12.7. |
+| **Loop 12.7: The Real Stop-Motion World** | **COMPLETE** | Reusable image-based `StopMotionActor` system with stepped tactile breathing/talking/action keyframes, complete stop-motion asset manifest (`docs/STOP_MOTION_ASSET_MANIFEST.md`), public directories (`environments/`, `props/`), real MP4 video playback hook in reveal modal with stop-motion fallback, practical miniature lights/glowing motes in Weather Forest, and low-profile accessible drawer. Verified across 320–1440px with 0 overflow. | Asset Generation Integration Ready. |
 
 ---
 
@@ -364,6 +365,34 @@ This file tracks the verifiable evidence, test passes, and progress through MORR
     - `loop12_07_loom_dragging_390px.png`: Interactive pointer/touch drag tracking with Morrow's peach mitten paw cursor and trailing colored thread.
     - `loop12_08_celebration_payoff_390px.png`: Persistent environmental transformations (blooming lilies, spinning windmill, sunbeams warming Frog Mayor) with single compact chapter continue button.
     - `loop12_09_desktop_stage_1280px.png`: Pristine 1280px desktop presentation maintaining 600/520 aspect ratio without letterboxing or character overlap.
+
+---
+
+### [2026-10-19] L12.7 — The Real Stop-Motion World: Image-Based Actor System & Miniature Set Pipeline
+- **Requirement:**
+  - Build an image-based actor system (`src/components/art/StopMotionActor.tsx`) supporting transparent PNG/WebP character sprites with tactile stepped keyframes (`actor-breathe`, `actor-talk-bounce`, `actor-startle`, `actor-happy-hop`, `actor-worried-quiver`, `actor-action-lean`). Preserve character coordinates, dialogue anchors, and SVG fallbacks.
+  - Generate an asset manifest (`docs/STOP_MOTION_ASSET_MANIFEST.md`) and create public directories: `public/characters/`, `public/environments/`, `public/props/`, `public/cinematics/`.
+  - Rebuild Weather Forest composition with practical miniature set details: inverted canopy trees, hanging amber lanterns on branches, bioluminescent moss lichen, floating ambient spore motes, and physical interactive brass loom.
+  - Native in-scene gameplay: physical loom spools are the primary touch/drag controls. Move inspection control panel into a compact accessible disclosure drawer (`<details className="accessible-loom-drawer" open>`).
+  - Integrate real MP4 video playback in `CinematicWeatherReveal` with fallback to 16:9 stop-motion sequence when videos are pending generation.
+  - Preserve 100% quality and compatibility with zero horizontal overflow across 320–1440px.
+- **Affected Files:**
+  - `src/components/art/StopMotionActor.tsx`
+  - `src/components/art/WeatherStage.tsx`
+  - `src/styles.css`
+  - `docs/STOP_MOTION_ASSET_MANIFEST.md`
+  - `docs/LOOP_LOG.md`
+- **Verification Evidence:**
+  - `npm run build`: PASSED (0 errors, clean bundle).
+  - `scripts/viewport_audit.mjs`: PASSED across 320px, 375px, 430px, 768px, 1280px, 1440px (0 horizontal overflow).
+  - `scripts/comic-visual-qa.mjs`: PASSED across 320px–768px.
+  - `scripts/mobile-qa.mjs`: PASSED (full adventure playthrough from workshop through epilogue).
+  - `scripts/test-weather-scene.mjs`: Captured 9 high-resolution screenshots in `master_delivery`:
+    - `loop12_01_beat0_frog_390px.png`: StopMotionActor integration with stepped animations, practical lanterns, and compact accessible drawer.
+    - `loop12_06_loom_initial_390px.png`: Tactile in-world loom with glowing spools and pulsing beacons.
+    - `loop12_08_celebration_payoff_390px.png`: Persistent environmental transformations and accessible drawer.
+    - `loop12_09_desktop_stage_1280px.png`: Balanced 1280px desktop view with stop-motion miniature staging and zero character collision.
+
 
 
 
