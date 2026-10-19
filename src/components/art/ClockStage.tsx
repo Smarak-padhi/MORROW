@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Film, Volume2, VolumeX } from 'lucide-react';
 import { StopMotionActor } from './StopMotionActor';
+import { Morrow } from './Morrow';
+import { ImpossibleClock } from '../inventions/ImpossibleClock';
 
 interface Props {
   dialog?: number;
@@ -15,12 +17,18 @@ interface Props {
 export const ClockStage: React.FC<Props> = ({
   dialog = 0,
   puzzleDone = false,
+  onPuzzleSuccess,
+  playChime = () => {},
   isMuted = true,
   onToggleMute,
 }) => {
   const [showCinematic, setShowCinematic] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Timed restart stage: 0=idle, 1=heart, 2=gears, 3=hands, 4=steam, 5=lights, 6=professor, 7=dawn, 8=complete
+  const [restartStage, setRestartStage] = useState<number>(puzzleDone ? 8 : 0);
+  const effectiveStage = puzzleDone ? 8 : restartStage;
 
   // Synchronize video muted state with global sound
   useEffect(() => {
@@ -50,13 +58,16 @@ export const ClockStage: React.FC<Props> = ({
     }
   };
 
+  const isDawn = effectiveStage >= 7;
+
   return (
     <section
-      className={`storybook-stage clock-stage-bespoke ${puzzleDone ? 'clock-stage-restored' : 'clock-stage-frozen'}`}
-      aria-label="Tomorrow Town square with the miniature clocktower, Professor Primrose Perfect, Baker, and the frozen clock mechanism"
+      className={`clock-stage-bespoke ${isDawn ? 'clock-stage-restored' : 'clock-stage-frozen'}`}
+      aria-label="Tomorrow Town square with the miniature clocktower, Professor Primrose Perfect, Baker, and the physical clockwork mechanism"
     >
       {/* 2.5D Living Photographic Stop-Motion Theater Plate */}
-      <div className="storybook-sky clock-town-sky" aria-hidden="true">
+      <div className="tomorrow-town-theatre-plate storybook-stage">
+        <div className="storybook-sky clock-town-sky" aria-hidden="true">
         <img
           src="/environments/tomorrow-town.webp"
           alt=""
@@ -68,10 +79,10 @@ export const ClockStage: React.FC<Props> = ({
             height: '100%',
             objectFit: 'cover',
             objectPosition: 'center 42%',
-            filter: puzzleDone
-              ? 'brightness(1.08) saturate(1.2) contrast(1.02)'
+            filter: isDawn
+              ? 'brightness(1.08) saturate(1.22) contrast(1.02)'
               : 'brightness(0.92) saturate(0.88) contrast(1.05) hue-rotate(-8deg)',
-            transition: 'filter 1.5s cubic-bezier(0.16, 1, 0.3, 1)',
+            transition: 'filter 2s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
         />
         {/* Dynamic Twilight / Golden Dawn Lighting Wash */}
@@ -80,10 +91,10 @@ export const ClockStage: React.FC<Props> = ({
           style={{
             position: 'absolute',
             inset: 0,
-            background: puzzleDone
-              ? 'radial-gradient(ellipse at 50% 30%, rgba(247, 213, 96, 0.28) 0%, rgba(232, 200, 120, 0.16) 45%, rgba(30, 24, 40, 0.25) 100%)'
+            background: isDawn
+              ? 'radial-gradient(ellipse at 50% 30%, rgba(247, 213, 96, 0.32) 0%, rgba(232, 200, 120, 0.18) 45%, rgba(30, 24, 40, 0.2) 100%)'
               : 'radial-gradient(ellipse at 50% 35%, rgba(65, 57, 82, 0.35) 0%, rgba(26, 20, 32, 0.65) 100%)',
-            transition: 'background 1.5s ease',
+            transition: 'background 2s ease',
             pointerEvents: 'none',
           }}
         />
@@ -91,7 +102,7 @@ export const ClockStage: React.FC<Props> = ({
 
       <div className="storybook-scene-label">
         <span style={{ background: 'rgba(23, 18, 32, 0.7)', padding: '2px 8px', borderRadius: '6px', backdropFilter: 'blur(4px)', color: '#FFF8F1', font: "700 0.68rem 'Space Mono', monospace" }}>
-          CHAPTER 03 · {puzzleDone ? 'TOMORROW RESTORED ✦' : 'TIME LOCKED AT 4:01'}
+          CHAPTER 03 · {isDawn ? 'TOMORROW RESTORED ✦' : 'TIME LOCKED AT 4:01'}
         </span>
         <button
           type="button"
@@ -123,11 +134,14 @@ export const ClockStage: React.FC<Props> = ({
             <filter id="gold-glow">
               <feDropShadow dx="0" dy="0" stdDeviation="5" floodColor="#F7D560" floodOpacity="0.8" />
             </filter>
+            <filter id="lamp-glow">
+              <feDropShadow dx="0" dy="0" stdDeviation="12" floodColor="#F7D560" floodOpacity="0.9" />
+            </filter>
           </defs>
 
-          {/* CHIMNEY STEAM: Frozen Stiff vs Rising Upon Dawn */}
+          {/* CHIMNEY STEAM: Frozen Stiff vs Rising Upon Stage 4+ */}
           {/* Left Bakery Chimney (105, 270) */}
-          {!puzzleDone ? (
+          {effectiveStage < 4 ? (
             <g opacity="0.65" transform="translate(105, 255)">
               <path d="M 0 10 Q -6 0 0 -10 Q 6 -20 0 -28" fill="none" stroke="#E8E4EC" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="3,3" />
               <circle cx="0" cy="-30" r="2.5" fill="#E8E4EC" />
@@ -142,11 +156,20 @@ export const ClockStage: React.FC<Props> = ({
           )}
 
           {/* Right Townhouse Chimney (905, 200) */}
-          {puzzleDone && (
+          {effectiveStage >= 4 && (
             <g className="chimney-steam-rising" fill="#FFF8F1" opacity="0.8">
               <circle cx="905" cy="190" r="4" />
               <circle cx="908" cy="176" r="6" />
               <circle cx="904" cy="160" r="8" />
+            </g>
+          )}
+
+          {/* BAKERY WINDOW ILLUMINATION (Stage 5+) */}
+          {effectiveStage >= 5 && (
+            <g className="bakery-window-illumination" transform="translate(140, 360)">
+              <rect x="0" y="0" width="38" height="48" rx="4" fill="rgba(247, 213, 96, 0.45)" filter="url(#gold-glow)" />
+              <line x1="19" y1="0" x2="19" y2="48" stroke="#5A4739" strokeWidth="2" />
+              <line x1="0" y1="24" x2="38" y2="24" stroke="#5A4739" strokeWidth="2" />
             </g>
           )}
 
@@ -155,7 +178,7 @@ export const ClockStage: React.FC<Props> = ({
             <ellipse cx="36" cy="120" rx="22" ry="5" fill="#1e1828" opacity="0.4" />
             <rect x="33" y="55" width="7" height="65" fill="#5A4739" stroke="#252030" strokeWidth="1.5" />
             <rect x="0" y="0" width="72" height="58" rx="3" fill="#FFF8F1" stroke="#252030" strokeWidth="2" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.3))" />
-            {!puzzleDone ? (
+            {effectiveStage < 8 ? (
               <>
                 <rect x="6" y="8" width="60" height="18" fill="none" stroke="#A34063" strokeWidth="2" strokeDasharray="2,2" transform="rotate(-7 36 17)" />
                 <text x="36" y="21" fill="#A34063" fontSize="8.5" fontWeight="bold" textAnchor="middle" transform="rotate(-7 36 17)">
@@ -186,41 +209,41 @@ export const ClockStage: React.FC<Props> = ({
 
           {/* DYNAMIC CLOCK MECHANISM OVERLAY ON CENTRAL CLOCK (Center at 490, 195) */}
           <g className="central-clock-overlay" transform="translate(490, 195)">
-            {/* Ambient Clockwork Cogs (Accelerate and spin upon restart) */}
-            <g className={puzzleDone ? 'clock-gear-spin-fast' : ''} opacity={puzzleDone ? '0.75' : '0.45'}>
+            {/* Ambient Clockwork Cogs (Accelerate and spin in Stage 2+) */}
+            <g className={effectiveStage >= 2 ? 'clock-gear-spin-fast' : ''} opacity={effectiveStage >= 2 ? '0.85' : '0.45'}>
               <circle cx="0" cy="55" r="28" fill="none" stroke="url(#brass-clock)" strokeWidth="7" strokeDasharray="7,5" />
               <circle cx="0" cy="55" r="12" fill="#221b2c" stroke="url(#brass-clock)" strokeWidth="2" />
             </g>
 
-            {/* FROZEN AT 4:01 vs SWEEPING HANDS */}
+            {/* FROZEN AT 4:01 vs SWEEPING HANDS (Stage 3+) */}
             {/* Hour Hand: stuck at IV (120°) vs advanced forward */}
             <line
               x1="0"
               y1="0"
-              x2={puzzleDone ? '-15' : '36'}
-              y2={puzzleDone ? '42' : '22'}
+              x2={effectiveStage >= 3 ? '-15' : '36'}
+              y2={effectiveStage >= 3 ? '42' : '22'}
               stroke="#252030"
               strokeWidth="5.5"
               strokeLinecap="round"
-              style={{ transition: 'all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
+              style={{ transition: 'all 1.6s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
             />
-            {/* Minute Hand: stuck at 4:01 (6° from 12) vs sweeping freely */}
+            {/* Minute Hand: stuck at 4:01 (6°) vs sweeping freely */}
             <line
               x1="0"
               y1="0"
-              x2={puzzleDone ? '-28' : '7'}
-              y2={puzzleDone ? '-55' : '-65'}
+              x2={effectiveStage >= 3 ? '-28' : '7'}
+              y2={effectiveStage >= 3 ? '-55' : '-65'}
               stroke="#F7D560"
               strokeWidth="3.5"
               strokeLinecap="round"
-              className={puzzleDone ? 'clock-hand-sweeping' : ''}
+              className={effectiveStage >= 3 ? 'clock-hand-sweeping' : ''}
             />
             {/* Central Spindle Hub */}
             <circle cx="0" cy="0" r="8" fill="url(#brass-clock)" stroke="#171220" strokeWidth="2" />
-            {puzzleDone && <circle cx="0" cy="0" r="4" fill="#F7D560" filter="url(#gold-glow)" />}
+            {effectiveStage >= 1 && <circle cx="0" cy="0" r="4" fill="#F7D560" filter="url(#gold-glow)" />}
 
             {/* Celebratory Sparkle Bursts */}
-            {puzzleDone && (
+            {effectiveStage >= 3 && (
               <g className="restart-sparkles" fill="#F7D560">
                 <text x="-70" y="-70" fontSize="16">✦</text>
                 <text x="75" y="-60" fontSize="18">✧</text>
@@ -230,12 +253,22 @@ export const ClockStage: React.FC<Props> = ({
             )}
           </g>
 
-          {/* CROOKED LAMPPOST (745, 300) */}
+          {/* CROOKED LAMPPOST (745, 300) - Illuminates in Stage 5+ */}
           <g className="street-lamppost" transform="translate(745, 290)">
             <line x1="0" y1="160" x2="0" y2="15" stroke="#211a2c" strokeWidth="4" strokeLinecap="round" />
             <circle cx="0" cy="160" r="6" fill="#211a2c" />
             <line x1="-12" y1="22" x2="12" y2="18" stroke="#211a2c" strokeWidth="2.5" />
-            <polygon points="-6,20 6,18 4,4 -4,6" fill={puzzleDone ? '#F7D560' : '#E8C878'} opacity={puzzleDone ? 0.95 : 0.6} stroke="#211a2c" strokeWidth="1.2" />
+            <polygon
+              points="-6,20 6,18 4,4 -4,6"
+              fill={effectiveStage >= 5 ? '#F7D560' : '#E8C878'}
+              opacity={effectiveStage >= 5 ? 1 : 0.6}
+              stroke="#211a2c"
+              strokeWidth="1.2"
+              filter={effectiveStage >= 5 ? 'url(#lamp-glow)' : undefined}
+            />
+            {effectiveStage >= 5 && (
+              <circle cx="0" cy="12" r="16" fill="rgba(247, 213, 96, 0.25)" filter="url(#lamp-glow)" />
+            )}
           </g>
         </svg>
 
@@ -243,7 +276,7 @@ export const ClockStage: React.FC<Props> = ({
             STOP-MOTION CHARACTER ACTORS & DIALOGUE ANCHORS
            ========================================================================= */}
 
-        {/* 1. BAKER (Far Left outside Bakery) */}
+        {/* 1. BAKER (Far Left outside Bakery) - Illustrated stop-motion fallback */}
         <div
           className="stage-actor-anchor baker-anchor"
           style={{
@@ -258,9 +291,9 @@ export const ClockStage: React.FC<Props> = ({
         >
           <StopMotionActor
             character="baker"
-            state={dialog === 0 ? 'talking' : puzzleDone ? 'happy' : 'idle'}
+            state={dialog === 0 ? 'talking' : effectiveStage >= 6 ? 'happy' : 'idle'}
             isSpeaking={dialog === 0}
-            alt="Baker holding wooden bread peel in flour-dusted linen apron"
+            alt="Baker holding wooden bread peel in flour-dusted linen apron (Illustrated stop-motion paper craft fallback — awaiting photographic cutout)"
             fallbackSvg={
               <svg viewBox="0 0 100 130" width="100%" height="100%">
                 <ellipse cx="50" cy="120" rx="30" ry="6" fill="#1e1828" opacity="0.35" />
@@ -299,10 +332,42 @@ export const ClockStage: React.FC<Props> = ({
             zIndex: 5,
           }}
         >
+          <StopMotionActor
+            character="professor"
+            state={dialog === 1 ? 'talking' : effectiveStage >= 6 ? 'happy' : 'idle'}
+            isSpeaking={dialog === 1}
+            alt="Professor Primrose Perfect in tailored stop-motion felt waistcoat and monocle"
+            fallbackSvg={
+              <svg viewBox="0 0 100 170" width="100%" height="100%">
+                <ellipse cx="50" cy="155" rx="28" ry="6" fill="#1e1828" opacity="0.35" />
+                <rect x="36" y="70" width="28" height="85" fill="#392F3B" rx="4" />
+                <path d="M 38 72 L 50 110 L 62 72 Z" fill="#F4EFEA" />
+                <circle cx="50" cy="46" r="18" fill="#E8B496" stroke="#252030" strokeWidth="2" />
+                <circle cx="44" cy="44" r="2.5" fill="#252030" />
+                <circle cx="56" cy="44" r="2.5" fill="#252030" />
+                <circle cx="56" cy="44" r="6" fill="none" stroke="#D4A853" strokeWidth="1.8" />
+                <line x1="60" y1="48" x2="68" y2="78" stroke="#D4A853" strokeWidth="1.2" strokeDasharray="1,1" />
+                {effectiveStage >= 6 ? (
+                  <path d="M 44 54 Q 50 62 56 54" fill="none" stroke="#252030" strokeWidth="2" strokeLinecap="round" />
+                ) : (
+                  <line x1="44" y1="55" x2="56" y2="55" stroke="#252030" strokeWidth="2" strokeLinecap="round" />
+                )}
+                <rect x="34" y="24" width="32" height="18" fill="#252030" rx="2" />
+                <ellipse cx="50" cy="40" rx="24" ry="4" fill="#252030" />
+                <rect x="34" y="34" width="32" height="4" fill="#A34063" />
+              </svg>
+            }
+          />
           {dialog === 1 && (
             <div className="character-speech-bubble bubble-professor" role="tooltip" aria-live="polite">
               <strong>Professor Perfect</strong>
               <p>Tomorrow introduces mistakes. Therefore tomorrow is cancelled.</p>
+            </div>
+          )}
+          {effectiveStage >= 6 && (
+            <div className="character-speech-bubble bubble-professor" role="tooltip" aria-live="polite" style={{ borderColor: 'var(--sage)' }}>
+              <strong>Professor Perfect</strong>
+              <p>The gear ratio... is mathematically atrocious. Yet... it runs!</p>
             </div>
           )}
         </div>
@@ -320,6 +385,13 @@ export const ClockStage: React.FC<Props> = ({
             zIndex: 5,
           }}
         >
+          <StopMotionActor
+            character="morrow"
+            state={dialog === 2 ? 'talking' : isDawn ? 'happy' : 'action'}
+            isSpeaking={dialog === 2}
+            alt="Morrow the Stitchling apprentice with patchwork scarf and golden needle"
+            fallbackSvg={<Morrow small expression={isDawn ? 'happy' : 'focused'} />}
+          />
           {dialog === 2 && (
             <div className="character-speech-bubble bubble-morrow" role="tooltip" aria-live="polite">
               <strong>Morrow</strong>
@@ -343,9 +415,9 @@ export const ClockStage: React.FC<Props> = ({
         >
           <StopMotionActor
             character="clack"
-            state={dialog === 3 ? 'talking' : 'idle'}
+            state={dialog === 3 ? 'talking' : isDawn ? 'happy' : 'idle'}
             isSpeaking={dialog === 3}
-            alt="Sir Clack the grumpy toolbox mentor"
+            alt="Sir Clack the grumpy antique toolbox mentor"
             fallbackSvg={
               <svg viewBox="0 0 90 110" width="100%" height="100%">
                 <ellipse cx="45" cy="100" rx="28" ry="6" fill="#1e1828" opacity="0.3" />
@@ -384,7 +456,7 @@ export const ClockStage: React.FC<Props> = ({
         >
           <StopMotionActor
             character="pipkin"
-            state={puzzleDone ? 'happy' : 'idle'}
+            state={isDawn ? 'happy' : 'idle'}
             alt="Pipkin perched on the street lamppost"
             fallbackSvg={
               <svg viewBox="0 0 60 60" width="100%" height="100%">
@@ -401,10 +473,36 @@ export const ClockStage: React.FC<Props> = ({
 
       <div className="storybook-scene-bottom">
         <span style={{ background: 'rgba(23, 18, 32, 0.7)', padding: '2px 8px', borderRadius: '6px', backdropFilter: 'blur(4px)', color: '#FFF8F1', font: "700 0.68rem 'Space Mono', monospace" }}>
-          {puzzleDone ? '✦ The Cogs Sing at Sunrise · Tomorrow Restored ✦' : 'Tomorrow Has Been Cancelled'}
+          {isDawn ? '✦ The Cogs Sing at Sunrise · Tomorrow Restored ✦' : 'Tomorrow Has Been Cancelled'}
         </span>
         <span style={{ background: 'rgba(23, 18, 32, 0.7)', padding: '2px 6px', borderRadius: '6px', backdropFilter: 'blur(4px)', color: '#F7D560' }}>✦</span>
       </div>
+      </div>
+
+      {/* =========================================================================
+          PHYSICAL IMPOSSIBLE CLOCK MECHANISM (Visually integrated into Town)
+         ========================================================================= */}
+      <div
+        className="tomorrow-town-clock-workbench"
+        style={{
+          width: '100%',
+          maxWidth: '820px',
+          margin: '14px auto 0',
+          position: 'relative',
+          zIndex: 6,
+        }}
+      >
+        <ImpossibleClock
+          onSuccess={() => {
+            if (onPuzzleSuccess) onPuzzleSuccess();
+          }}
+          playChime={playChime}
+          onRestartStageChange={setRestartStage}
+          initialRestartStage={puzzleDone ? 8 : 0}
+        />
+      </div>
+
+
 
       {/* Cinematic Reveal Modal */}
       {showCinematic && (

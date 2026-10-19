@@ -3330,16 +3330,22 @@ img,svg,video,canvas { max-width:100%; }
 
 .clock-stage-bespoke {
   position: relative;
-  overflow: hidden;
   width: min(100%, 960px);
   margin: 10px auto 0;
+  height: auto;
+  overflow: visible;
+}
+
+.tomorrow-town-theatre-plate {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: clamp(240px, 48vw, 540px);
   border-radius: var(--radius-lg, 18px);
   background: #171220;
   border: 2px solid var(--line);
   box-shadow: 0 14px 40px rgba(18, 14, 24, 0.45);
-  height: auto;
-  aspect-ratio: 16 / 9;
-  min-height: clamp(240px, 50vw, 540px);
 }
 
 .clock-stage-bespoke .stage-svg-wrap {
@@ -3479,14 +3485,83 @@ img,svg,video,canvas { max-width:100%; }
   }
 }
 
+@keyframes heart-glow-pulse {
+  0% { transform: scale(1); filter: drop-shadow(0 0 4px #F7D560); }
+  50% { transform: scale(1.08); filter: drop-shadow(0 0 14px #F7D560) drop-shadow(0 0 8px #A34063); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 4px #F7D560); }
+}
+
+.heart-glow-pulsing {
+  transform-origin: 0 0;
+  animation: heart-glow-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes gear-wobble {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(12deg); }
+  50% { transform: rotate(-8deg); }
+  75% { transform: rotate(4deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.clock-gear-wobble {
+  transform-origin: center;
+  animation: gear-wobble 0.6s ease-out;
+}
+
+/* Accessible Clock Drawer & Workbench */
+.tomorrow-town-clock-workbench {
+  width: 100%;
+  border-radius: 18px;
+  background: var(--surface, #FFFDF9);
+  padding: 12px;
+  border: 1px solid var(--line, #E8DEC8);
+  box-shadow: 0 4px 20px rgba(37, 32, 48, 0.08);
+}
+
+.accessible-clock-drawer {
+  background: rgba(232, 222, 200, 0.25);
+  border: 1px solid var(--line, #E8DEC8);
+  border-radius: 12px;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+}
+
+.accessible-clock-drawer summary {
+  user-select: none;
+}
+
+.accessible-clock-drawer summary:focus-visible {
+  outline: 2px solid var(--gold, #E8C878);
+  outline-offset: 2px;
+}
+
+.accessible-clock-btn:hover:not(:disabled) {
+  border-color: var(--gold, #E8C878) !important;
+  transform: translateY(-1px);
+}
+
+.accessible-clock-btn:focus-visible {
+  outline: 2px solid var(--gold, #E8C878);
+  outline-offset: 2px;
+}
+
+.bubble-professor-reaction {
+  border-color: var(--sage, #88A991) !important;
+  box-shadow: 0 0 12px rgba(136, 169, 145, 0.45) !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .clock-gear-spin,
   .clock-gear-spin-fast,
   .clock-gear-spin-reverse,
   .clock-hand-sweeping,
-  .chimney-steam-rising {
+  .chimney-steam-rising,
+  .heart-glow-pulsing,
+  .clock-gear-wobble {
     animation: none !important;
   }
 }
+
 
 

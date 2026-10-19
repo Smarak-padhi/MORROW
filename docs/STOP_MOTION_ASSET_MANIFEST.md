@@ -31,8 +31,8 @@ Each character requires transparent cutouts with alpha channels (min 1024×1024p
 | **Pipkin** | News Delivery Bird | `idle`, `talking`, `surprised`, `happy`, `worried`, `action` | `/characters/pipkin-{state}.png` | **Cutouts Active** (`pipkin-idle.png`, `pipkin-talking.png`, `pipkin-surprised.png`) |
 | **Frog Mayor** | Mayor of Upside-Down Forest | `idle`, `talking`, `surprised`, `happy`, `worried`, `action` | `/characters/frog-{state}.png` | **Cutouts Active** (`frog-idle.png`, `frog-talking.png`, `frog-happy.png`) |
 | **Village Duck** | Shadow Village Resident | `idle`, `talking`, `surprised`, `happy`, `worried`, `action` | `/characters/duck-{state}.png` | **Cutouts Active** (`duck-idle.png`, `duck-talking.png`) |
-| **Professor Perfect** | Clock Tower Perfectionist | `idle`, `talking`, `surprised`, `happy`, `worried`, `action` | `/characters/professor-{state}.png` | **Cutouts Active** (`professor-idle.png`, `professor-talking.png`) |
-| **Baker** | Tomorrow Town Baker | `idle`, `talking`, `happy` | `/characters/baker-{state}.png` | **Stop-Motion Felt Puppet Active** (In-engine tactile linen apron, chef's toque, flour dust) |
+| **Professor Perfect** | Clock Tower Perfectionist | `idle`, `talking`, `surprised`, `happy`, `worried`, `action` | `/characters/professor-{state}.png` | **Cutouts Active** (`professor-idle.png`, `professor-talking.png`, smiling/surprised delight state) |
+| **Baker** | Tomorrow Town Baker | `idle`, `talking`, `happy` | `/characters/baker-{state}.png` | **Illustrated Paper-Craft Stop-Motion Fallback** (Accurately documented: awaiting photographic cutout in future intake; StopMotionActor serves handcrafted illustrated paper-craft puppet with flour-dusted linen apron and wooden bread peel, zero 404 network attempts) |
 | **The Unfinished One** | Shadow Silhouette Co-protagonist | `idle`, `talking`, `surprised`, `happy`, `worried`, `action` | `/characters/unfinished-{state}.png` | **Cutouts Active** (`unfinished-idle.png`, `unfinished-action.png`) |
 
 ---
@@ -67,7 +67,7 @@ Physical props engineered for tactile pointer/touch interactions:
 | `prop-frog-umbrella` | Inverted leaf umbrella bucket with cane handle | Sloshing water pool, drops spilling | `/props/frog-umbrella.webp` | Procedural SVG In-Engine |
 | `prop-thirsty-lilies` | Stone water basin with parched buds $\to$ blooming water lilies | Concentric blue ripple rings | `/props/thirsty-lilies.webp` | Procedural SVG In-Engine |
 | `prop-frozen-windmill` | Wooden sails on brass axletree | Static $\to$ rotating with wind | `/props/windmill-sails.webp` | Procedural SVG In-Engine |
-| `prop-impossible-clock` | 3 interlocking irregular wooden & brass cogs | Shadow Cog, Weather Spring, Crooked Key | `/props/impossible-cogs.webp` | Procedural SVG In-Engine |
+| `prop-impossible-clock` | Physical Miniature Impossible Clock | 3 direct physical manipulations: brass cog pointer drag & mesh, weather dial direct circular rotation with magnetic lock to 180° South, crooked heart mainspring elastic tension pull & escapement seating. 8-stage timed transformation sequence. Dual accessible drawer. | In-Engine Physical Mechanism | **Fully Playable In-Engine (Sprint 02.1)** |
 | `prop-golden-needle` | Morrow's polished brass needle with trailing thread | Used as pointer drag cursor | `/props/brass-needle.webp` | Procedural SVG In-Engine |
 
 ---

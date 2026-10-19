@@ -47,6 +47,17 @@ export const ComicVideoPanel: React.FC<ComicVideoPanelProps> = ({
     }
   }, [effectiveMuted]);
 
+  // Keep localMuted synchronized with native video volume/muted events
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const handleVolume = () => {
+      setLocalMuted(video.muted);
+    };
+    video.addEventListener('volumechange', handleVolume);
+    return () => video.removeEventListener('volumechange', handleVolume);
+  }, []);
+
   useEffect(() => {
     if (autoPlay && videoRef.current && !isReducedMotion) {
       videoRef.current.muted = effectiveMuted;
@@ -60,7 +71,15 @@ export const ComicVideoPanel: React.FC<ComicVideoPanelProps> = ({
             videoRef.current.muted = true;
             videoRef.current
               .play()
-              .then(() => setIsPlaying(true))
+              .then(() => {
+                setIsPlaying(true);
+                // If browser forced mute on unmuted request, notify parent or sync local state
+                if (propMuted === false && onToggleMute) {
+                  onToggleMute();
+                } else {
+                  setLocalMuted(true);
+                }
+              })
               .catch(() => {
                 // If even muted autoplay fails, stay on poster ready to click
                 setIsPlaying(false);
@@ -70,7 +89,7 @@ export const ComicVideoPanel: React.FC<ComicVideoPanelProps> = ({
           }
         });
     }
-  }, [autoPlay, isReducedMotion, src, effectiveMuted]);
+  }, [autoPlay, isReducedMotion, src, effectiveMuted, propMuted, onToggleMute]);
 
   const togglePlay = () => {
     if (!videoRef.current) return;

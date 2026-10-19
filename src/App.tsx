@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import { ArrowRight, BookOpen, Map as MapIcon, Moon, Sun, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 import { chapters, dialogues, type ChapterId } from './story';
 import { sound, type AudioEffect } from './sound';
-
-import { ImpossibleClock } from './components/inventions/ImpossibleClock';
 import { FinaleStitch } from './components/inventions/FinaleStitch';
 import { Cinematic } from './components/Cinematic';
 import { WorkshopComic } from './components/WorkshopComic';
@@ -60,13 +58,13 @@ export default function App() {
   const lines = dialogues[chapter.id];
   const lastLine = chapter.id === 'workshop'
     ? dialog >= 7
-    : (chapter.id === 'shadows' || chapter.id === 'weather')
-    ? (puzzleDone || save.completed.includes(chapter.id))
+    : (chapter.id === 'shadows' || chapter.id === 'weather' || chapter.id === 'clock')
+    ? (puzzleDone || save.completed.includes(chapter.id) || dialog === lines.length - 1)
     : dialog === lines.length - 1;
   const puzzleNeeded = puzzleChapters.includes(chapter.id);
   const ready = (chapter.id === 'workshop'
     ? dialog >= 7
-    : (chapter.id === 'shadows' || chapter.id === 'weather')
+    : (chapter.id === 'shadows' || chapter.id === 'weather' || chapter.id === 'clock')
     ? (puzzleDone || save.completed.includes(chapter.id))
     : lastLine) && (!puzzleNeeded || puzzleDone || save.completed.includes(chapter.id));
   const completedCount = save.completed.length;
@@ -352,7 +350,6 @@ export default function App() {
           )}
           {lastLine && chapter.id !== 'shadows' && chapter.id !== 'weather' && (
             <section className="storybook-interaction reveal-on-scroll" aria-label="Chapter interaction">
-              {chapter.id === 'clock' && <ImpossibleClock playChime={() => play('gear')} onSuccess={() => setPuzzleDone(true)}/>}
               {chapter.id === 'finale' && <FinaleStitch playChime={() => play('stitch')} onSuccess={() => setPuzzleDone(true)}/>}
               {chapter.id === 'epilogue' && (
                 <div className="storybook-ending">

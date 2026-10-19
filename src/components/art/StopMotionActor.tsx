@@ -18,6 +18,54 @@ export type ActorState =
   | 'worried'
   | 'action';
 
+// Explicit mapping of confirmed transparent character PNGs
+// Ensures graceful sprite aliasing and prevents 404 console errors for unphotographed poses or fallbacks.
+const CHARACTER_SPRITE_MAP: Record<ActorId, Partial<Record<ActorState, string>>> = {
+  morrow: {
+    idle: 'morrow-idle.png',
+    talking: 'morrow-talking.png',
+    happy: 'morrow-happy.png',
+    action: 'morrow-action.png',
+    worried: 'morrow-action.png',
+    surprised: 'morrow-talking.png',
+  },
+  clack: {
+    idle: 'clack-idle.png',
+    talking: 'clack-talking.png',
+    happy: 'clack-talking.png',
+    surprised: 'clack-talking.png',
+  },
+  duck: {
+    idle: 'duck-idle.png',
+    talking: 'duck-talking.png',
+    happy: 'duck-talking.png',
+  },
+  frog: {
+    idle: 'frog-idle.png',
+    talking: 'frog-talking.png',
+    happy: 'frog-happy.png',
+  },
+  pipkin: {
+    idle: 'pipkin-idle.png',
+    talking: 'pipkin-talking.png',
+    surprised: 'pipkin-surprised.png',
+    happy: 'pipkin-surprised.png',
+  },
+  professor: {
+    idle: 'professor-idle.png',
+    talking: 'professor-talking.png',
+    happy: 'professor-talking.png',
+    surprised: 'professor-talking.png',
+    worried: 'professor-idle.png',
+  },
+  unfinished: {
+    idle: 'unfinished-idle.png',
+    action: 'unfinished-action.png',
+  },
+  // Baker is an authoritative illustrated stop-motion paper-craft fallback (no photographic intake exists)
+  baker: {},
+};
+
 export interface StopMotionActorProps {
   character: ActorId;
   state?: ActorState;
@@ -56,10 +104,10 @@ export const StopMotionActor: React.FC<StopMotionActorProps> = ({
   // Compute effective state (if isSpeaking, force 'talking' unless explicitly overridden)
   const effectiveState: ActorState = isSpeaking ? 'talking' : isAction ? 'action' : state;
 
-  // Resolve potential sprite source
-  // In future production batches, /characters/${character}-${effectiveState}.webp will be loaded.
-  // Currently, character images without transparent alpha are gated to avoid rectangular artifacts.
-  const spriteSrc = `/characters/${character}-${effectiveState}.png`;
+  // Resolve sprite source from verified asset inventory
+  const spriteFile = CHARACTER_SPRITE_MAP[character]?.[effectiveState];
+  const hasSprite = Boolean(spriteFile);
+  const spriteSrc = spriteFile ? `/characters/${spriteFile}` : undefined;
 
   const transformParts: string[] = [];
   if (flipX) transformParts.push('scaleX(-1)');
@@ -89,7 +137,7 @@ export const StopMotionActor: React.FC<StopMotionActorProps> = ({
       aria-label={alt || `${character} in ${effectiveState} state`}
     >
       {/* If a transparent sprite exists and hasn't errored, display the real sprite */}
-      {!imageError ? (
+      {hasSprite && spriteSrc && !imageError ? (
         <img
           src={spriteSrc}
           alt={alt || `${character}`}
@@ -100,8 +148,8 @@ export const StopMotionActor: React.FC<StopMotionActorProps> = ({
         />
       ) : null}
 
-      {/* Handcrafted Stop-Motion Visual (Authoritative Fallback until image is loaded or if error) */}
-      {(!imageLoaded || imageError) && (
+      {/* Handcrafted Stop-Motion Visual (Authoritative Fallback until image is loaded or if no sprite exists) */}
+      {(!hasSprite || !imageLoaded || imageError) && (
         <div className="stop-motion-fallback-container">
           {fallbackSvg}
         </div>
