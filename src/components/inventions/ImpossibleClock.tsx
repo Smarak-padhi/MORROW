@@ -369,7 +369,7 @@ export function ImpossibleClock({
           className="clock-svg physical-clock-svg"
           role="img"
           aria-label={`Miniature clockwork mechanism. Cog: ${gearFitted ? 'Fitted' : 'Detached'}, Weather Dial: ${weatherAligned ? 'Aligned 180°' : `${weatherAngle}°`}, Heart Spring: ${heartInserted ? 'Inserted' : 'Unseated'}`}
-          style={{ width: '100%', maxHeight: '350px', display: 'block', margin: '0 auto', touchAction: 'none' }}
+          style={{ width: '100%', maxHeight: '520px', maxWidth: '680px', display: 'block', margin: '0 auto', touchAction: 'none' }}
           onPointerMove={(e) => {
             if (isDraggingGearRef.current) handleGearPointerMove(e);
             if (isDraggingDialRef.current) handleDialPointerMove(e);

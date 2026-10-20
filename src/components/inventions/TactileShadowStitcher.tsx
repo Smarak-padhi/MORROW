@@ -503,6 +503,30 @@ export const TactileShadowStitcher: React.FC<TactileShadowStitcherProps> = ({
       tabIndex={0}
     >
       {/* Narrative In-Scene Guidance Banner */}
+      <div className="seam-selection-tabs" role="tablist" aria-label="Select shadow seam to stitch">
+        {SEAMS.map((s, idx) => {
+          const isDone = repairedSeams.includes(s.id);
+          const isSelected = activeSeamIndex === s.id;
+          return (
+            <button
+              key={`seam-tab-${s.id}`}
+              type="button"
+              role="tab"
+              aria-selected={isSelected}
+              onKeyDown={(e) => e.stopPropagation()}
+              className={`seam-tab-btn ${isSelected ? "is-active" : ""} ${isDone ? "is-repaired" : ""}`}
+              onClick={() => {
+                setActiveSeamIndex(s.id);
+                setActivePointProgress(isDone ? s.points.length : 0);
+              }}
+            >
+              <span className="seam-tab-indicator">{isDone ? "✓" : idx + 1}</span>
+              <strong>{s.shortName}</strong>
+              <small>{isDone ? "Mended" : isSelected ? "Stitching" : "Damaged"}</small>
+            </button>
+          );
+        })}
+      </div>
       <div className="environmental-stitch-guidance" aria-live="polite">
         <div className="guidance-seam-badge">
           <Scissors size={15} aria-hidden="true" />

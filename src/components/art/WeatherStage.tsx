@@ -672,7 +672,7 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
         {/* Parallax & Camera Attention Wrapper */}
         <div className={`living-scene-camera ${cameraClass}`} aria-hidden="true">
           {/* Layer 1: Forest Sky Background */}
-          <div className="living-forest-sky-layer" style={{ backgroundImage: 'url(/environments/forest-canopy.webp)', backgroundSize: 'cover', backgroundPosition: 'center top', opacity: 0.85 }}>
+          <div className="living-forest-sky-layer" style={{ backgroundImage: "url(/environments/forest-canopy.webp)", backgroundSize: "cover", backgroundPosition: "center", opacity: 0.95, height: "100%" }}>
             <span className="forest-sun-orb" />
           </div>
 
@@ -732,7 +732,7 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
             </defs>
 
             {/* INVERTED CANOPY TREES (Layered Hanging Trees with High-Contrast Foliage) */}
-            <g className="living-inverted-canopy">
+            <g className="living-inverted-canopy" opacity="0.45" style={{ mixBlendMode: "overlay" }}>
               {/* Inverted Tree 1 (Left above Loom & Pipkin) */}
               <path d="M 25 0 L 105 170 L 5 170 Z" fill="url(#tree-wood-grad)" stroke="#16251A" strokeWidth="2" />
               <path d="M 35 30 L 115 150 L 15 150 Z" fill="url(#tree-branch-grad)" opacity="0.85" />

@@ -131,6 +131,7 @@ export const StopMotionActor: React.FC<StopMotionActorProps> = ({
   };
 
   useEffect(() => {
+    setImageError(false);
     if (!spriteSrc) {
       setImageLoaded(false);
       return;
@@ -140,7 +141,6 @@ export const StopMotionActor: React.FC<StopMotionActorProps> = ({
       return;
     }
     setImageLoaded(false);
-    setImageError(false);
   }, [spriteSrc]);
 
   return (

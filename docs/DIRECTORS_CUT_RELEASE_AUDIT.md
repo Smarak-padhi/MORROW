@@ -70,7 +70,7 @@ In accordance with Sprint 05 audit recommendations, real chapter photographic im
 
 ## 4. Production Performance & Media Transfer
 
-- **Production JavaScript:** **463.19 KB**
+- **Production JavaScript:** **463.85 KB**
 - **Production CSS:** **86.22 KB**
 - **Network 404s:** **0** (All media requests resolved successfully)
 - **Audio Architecture:** Mute state strictly authoritative via topbar `save.muted` with no silent video playback while sound is indicated.

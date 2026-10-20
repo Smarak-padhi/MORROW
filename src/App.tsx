@@ -126,7 +126,7 @@ export default function App() {
     }, intervalMs);
 
     return () => window.clearInterval(timer);
-  }, [save.started, view, cinematic, lastLine, isDialoguePaused, chapter.id, lines.length]);
+  }, [save.started, view, cinematic, lastLine, isDialoguePaused, chapter.id, lines.length, dialog]);
 
   // Re-observe story panels after each page turn.
   useEffect(() => {

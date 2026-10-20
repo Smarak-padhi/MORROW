@@ -416,12 +416,7 @@ main {
   margin-bottom: 16px;
 }
 
-.duck-svg,
-.clock-svg,
-.finale-svg {
-  width: 100%;
-  max-width: 240px;
-  height: auto;
+.duck-svg, .clock-svg, .finale-svg { width: 100%; max-width: 680px; height: auto;
 }
 
 .choices-grid {

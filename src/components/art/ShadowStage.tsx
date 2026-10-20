@@ -451,7 +451,7 @@ export const ShadowStage: React.FC<ShadowStageProps> = ({
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              overflowY: 'auto',
+              overflowY: 'visible', touchAction: 'none',
             }}
           >
             <TactileShadowStitcher
