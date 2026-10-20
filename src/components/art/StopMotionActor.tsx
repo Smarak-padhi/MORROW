@@ -20,7 +20,7 @@ export type ActorState =
 
 // Explicit mapping of confirmed transparent character PNGs
 // Ensures graceful sprite aliasing and prevents 404 console errors for unphotographed poses or fallbacks.
-const CHARACTER_SPRITE_MAP: Record<ActorId, Partial<Record<ActorState, string>>> = {
+export const CHARACTER_SPRITE_MAP: Record<ActorId, Partial<Record<ActorState, string>>> = {
   morrow: {
     idle: 'morrow-idle.png',
     talking: 'morrow-talking.png',
@@ -70,10 +70,16 @@ const CHARACTER_SPRITE_MAP: Record<ActorId, Partial<Record<ActorState, string>>>
   baker: {},
 };
 
+export const PRELOAD_SPRITE_URLS: string[] = Object.values(CHARACTER_SPRITE_MAP).flatMap(
+  (states) => Object.values(states).filter((f): f is string => Boolean(f)).map((file) => `/characters/${file}`)
+);
+
+// Global sprite cache to prevent re-flashing fallback on already loaded images
+const loadedSpriteCache = new Set<string>();
+
 export interface StopMotionActorProps {
   character: ActorId;
   state?: ActorState;
-  expression?: string;
   isSpeaking?: boolean;
   isAction?: boolean;
   flipX?: boolean;
@@ -88,8 +94,7 @@ export interface StopMotionActorProps {
  * Reusable image-based stop-motion actor component.
  * Supports transparent PNG/WebP character sprites with tactile stop-motion
  * animations (breathing, body rocking, talking bounce, surprised startle).
- * Gracefully renders the handcrafted SVG actor as a zero-layout-shift fallback
- * until approved transparent cutouts are loaded.
+ * Eliminates FOUC flash by checking global preload cache and smoothly transitioning.
  */
 export const StopMotionActor: React.FC<StopMotionActorProps> = ({
   character,
@@ -113,6 +118,8 @@ export const StopMotionActor: React.FC<StopMotionActorProps> = ({
   const hasSprite = Boolean(spriteFile);
   const spriteSrc = spriteFile ? `/characters/${spriteFile}` : undefined;
 
+  const [imageLoaded, setImageLoaded] = useState(() => (spriteSrc ? loadedSpriteCache.has(spriteSrc) : false));
+
   const transformParts: string[] = [];
   if (flipX) transformParts.push('scaleX(-1)');
   if (flipY) transformParts.push('scaleY(-1)');
@@ -123,13 +130,18 @@ export const StopMotionActor: React.FC<StopMotionActorProps> = ({
     transform: [style.transform, orientationTransform].filter(Boolean).join(' ') || undefined,
   };
 
-  const [imageLoaded, setImageLoaded] = useState(false);
-
-  // Reset loading and error states whenever character or effective pose changes
   useEffect(() => {
+    if (!spriteSrc) {
+      setImageLoaded(false);
+      return;
+    }
+    if (loadedSpriteCache.has(spriteSrc)) {
+      setImageLoaded(true);
+      return;
+    }
     setImageLoaded(false);
     setImageError(false);
-  }, [character, effectiveState]);
+  }, [spriteSrc]);
 
   return (
     <div
@@ -145,15 +157,18 @@ export const StopMotionActor: React.FC<StopMotionActorProps> = ({
         <img
           src={spriteSrc}
           alt={alt || `${character}`}
-          className="stop-motion-sprite-img"
-          onLoad={() => setImageLoaded(true)}
+          className={`stop-motion-sprite-img ${imageLoaded ? 'loaded' : 'loading'}`}
+          onLoad={() => {
+            loadedSpriteCache.add(spriteSrc);
+            setImageLoaded(true);
+          }}
           onError={() => setImageError(true)}
-          style={{ display: imageLoaded ? 'block' : 'none' }}
+          style={{ opacity: imageLoaded ? 1 : 0, transition: 'opacity 0.2s ease-in' }}
         />
       ) : null}
 
-      {/* Handcrafted Stop-Motion Visual (Authoritative Fallback until image is loaded or if no sprite exists) */}
-      {(!hasSprite || !imageLoaded || imageError) && (
+      {/* Handcrafted Stop-Motion Visual (Only shown if no sprite exists or on true error) */}
+      {(!hasSprite || imageError) && (
         <div className="stop-motion-fallback-container">
           {fallbackSvg}
         </div>
