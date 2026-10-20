@@ -251,7 +251,7 @@ export default function App() {
               isMuted={save.muted}
               onToggleMute={toggleGlobalMute}
               onBell={() => { setAwake(true); setBell(n => n + 1); play('bell'); }}
-              onNext={() => { setDialog(d => Math.min(d + 1, 7)); play('chime'); }}
+              onNext={() => { if (dialog >= 7) { nextChapter(); } else { setDialog(d => Math.min(d + 1, 7)); play('chime'); } }}
             />
           ) : chapter.id === 'shadows' ? (
             <ShadowStage
@@ -358,7 +358,7 @@ export default function App() {
               </section>
             </>
           )}
-          {lastLine && chapter.id !== 'shadows' && chapter.id !== 'weather' && (
+          {lastLine && chapter.id !== 'workshop' && chapter.id !== 'shadows' && chapter.id !== 'weather' && (
             <section className="storybook-interaction reveal-on-scroll" aria-label="Chapter interaction">
               {chapter.id === 'epilogue' && (
                 <div className="storybook-ending">
