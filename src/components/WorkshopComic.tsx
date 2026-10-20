@@ -1,280 +1,324 @@
-import { useEffect, useRef, useCallback } from 'react';
-import { ArrowRight, Bell } from 'lucide-react';
-import { ComicVideoPanel } from './ComicVideoPanel';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { Bell, Volume2, VolumeX } from 'lucide-react';
 import {
   Panel1Establish,
   Panel2Bell,
-  Panel3Reaction,
   Panel4GiantPOV,
+  Panel3Reaction,
   Panel5TwoShot,
   Panel6Hello,
   Panel7Pipkin,
   Panel8Pause,
   Panel9Exit,
 } from './art/WorkshopComicScenes';
+import { CinematicStage } from './cinematic/CinematicStage';
+import { DialogueOverlay } from './cinematic/DialogueOverlay';
+import { StoryControls } from './cinematic/StoryControls';
 
-type Props = {
+export interface WorkshopComicProps {
   beat: number;
   awake: boolean;
   onBell: () => void;
   onNext: () => void;
   isMuted?: boolean;
   onToggleMute?: () => void;
-};
+}
 
-const beats = [
+export interface WorkshopBeatDef {
+  id: string;
+  shot: string;
+  title: string;
+  badge: string;
+  speaker?: string;
+  role?: string;
+  words?: string;
+  narrator?: string;
+  videoSrc?: string;
+  posterSrc?: string;
+}
+
+export const WORKSHOP_BEATS: WorkshopBeatDef[] = [
   {
-    title: 'A very bad first day',
+    id: 'beat-0',
     shot: 'establish',
-    label: 'SOMEWHERE BETWEEN A WISH AND A LOOSE THREAD…',
-    speaker: '',
-    words: '',
-    videoSrc: null,
-    posterSrc: null,
+    title: 'A Very Bad First Day',
+    badge: 'PROLOGUE · SCENE 01',
+    narrator: 'Somewhere between a wish and a loose thread… once upon a nearly-perfect morning, a very small mistake was sleeping.',
   },
   {
-    title: 'A small sound',
+    id: 'beat-1',
     shot: 'bell',
-    label: 'CLOSE-UP',
-    speaker: '',
-    words: '',
-    videoSrc: null,
-    posterSrc: null,
+    title: 'The Counter Bell',
+    badge: 'PROLOGUE · SCENE 02',
+    narrator: 'On the timber counter sits Sir Clack’s antique brass bell. Give it a firm ring to open the repair shop.',
   },
   {
-    title: 'An unexpected visitor',
-    shot: 'reaction',
-    label: 'SUDDENLY!',
+    id: 'beat-2',
+    shot: 'giant-entry',
+    title: 'An Unexpected Visitor',
+    badge: 'PROLOGUE · SCENE 03',
     speaker: 'MORROW',
+    role: 'APPRENTICE STITCHLING',
     words: 'AH! A GIANT!',
     videoSrc: '/cinematics/prologue-02-giant.mp4',
     posterSrc: '/cinematics/prologue-02-giant-poster.jpg',
   },
   {
-    title: 'From a very small point of view',
-    shot: 'giant',
-    label: 'MORROW’S POINT OF VIEW',
-    speaker: '',
-    words: '',
-    videoSrc: null,
-    posterSrc: null,
+    id: 'beat-3',
+    shot: 'giant-pov',
+    title: 'A Spool’s-Eye Perspective',
+    badge: 'PROLOGUE · SCENE 04',
+    narrator: 'To someone the size of a wooden spool, every human customer towering over the counter looks colossal.',
+    posterSrc: '/environments/workshop-bg.webp',
   },
   {
-    title: 'A very reasonable explanation',
-    shot: 'clack',
-    label: 'TWO-SHOT',
+    id: 'beat-4',
+    shot: 'clack-visitor',
+    title: 'A Reasonable Explanation',
+    badge: 'PROLOGUE · SCENE 05',
     speaker: 'SIR CLACK',
+    role: 'ANTIQUE TOOLBOX MENTOR',
     words: 'That is a visitor, you walnut.',
     videoSrc: '/cinematics/prologue-03-clack-visitor.mp4',
     posterSrc: '/cinematics/prologue-03-clack-visitor-poster.jpg',
   },
   {
-    title: 'Introductions',
-    shot: 'hello',
-    label: 'HELLO!',
+    id: 'beat-5',
+    shot: 'morrow-hello',
+    title: 'Proper Etiquette',
+    badge: 'PROLOGUE · SCENE 06',
     speaker: 'MORROW',
+    role: 'APPRENTICE STITCHLING',
     words: 'HELLO, POTENTIALLY POLITE GIANT!',
     videoSrc: '/cinematics/prologue-04-morrow-hello.mp4',
     posterSrc: '/cinematics/prologue-04-morrow-hello-poster.jpg',
   },
   {
-    title: 'Breaking news',
-    shot: 'pipkin',
-    label: 'WHOOSH!',
+    id: 'beat-6',
+    shot: 'pipkin-emergency',
+    title: 'Breaking News',
+    badge: 'PROLOGUE · SCENE 07',
     speaker: 'PIPKIN',
+    role: 'SPECIAL EDITION SWIFT',
     words: 'EMERGENCY! THE WORLD IS BROKEN!',
     videoSrc: '/cinematics/prologue-05-pipkin-emergency.mp4',
     posterSrc: '/cinematics/prologue-05-pipkin-emergency-poster.jpg',
   },
   {
-    title: 'An important question',
-    shot: 'question',
-    label: 'A VERY LONG PAUSE',
+    id: 'beat-7',
+    shot: 'clack-which-part',
+    title: 'An Important Question',
+    badge: 'PROLOGUE · SCENE 08',
     speaker: 'SIR CLACK',
+    role: 'ANTIQUE TOOLBOX MENTOR',
     words: 'Which part?',
     videoSrc: '/cinematics/prologue-06-clack-which-part.mp4',
     posterSrc: '/cinematics/prologue-06-clack-which-part-poster.jpg',
   },
   {
-    title: 'A very short answer',
-    shot: 'exit',
-    label: 'NEXT: THE SHADOW SCANDAL',
+    id: 'beat-8',
+    shot: 'pipkin-yes',
+    title: 'The Shortest Answer',
+    badge: 'PROLOGUE · SCENE 09',
     speaker: 'PIPKIN',
+    role: 'SPECIAL EDITION SWIFT',
     words: 'YES.',
     videoSrc: '/cinematics/prologue-07-pipkin-yes.mp4',
     posterSrc: '/cinematics/prologue-07-pipkin-yes-poster.jpg',
   },
-] as const;
+];
 
-function Balloon({ speaker, words, side = 'left' }: { speaker: string; words: string; side?: 'left' | 'right' }) {
-  return (
-    <div className={`comic-balloon comic-balloon--${side}`}>
-      <span className="comic-speaker">{speaker}</span>
-      <p>{words}</p>
-    </div>
-  );
-}
+export function WorkshopComic({
+  beat,
+  awake,
+  onBell,
+  onNext,
+  isMuted = true,
+  onToggleMute,
+}: WorkshopComicProps) {
+  // Determine current beat index (0..8)
+  const activeBeatIdx = !awake ? (beat === 0 ? 0 : 1) : Math.min(Math.max(beat + 1, 1), WORKSHOP_BEATS.length - 1);
+  const currentBeat = WORKSHOP_BEATS[activeBeatIdx];
 
-export function WorkshopComic({ beat, awake, onBell, onNext, isMuted, onToggleMute }: Props) {
-  const newest = useRef<HTMLElement | null>(null);
-  const autoAdvanceTimer = useRef<number | null>(null);
-  const lastAdvancedBeat = useRef<number>(-1);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [videoError, setVideoError] = useState(false);
 
-  // Safe advancement wrapper to prevent race conditions or duplicate step triggers
-  const safeAdvance = useCallback(() => {
-    if (autoAdvanceTimer.current) {
-      window.clearTimeout(autoAdvanceTimer.current);
-      autoAdvanceTimer.current = null;
+  // Check prefers-reduced-motion
+  const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Synchronize audio muted state
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = isMuted;
     }
-    if (lastAdvancedBeat.current === beat) return;
-    lastAdvancedBeat.current = beat;
+  }, [isMuted]);
+
+  // Reset video playback state on beat change
+  useEffect(() => {
+    setVideoError(false);
+
+    if (currentBeat.videoSrc && videoRef.current && !prefersReducedMotion) {
+      videoRef.current.currentTime = 0;
+      const playPromise = videoRef.current.play();
+      if (playPromise) {
+        playPromise.catch(() => {
+          // Autoplay policy fallback: video remains ready on poster
+        });
+      }
+    }
+  }, [activeBeatIdx, currentBeat.videoSrc, prefersReducedMotion]);
+
+  const handleAdvance = useCallback(() => {
     onNext();
-  }, [beat, onNext]);
+  }, [onNext]);
 
-  useEffect(() => {
-    if (beat > 0 && newest.current && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      newest.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  // Avatar lookup
+  const getAvatar = (speaker?: string) => {
+    if (speaker === 'MORROW') return '/characters/morrow-talking.png';
+    if (speaker === 'SIR CLACK') return '/characters/clack-talking.png';
+    if (speaker === 'PIPKIN') return '/characters/pipkin-talking.png';
+    return undefined;
+  };
+
+  // Authoritative fallback stage when videos encounter errors or for reduced-motion environments
+  const renderFallbackScene = (shot: string) => {
+    switch (shot) {
+      case 'giant-entry':
+        return <Panel3Reaction />;
+      case 'clack-visitor':
+        return <Panel5TwoShot />;
+      case 'morrow-hello':
+        return <Panel6Hello />;
+      case 'pipkin-emergency':
+        return <Panel7Pipkin />;
+      case 'clack-which-part':
+        return <Panel8Pause />;
+      case 'pipkin-yes':
+        return <Panel9Exit />;
+      default:
+        return null;
     }
-  }, [beat]);
-
-  // Clean up timers on unmount
-  useEffect(() => {
-    return () => {
-      if (autoAdvanceTimer.current) window.clearTimeout(autoAdvanceTimer.current);
-    };
-  }, []);
-
-  // For reduced-motion fallback where video is skipped or disabled:
-  useEffect(() => {
-    if (!awake) return;
-    if (beat === 3 && typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      if (autoAdvanceTimer.current) window.clearTimeout(autoAdvanceTimer.current);
-      autoAdvanceTimer.current = window.setTimeout(() => {
-        safeAdvance();
-      }, 2500);
-    }
-  }, [beat, awake, safeAdvance]);
+  };
 
   return (
-    <div className="comic-workshop">
-      <header className="comic-heading">
-        <span>PROLOGUE · 01 / 06</span>
-        <h1>The Workshop</h1>
-        <p>A little mistake. A very big adventure.</p>
-      </header>
-
-      <div className="comic-strip" aria-label="Workshop comic panels">
-        {beats.slice(0, awake ? beat + 2 : 1).map((panel, i) => {
-          const current = i === (awake ? Math.min(beat + 1, beats.length - 1) : 0);
-
-          return (
-            <section
-              ref={current ? newest : undefined}
-              key={panel.shot}
-              className={`comic-panel comic-panel--${panel.shot}`}
-              aria-label={panel.title}
-            >
-              <span className="comic-panel-caption">{panel.label}</span>
-
-              {/* Panel visual: video when available with procedural fallback, or pure handcrafted scene */}
-              {panel.videoSrc && panel.posterSrc ? (
-                <ComicVideoPanel
-                  src={panel.videoSrc}
-                  poster={panel.posterSrc}
-                  ariaLabel={panel.title}
-                  autoPlay={current}
-                  isMuted={isMuted}
-                  onToggleMute={onToggleMute}
-                  onEnded={() => {
-                    if (!current) return;
-                    if (panel.shot === 'clack') {
-                      // Sir Clack's cinematic panel (prologue-03-clack-visitor.mp4) finishes playing FIRST,
-                      // followed by the 800 ms comedic pause, followed by Morrow's response.
-                      if (autoAdvanceTimer.current) window.clearTimeout(autoAdvanceTimer.current);
-                      autoAdvanceTimer.current = window.setTimeout(() => {
-                        safeAdvance();
-                      }, 800); // 0.8-second comedic pause
-                    } else if (i < beats.length - 1) {
-                      // For other video panels, automatically advance once the clip finishes playing
-                      safeAdvance();
-                    }
-                  }}
-                  fallbackArt={
-                    <>
-                      {panel.shot === 'reaction' && <Panel3Reaction />}
-                      {panel.shot === 'clack' && <Panel5TwoShot />}
-                      {panel.shot === 'hello' && <Panel6Hello />}
-                      {panel.shot === 'pipkin' && <Panel7Pipkin />}
-                      {panel.shot === 'question' && <Panel8Pause />}
-                      {panel.shot === 'exit' && <Panel9Exit />}
-                    </>
-                  }
-                />
-              ) : (
-                <div className="comic-art-stage">
-                  {panel.shot === 'establish' && <Panel1Establish />}
-                  {panel.shot === 'bell' && <Panel2Bell />}
-                  {panel.shot === 'giant' && <Panel4GiantPOV />}
-                </div>
+    <section className="workshop-cinematic-container" aria-label="Prologue: The Workshop">
+      <CinematicStage
+        id="workshop-cinematic-stage"
+        title={currentBeat.title}
+        badge={currentBeat.badge}
+        aspectRatio="16/9"
+        backgroundSrc="/environments/workshop-bg.webp"
+        backgroundAlt="Handcrafted stop-motion workshop interior"
+        className="workshop-main-stage"
+      >
+        {/* Active Beat Visual Plane */}
+        <div className="workshop-visual-viewport">
+          {currentBeat.videoSrc && currentBeat.posterSrc && !videoError && !prefersReducedMotion ? (
+            <div className="workshop-video-frame">
+              <video
+                ref={videoRef}
+                src={currentBeat.videoSrc}
+                poster={currentBeat.posterSrc}
+                playsInline
+                autoPlay
+                muted={isMuted}
+                onError={() => {
+                  setVideoError(true);
+                }}
+                className="workshop-stage-video"
+                aria-label={`${currentBeat.title} cinematic clip`}
+              />
+              {/* Audio mute toggle pill on video */}
+              {onToggleMute && (
+                <button
+                  type="button"
+                  onClick={onToggleMute}
+                  className="cinematic-mute-pill"
+                  aria-label={isMuted ? 'Unmute video audio' : 'Mute video audio'}
+                >
+                  {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+                  <span>{isMuted ? 'Muted' : 'Sound On'}</span>
+                </button>
               )}
-
-              {/* Narrative Captions & Bell overlays */}
-              {panel.shot === 'establish' && (
-                <div className="comic-narrator">
-                  Once upon a nearly-perfect morning, a very small mistake was sleeping. Then came a bell.
-                </div>
-              )}
-
-              {panel.shot === 'bell' && (
-                <div className="comic-bell-overlay">
-                  <strong className="comic-sfx">DING!</strong>
+            </div>
+          ) : (
+            <div className="workshop-stage-art">
+              {currentBeat.shot === 'establish' && <Panel1Establish />}
+              {currentBeat.shot === 'bell' && (
+                <div className="workshop-interactive-bell-stage">
+                  <Panel2Bell />
                   {!awake && (
-                    <button className="comic-bell-action" onClick={onBell} type="button">
-                      Ring the bell to wake the workshop <Bell size={20} />
-                    </button>
+                    <div className="workshop-bell-callout">
+                      <button
+                        type="button"
+                        onClick={onBell}
+                        className="storybook-action workshop-bell-btn pulse-glow"
+                        aria-label="Ring the counter bell to wake the workshop"
+                      >
+                        <Bell size={22} aria-hidden="true" />
+                        <span>Ring the Bell to Open Shop</span>
+                      </button>
+                    </div>
                   )}
                 </div>
               )}
-
-              {panel.shot === 'giant' && (
-                <div className="comic-narrator">
-                  To someone the size of a spool, every visitor looks enormous.
+              {currentBeat.shot === 'giant-pov' && (
+                <div className="workshop-giant-pov-stage">
+                  <Panel4GiantPOV />
                 </div>
               )}
+              {renderFallbackScene(currentBeat.shot)}
+            </div>
+          )}
+        </div>
 
-              {panel.words && (
-                <Balloon
-                  speaker={panel.speaker}
-                  words={panel.words}
-                  side={panel.shot === 'clack' ? 'right' : 'left'}
-                />
-              )}
-            </section>
-          );
-        })}
-      </div>
-
-      <section className="storybook-reading comic-reading" aria-label="Story dialogue">
-        <span className="story-overline">PROLOGUE · A VERY BAD FIRST DAY</span>
-        <h2>The Workshop</h2>
-        {!awake ? (
-          <button type="button" className="storybook-action" onClick={onBell}>
-            Ring the bell to wake the workshop <Bell size={20} />
-          </button>
-        ) : beat < 7 ? (
-          <button
-            className="storybook-action"
-            type="button"
-            onClick={safeAdvance}
-            aria-label="Turn the page · Continue story"
+        {/* Integrated Dialogue / Narration Overlay */}
+        {(currentBeat.words || currentBeat.narrator) && (
+          <DialogueOverlay
+            speaker={currentBeat.speaker}
+            speakerRole={currentBeat.role}
+            avatarSrc={getAvatar(currentBeat.speaker)}
+            position="bottom"
+            className="workshop-scene-dialogue"
           >
-            {beat === 3 ? 'Awaiting response…' : 'Continue story'} <ArrowRight size={18} />
-          </button>
-        ) : null}
-        <span className="storybook-page-number">
-          {awake ? Math.min(beat + 2, 9) : 1} of 9 panels · Scroll to read
-        </span>
-      </section>
-    </div>
+            {currentBeat.words ? (
+              <p className="dialogue-speech-text">{currentBeat.words}</p>
+            ) : (
+              <p className="dialogue-narrative-text">{currentBeat.narrator}</p>
+            )}
+          </DialogueOverlay>
+        )}
+      </CinematicStage>
+
+      {/* Cinematic Navigation & Story Controls */}
+      <footer className="workshop-navigation-bar">
+        {!awake ? (
+          <div className="workshop-awaiting-bell">
+            <button
+              type="button"
+              onClick={onBell}
+              className="storybook-action workshop-bell-advance"
+              aria-label="Ring the bell to wake the workshop"
+            >
+              <Bell size={18} aria-hidden="true" /> Ring the bell
+            </button>
+          </div>
+        ) : (
+          <StoryControls
+            forwardLabel={
+              activeBeatIdx >= WORKSHOP_BEATS.length - 1
+                ? 'Step into the next chapter'
+                : currentBeat.shot === 'clack-which-part'
+                ? 'Continue Story (Wait for Pipkin…)'
+                : 'Continue Story'
+            }
+            forwardDisabled={!awake}
+            onForward={handleAdvance}
+            stepIndicator={`BEAT ${activeBeatIdx + 1} OF ${WORKSHOP_BEATS.length}`}
+          />
+        )}
+      </footer>
+    </section>
   );
 }

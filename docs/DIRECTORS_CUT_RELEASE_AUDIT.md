@@ -37,7 +37,7 @@ All four core inventions (Shadow Stitcher, Weather Loom, Impossible Clock, and F
 | **Keyboard Accessibility** | Desktop (1280px) | Tab focus, `:focus-visible` outlines, accessible drawers | **PASS** | `09_accessible_keyboard_reduced_motion.png` |
 | **Reduced-Motion** | `prefers-reduced-motion` | Continuous rotation/pulse animations zeroed out | **PASS** | Verified in CSS & computed styles |
 | **State Resilience** | Edge Cases | Corrupted JSON recovery, chapter map back-navigation | **PASS** | Safe fallback without app crash |
-| **Production Build** | Node.js / Vite 7 | Bundle sizes: JS 472.5 KB, CSS 83.0 KB | **PASS** | Zero build warnings |
+| **Production Build** | Node.js / Vite 7 | Bundle sizes: JS 465.23 KB, CSS 89.17 KB | **PASS** | Zero build warnings |
 
 ---
 
@@ -70,8 +70,8 @@ In accordance with Sprint 05 audit recommendations, real chapter photographic im
 
 ## 4. Production Performance & Media Transfer
 
-- **Production JavaScript:** **463.85 KB**
-- **Production CSS:** **86.22 KB**
+- **Production JavaScript:** **465.23 KB**
+- **Production CSS:** **89.17 KB**
 - **Network 404s:** **0** (All media requests resolved successfully)
 - **Audio Architecture:** Mute state strictly authoritative via topbar `save.muted` with no silent video playback while sound is indicated.
 
