@@ -416,12 +416,7 @@ main {
   margin-bottom: 16px;
 }
 
-.duck-svg,
-.clock-svg,
-.finale-svg {
-  width: 100%;
-  max-width: 240px;
-  height: auto;
+.duck-svg, .clock-svg, .finale-svg { width: 100%; max-width: 680px; height: auto;
 }
 
 .choices-grid {
@@ -1041,7 +1036,7 @@ footer button {
 .storybook-character .morrow { width:100%; max-height:65vh; animation:storybook-float 5s ease-in-out infinite; }
 .storybook-companion { position:absolute; z-index:4; bottom:10%; width:clamp(85px,12vw,170px); height:auto; max-height:180px; filter:drop-shadow(0 12px 10px rgba(0,0,0,.18)); }
 .companion-left { left:12%; } .companion-right { right:12%; }
-.storybook-reading { position:relative; z-index:6; max-width:820px; margin:-30px auto 0; padding:clamp(28px,5vw,64px) clamp(22px,5vw,70px) 50px; border-radius:28px 28px 0 0; background:var(--cream); text-align:center; box-shadow:0 -20px 50px rgba(57,47,59,.09); }
+.storybook-reading { position:relative; z-index:6; max-width:820px; margin:20px auto 0; padding:clamp(24px,4vw,48px) clamp(20px,4vw,60px) 40px; border-radius:24px; background:var(--cream); text-align:center; box-shadow:0 10px 40px rgba(57,47,59,.07); }
 .storybook-reading h1 { font:700 clamp(2.6rem,5vw,5rem)/1.05 'Fraunces',Georgia,serif; letter-spacing:-.045em; margin:12px 0 25px; }
 .storybook-dialogue { min-height:130px; display:grid; place-items:center; padding:10px 0 25px; animation:story-rise .35s both; }
 .storybook-dialogue p { margin:0; font:600 clamp(1.25rem,2.5vw,1.85rem)/1.6 'Nunito',sans-serif; }
@@ -1140,7 +1135,7 @@ footer button {
   .storybook-companion { bottom:13%; width:85px; }.companion-left { left:3%; }.companion-right { right:3%; }
   .storybook-scene-label { top:76px; }
   .storybook-scene-bottom { bottom:42px; }
-  .storybook-reading { margin-top:-25px; padding:30px 20px 45px; }
+  .storybook-reading { margin-top:16px; padding:24px 18px 36px; }
   .storybook-dialogue { min-height:110px; }
   .storybook-map-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
   .storybook-island { min-height:155px; }
@@ -3473,6 +3468,12 @@ img,svg,video,canvas { max-width:100%; }
   line-height: 1.25;
 }
 
+.stage-actor-anchor:focus-visible {
+  outline: 3px solid var(--accent, #E8C878);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
 /* Mobile Scaling for Tomorrow Town */
 @media (max-width: 600px) {
   .stage-actor-anchor {
@@ -4127,3 +4128,313 @@ img,svg,video,canvas { max-width:100%; }
   gap: 10px;
 }
 
+
+/* ==========================================================================
+   CINEMATIC DESIGN SYSTEM PRIMITIVES (Director's Cut Overhaul)
+   ========================================================================== */
+
+.cinematic-stage {
+  position: relative;
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cinematic-stage-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.cinematic-stage-badge {
+  display: inline-flex;
+  align-items: center;
+  font: 700 0.7rem 'Space Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--berry);
+  background: rgba(163, 64, 99, 0.12);
+  border: 1px solid rgba(163, 64, 99, 0.25);
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.cinematic-stage-title {
+  margin: 0;
+  font: 700 clamp(1.4rem, 3.5vw, 2.2rem)/1.2 'Fraunces', Georgia, serif;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+
+.cinematic-stage-subtitle {
+  margin: 0;
+  font: 500 0.95rem/1.5 'Nunito', sans-serif;
+  color: rgba(57, 47, 59, 0.8);
+  max-width: 600px;
+}
+
+.cinematic-stage-frame {
+  position: relative;
+  width: 100%;
+  background: #110e1a;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.cinematic-stage-frame.aspect-16-9 {
+  aspect-ratio: 16 / 9;
+}
+
+.cinematic-stage-frame.aspect-4-3 {
+  aspect-ratio: 4 / 3;
+}
+
+.cinematic-stage-frame.aspect-auto {
+  aspect-ratio: auto;
+  min-height: 440px;
+}
+
+.cinematic-stage-backdrop-container {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.cinematic-stage-backdrop-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.cinematic-stage-backdrop-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 40%, rgba(10, 8, 14, 0.65) 100%),
+              linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, transparent 20%, transparent 75%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+.cinematic-stage-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cinematic-stage-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.cinematic-stage-overlay > * {
+  pointer-events: auto;
+}
+
+/* Character Actor Stop-Motion Styling */
+.cinematic-character-actor {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  transform-origin: bottom center;
+  transform: scale(var(--actor-scale, 1));
+  transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.cinematic-character-actor.flipped {
+  transform: scale(var(--actor-scale, 1)) scaleX(-1);
+}
+
+.cinematic-character-actor.breathe .cinematic-actor-sprite {
+  animation: actor-breathe 4s ease-in-out infinite;
+}
+
+@keyframes actor-breathe {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px) scaleY(1.015); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-character-actor.breathe .cinematic-actor-sprite {
+    animation: none;
+  }
+}
+
+.cinematic-actor-sprite {
+  display: block;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35));
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.cinematic-actor-contact-shadow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 14px;
+  background: radial-gradient(ellipse at center, rgba(12, 10, 16, 0.7) 0%, rgba(12, 10, 16, 0) 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Dialogue Overlay */
+.cinematic-dialogue-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.cinematic-dialogue-overlay.position-bottom {
+  bottom: 0;
+}
+
+.cinematic-dialogue-overlay.position-top {
+  top: 0;
+}
+
+.cinematic-dialogue-overlay.position-floating {
+  bottom: 24px;
+}
+
+.cinematic-dialogue-card {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 680px;
+  background: rgba(255, 248, 241, 0.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(220, 190, 160, 0.6);
+  border-radius: 16px;
+  padding: 16px 20px;
+  box-shadow: 0 12px 32px rgba(18, 12, 24, 0.28), 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.cinematic-dialogue-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.cinematic-dialogue-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border-soft);
+}
+
+.cinematic-dialogue-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.cinematic-dialogue-speaker {
+  font: 700 0.9rem 'Fraunces', serif;
+  color: var(--ink);
+}
+
+.cinematic-dialogue-role {
+  font: 600 0.7rem 'Space Mono', monospace;
+  color: var(--berry);
+  text-transform: uppercase;
+}
+
+.cinematic-dialogue-body {
+  font: 600 clamp(0.95rem, 2vw, 1.15rem)/1.5 'Nunito', sans-serif;
+  color: #2b2230;
+}
+
+.cinematic-dialogue-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* Story Controls */
+.cinematic-story-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 820px;
+  margin: 16px auto 0;
+  padding: 8px 12px;
+  gap: 12px;
+}
+
+.cinematic-control-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font: 700 0.95rem 'Nunito', sans-serif;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cinematic-control-btn:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.cinematic-control-btn.btn-primary {
+  background: var(--berry);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(163, 64, 99, 0.3);
+}
+
+.cinematic-control-btn.btn-primary:hover:not(:disabled) {
+  background: #b5476f;
+  transform: translateY(-1px);
+}
+
+.cinematic-control-btn.btn-secondary {
+  background: var(--cream);
+  color: var(--ink);
+  border: 1px solid rgba(57, 47, 59, 0.2);
+}
+
+.cinematic-control-btn.btn-secondary:hover:not(:disabled) {
+  background: #fdf2e4;
+  transform: translateY(-1px);
+}
+
+.cinematic-control-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cinematic-step-indicator {
+  font: 700 0.8rem 'Space Mono', monospace;
+  color: rgba(57, 47, 59, 0.7);
+}

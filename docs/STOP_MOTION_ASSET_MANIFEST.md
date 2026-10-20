@@ -49,14 +49,6 @@ Multiplane plates are split into Background (far horizon), Midground (walkable s
 | **Chapter 1** | `shadow-village` | Multiplane | Twilight village square with cobbled streets | `/environments/shadows-sky.webp` | In-Engine 2.5D Living Scene |
 | **Chapter 2** | `weather-forest` | Multiplane | Inverted forest canopy, rain, moss knolls | `/environments/forest-sky.webp` | In-Engine 2.5D Living Scene |
 | **Chapter 3** | `tomorrow-town` | Set Plate | Tabletop miniature Victorian clockwork city, giant brass gears, crooked shops | `/environments/tomorrow-town.webp` | **Active 1080p Film Set Plate** |
-| Chapter | Environment ID | Layer | Description | Path | Status |
-|---|---|---|---|---|---|
-| **Prologue** | `workshop-bench` | Far BG | Workbench wall with hanging tools, thread reels | `/environments/workshop-bg.webp` | Integrated in comic |
-| **Prologue** | `workshop-bench` | Mid | Wood-grain workbench table surface | `/environments/workshop-table.webp` | Integrated in comic |
-| **Prologue** | `workshop-bench` | FG | Brass lamp glow & scissor silhouette | `/environments/workshop-fg.webp` | Integrated in comic |
-| **Chapter 1** | `shadow-village` | Multiplane | Twilight village square with cobbled streets | `/environments/shadows-sky.webp` | In-Engine 2.5D Living Scene |
-| **Chapter 2** | `weather-forest` | Multiplane | Inverted forest canopy, rain, moss knolls | `/environments/forest-sky.webp` | In-Engine 2.5D Living Scene |
-| **Chapter 3** | `tomorrow-town` | Set Plate | Tabletop miniature Victorian clockwork city, giant brass gears, crooked shops | `/environments/tomorrow-town.webp` | **Active 1080p Film Set Plate** |
 | **Chapter 4** | `finale-cathedral` | Multiplane | Inside the monumental Clock Tower Cathedral mechanism with Gothic moonlit clock face, stained-glass rose window, rotating brass gears, hanging thread spools, floating dust particles, and dynamic golden dawn wash | Procedural In-Engine Stop-Motion Theatre Plate | **Active In-Engine Cathedral (Sprint 03)** |
 | **Epilogue** | `scrapbook-desk` | Surface | Handmade linen desk pad with stitched album | `/environments/scrapbook-desk.webp` | In-Engine 2.5D Living Scene |
 

@@ -93,7 +93,7 @@ try {
       await dialBtn.click();
       await page.waitForTimeout(300);
     }
-    const springBtn = page.locator('.accessible-clock-btn:has-text("3. Seat Crooked Heart Spring")');
+    const springBtn = page.locator('.accessible-clock-btn:has-text("3. Insert Heart Spring")');
     if (await springBtn.isVisible()) {
       await springBtn.click();
       await page.waitForTimeout(500);

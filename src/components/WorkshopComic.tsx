@@ -101,8 +101,8 @@ const beats = [
     label: 'NEXT: THE SHADOW SCANDAL',
     speaker: 'PIPKIN',
     words: 'YES.',
-    videoSrc: '/cinematics/prologue-08-door-original.mp4',
-    posterSrc: '/cinematics/prologue-08-door-original-poster.jpg',
+    videoSrc: '/cinematics/prologue-07-pipkin-yes.mp4',
+    posterSrc: '/cinematics/prologue-07-pipkin-yes-poster.jpg',
   },
 ] as const;
 

@@ -57,15 +57,12 @@ export default function App() {
   const lines = dialogues[chapter.id];
   const lastLine = chapter.id === 'workshop'
     ? dialog >= 7
-    : (chapter.id === 'shadows' || chapter.id === 'weather' || chapter.id === 'clock' || chapter.id === 'finale')
-    ? (puzzleDone || save.completed.includes(chapter.id) || dialog === lines.length - 1)
     : dialog === lines.length - 1;
   const puzzleNeeded = puzzleChapters.includes(chapter.id);
-  const ready = (chapter.id === 'workshop'
-    ? dialog >= 7
-    : (chapter.id === 'shadows' || chapter.id === 'weather' || chapter.id === 'clock' || chapter.id === 'finale')
-    ? (puzzleDone || save.completed.includes(chapter.id))
-    : lastLine) && (!puzzleNeeded || puzzleDone || save.completed.includes(chapter.id));
+  const isPuzzleComplete = puzzleDone || save.completed.includes(chapter.id);
+  const ready = (chapter.id === 'shadows' || chapter.id === 'weather')
+    ? isPuzzleComplete
+    : lastLine && (!puzzleNeeded || isPuzzleComplete);
   const completedCount = save.completed.length;
 
   // Authoritative Story Director State
@@ -77,9 +74,9 @@ export default function App() {
   } else if (ready) {
     directorState = 'COMPLETE';
   } else if (chapter.id === 'shadows' || chapter.id === 'weather') {
-    directorState = puzzleDone ? 'COMPLETE' : 'AWAITING_PLAYER_ACTION';
+    directorState = isPuzzleComplete ? 'COMPLETE' : 'AWAITING_PLAYER_ACTION';
   } else if (lastLine) {
-    directorState = puzzleNeeded && !puzzleDone ? 'AWAITING_PLAYER_ACTION' : 'COMPLETE';
+    directorState = puzzleNeeded && !isPuzzleComplete ? 'AWAITING_PLAYER_ACTION' : 'COMPLETE';
   } else {
     directorState = isDialoguePaused ? 'PAUSED' : 'DIALOGUE_AUTO_ADVANCING';
   }
@@ -114,20 +111,22 @@ export default function App() {
     const intervalMs = 100;
     const lineDurationMs = 3400; // Comfortable story reading pace
     const step = (intervalMs / lineDurationMs) * 100;
+    let progress = 0;
 
     const timer = window.setInterval(() => {
-      setDialogueProgress(prev => {
-        if (prev + step >= 100) {
-          setDialog(d => Math.min(d + 1, lines.length - 1));
-          play('chime');
-          return 0;
-        }
-        return prev + step;
-      });
+      progress += step;
+      if (progress >= 100) {
+        progress = 0;
+        setDialogueProgress(0);
+        setDialog(d => Math.min(d + 1, lines.length - 1));
+        play('chime');
+      } else {
+        setDialogueProgress(progress);
+      }
     }, intervalMs);
 
     return () => window.clearInterval(timer);
-  }, [save.started, view, cinematic, lastLine, isDialoguePaused, chapter.id, lines.length]);
+  }, [save.started, view, cinematic, lastLine, isDialoguePaused, chapter.id, lines.length, dialog]);
 
   // Re-observe story panels after each page turn.
   useEffect(() => {

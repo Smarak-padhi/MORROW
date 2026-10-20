@@ -102,6 +102,12 @@ await fs.mkdir(outDir, { recursive: true });
       viewport: { width: 1280, height: 800 },
     });
 
+    const pageErrors = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') pageErrors.push(msg.text());
+    });
+    page.on('pageerror', err => pageErrors.push(err.message));
+
     await page.addInitScript(() => {
       localStorage.setItem(
         'morrow-v2',
@@ -120,8 +126,9 @@ await fs.mkdir(outDir, { recursive: true });
 
     // Advance story dialogue to reach the ending and open the keepsake scrapbook
     const turnPage = page.locator('button:has-text("Turn the page")');
-    while (await turnPage.isVisible()) {
-      await turnPage.click();
+    let turnSteps = 0;
+    while (turnSteps++ < 30 && await turnPage.first().isVisible() && !(await turnPage.first().isDisabled())) {
+      await turnPage.first().click();
       await page.waitForTimeout(200);
     }
     await page.waitForTimeout(500);
@@ -181,6 +188,10 @@ await fs.mkdir(outDir, { recursive: true });
     await page.screenshot({ path: path.join(outDir, '04_scrapbook_desktop_friends.png') });
     console.log('✓ Captured 04: Scrapbook desktop friends portfolio');
 
+    if (pageErrors.length > 0) {
+      console.warn('Page errors in Test 2:', pageErrors);
+      failedErrors.push(...pageErrors);
+    }
     await page.close();
   }
 
@@ -194,6 +205,12 @@ await fs.mkdir(outDir, { recursive: true });
       isMobile: true,
       hasTouch: true,
     });
+
+    const pageErrors = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') pageErrors.push(msg.text());
+    });
+    page.on('pageerror', err => pageErrors.push(err.message));
 
     // 1. Weather Forest check
     await page.addInitScript(() => {
@@ -228,6 +245,11 @@ await fs.mkdir(outDir, { recursive: true });
       hasTouch: true,
     });
 
+    finalePage.on('console', msg => {
+      if (msg.type() === 'error') pageErrors.push(msg.text());
+    });
+    finalePage.on('pageerror', err => pageErrors.push(err.message));
+
     await finalePage.addInitScript(() => {
       localStorage.setItem(
         'morrow-v2',
@@ -253,8 +275,12 @@ await fs.mkdir(outDir, { recursive: true });
     await finalePage.screenshot({ path: path.join(outDir, '06_cathedral_stone_arcades.png') });
     console.log('✓ Captured 06: Cathedral stone arcades & directional lighting');
 
-    await finalePage.close();
+    if (pageErrors.length > 0) {
+      console.warn('Page errors in Test 3:', pageErrors);
+      failedErrors.push(...pageErrors);
+    }
 
+    await finalePage.close();
     await page.close();
   }
 

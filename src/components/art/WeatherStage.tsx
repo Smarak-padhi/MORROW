@@ -281,13 +281,7 @@ export const CinematicWeatherReveal: React.FC<CinematicWeatherRevealProps> = ({
     if (onToggleMute) {
       onToggleMute();
     } else {
-      setInternalMuted((prev) => {
-        const next = !prev;
-        if (videoRef.current) {
-          videoRef.current.muted = next;
-        }
-        return next;
-      });
+      setInternalMuted((prev) => !prev);
     }
   };
 
@@ -301,7 +295,7 @@ export const CinematicWeatherReveal: React.FC<CinematicWeatherRevealProps> = ({
           className="cinematic-media-video"
           playsInline
           autoPlay
-          muted={isMuted}
+          muted={activeMuted}
           loop
           onLoadedData={() => setVideoLoaded(true)}
           style={{ display: videoLoaded ? 'block' : 'none', width: '100%', height: '100%', objectFit: 'contain' }}
@@ -391,9 +385,9 @@ export const CinematicWeatherReveal: React.FC<CinematicWeatherRevealProps> = ({
             type="button"
             className="comic-video-btn"
             onClick={toggleMute}
-            aria-label={isMuted ? 'Unmute video audio' : 'Mute video audio'}
+            aria-label={activeMuted ? 'Unmute video audio' : 'Mute video audio'}
           >
-            {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+            {activeMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
           </button>
           <button
             type="button"
@@ -678,7 +672,7 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
         {/* Parallax & Camera Attention Wrapper */}
         <div className={`living-scene-camera ${cameraClass}`} aria-hidden="true">
           {/* Layer 1: Forest Sky Background */}
-          <div className="living-forest-sky-layer" style={{ backgroundImage: 'url(/environments/forest-canopy.webp)', backgroundSize: 'cover', backgroundPosition: 'center top', opacity: 0.85 }}>
+          <div className="living-forest-sky-layer" style={{ backgroundImage: "url(/environments/forest-canopy.webp)", backgroundSize: "cover", backgroundPosition: "center", opacity: 0.95, height: "100%" }}>
             <span className="forest-sun-orb" />
           </div>
 
@@ -738,7 +732,7 @@ export const WeatherStage: React.FC<WeatherStageProps> = ({
             </defs>
 
             {/* INVERTED CANOPY TREES (Layered Hanging Trees with High-Contrast Foliage) */}
-            <g className="living-inverted-canopy">
+            <g className="living-inverted-canopy" opacity="0.45" style={{ mixBlendMode: "overlay" }}>
               {/* Inverted Tree 1 (Left above Loom & Pipkin) */}
               <path d="M 25 0 L 105 170 L 5 170 Z" fill="url(#tree-wood-grad)" stroke="#16251A" strokeWidth="2" />
               <path d="M 35 30 L 115 150 L 15 150 Z" fill="url(#tree-branch-grad)" opacity="0.85" />
